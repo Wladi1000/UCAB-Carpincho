@@ -1,0 +1,12 @@
+@use '../abstracts/variables';
+.login{
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    height: 625px;
+
+    background-image: url('../../imgs/login-bk01.png');
+    background-color: variables.$c-input-lg;
+}
