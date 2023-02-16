@@ -12,7 +12,7 @@
                 </div>
                 <div class="login__form__mail">
                     <h2>Correo</h2>
-                    <input type="text" placeholder="example.nro@est.ucab.edu.ve">
+                    <input type="text" placeholder="example.num@est.ucab.edu.ve">
                 </div>
                 <div class="login__form__password">
                     <h2>Contraseña</h2>
@@ -22,5 +22,4 @@
             </form>
         </div>
     </div>
-    
 </template>

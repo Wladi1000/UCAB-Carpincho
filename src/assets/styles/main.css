@@ -21,40 +21,45 @@
   justify-content: center;
   flex-direction: column;
   margin-top: 32px;
+  opacity: 1;
   width: 100%;
 }
 .login__form .login__form__welcome h1 {
   font-size: 36px;
+  text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 }
 .login__form .login__form__welcome h2 {
-  margin-top: 72px;
+  align-self: center;
+  margin-top: 25px;
   width: 300px;
   font-size: 23px;
   opacity: 0.7;
 }
 .login__form .login__form__mail,
 .login__form .login__form__password {
+  opacity: 1;
   margin-top: 10px;
 }
 .login__form .login__form__mail h2,
 .login__form .login__form__password h2 {
   margin-top: 40px;
   opacity: 1;
+  text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 }
 .login__form .login__form__mail input,
 .login__form .login__form__password input {
   margin-top: 10px;
+  padding: 0 15px;
   height: 60px;
-  width: 100%;
+  width: 95%;
   border-radius: 10px;
   border: none;
-  text-align: center;
   font-size: 23px;
   appearance: none;
   background-color: #d9d9d9;
 }
 .login__form button {
-  margin-top: 20px;
+  margin-top: 45px;
   border-radius: 10px;
   border: none;
   width: 100%;
@@ -63,16 +68,23 @@
   background-color: #0e0e2c;
   color: #d9d9d9;
   font-size: 23px;
+  transition: 0.2s;
 }
 .login__form button:hover {
   cursor: pointer;
+  transform: scale(1.02);
+  box-shadow: 5px 5px 15px black;
+}
+.login__form button:active {
+  background-color: #d9d9d9;
+  color: #0e0e2c;
 }
 
 .navbar {
   display: flex;
   justify-content: center;
-  background-color: #494748;
   width: 10%;
+  background-color: #494748;
 }
 .navbar img {
   margin-top: 30px;
@@ -81,7 +93,13 @@
   object-fit: contain;
 }
 
-.app-login {
+.student {
+  background-color: #fff;
+  width: 90%;
+  height: 625px;
+}
+
+.app {
   display: flex;
   justify-content: space-between;
 }
@@ -92,8 +110,9 @@
   justify-content: center;
   width: 90%;
   height: 625px;
-  background-image: url("../../imgs/login-bk01.png");
-  background-color: #d9d9d9;
+  background-image: url("../imgs/login-bk02.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 /*# sourceMappingURL=main.css.map */

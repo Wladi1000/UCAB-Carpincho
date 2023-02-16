@@ -2,11 +2,15 @@
 .login{
 
     display: flex;
+//--------------------------
+    //display: none;
+//--------------------------
     align-items: center;
     justify-content: center;
     width: 90%;
     height: 625px;
 
-    background-image: url('../../imgs/login-bk01.png');
-    background-color: variables.$c-input-lg;
+    background-image: url('../imgs/login-bk02.png');
+    background-repeat: no-repeat;
+    background-size: cover;
 }

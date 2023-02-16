@@ -13,15 +13,19 @@
         display: flex;
         justify-content: center;
         flex-direction: column;
-
+        //align-items: center;
         margin-top: 32px;
+
+        opacity: 1;
 
         width: 100%;
         h1{
             font-size: 36px;
+            text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
         }
         h2{
-            margin-top: 72px;
+            align-self: center;
+            margin-top: 25px;
             width: 300px;
             font-size: 23px;
             opacity: variables.$opacity-bc1-lg;
@@ -30,20 +34,22 @@
     
     .login__form__mail,
     .login__form__password{
+        opacity: 1;
         margin-top: 10px;
         h2{
             margin-top: 40px;
             opacity: 1;
+            text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
         }
         input{
             margin-top: 10px;
+            padding: 0 15px;
             height: 60px;
-            width: 100%;
+            width: 95%;
 
             border-radius: 10px;
             border: none;
 
-            text-align: center;
             font-size: 23px;
 
             appearance: none;
@@ -51,7 +57,7 @@
         }
     }
     button{
-        margin-top: 20px;
+        margin-top: 45px;
         border-radius: 10px;;
         border: none;
 
@@ -62,9 +68,19 @@
         background-color: variables.$c-h1;
         color: variables.$c-input-lg;
         font-size: 23px;
-    }
-    button:hover{
-        cursor: pointer;
+
+        &:hover{
+            cursor: pointer;
+            transform: scale(1.02);
+            box-shadow: 5px 5px 15px black;
+        }
+
+        &:active{
+            background-color: variables.$c-input-lg;
+            color: variables.$c-h1;
+        }
+
+        transition: 0.2s;
     }
     
     background-color: variables.$c-bc-lg;

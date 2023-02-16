@@ -1,0 +1,6 @@
+@use '../abstracts/variables';
+.student{
+    background-color: variables.$c-bc-lg;
+    width: 90%;
+    height: 625px;
+}
