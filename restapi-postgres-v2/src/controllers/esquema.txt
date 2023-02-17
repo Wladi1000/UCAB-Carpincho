@@ -1,0 +1,30 @@
+import {} from '../models/'
+export const obtener = async (req,res) => {
+    const obtener = await .findAll();
+    res.json();
+};
+export const crear = async (req,res) => {
+    try {
+        const nuevo = await .create();
+        res.json(nuevo);
+    } catch (error) {
+        return res.status(500).json( { mensaje: "Error en creación de administrador", error: error.message })
+    }
+};
+export const actualizar = async (req,res) => {
+   
+}
+
+export const eliminar = async (req,res) => {
+
+}
+
+export const buscar= async (req, res) => {
+    const id = req.params.id;
+    try {
+        const buscar = await .findByPk(id);
+        return res.json(buscar);
+    } catch (error) {
+        return res.status(404).json("[] no encontrado");
+    }
+}
