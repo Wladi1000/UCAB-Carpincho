@@ -16,10 +16,7 @@ Profesores.hasOne(SPTG, {
     allowNull: true
 });
 
-SPTG.belongsTo(Profesores, {
-    foreignKey: 'id_ta',
-    targetId: 'id_profesor'
-});
+SPTG.belongsTo(Profesores);
 
 
 

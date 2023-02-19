@@ -18,7 +18,15 @@ export const SPTG = sequelize.define('sptg', {
     estatus: {
         type: DataTypes.STRING(2),
         defaultValue: 'PR'
+    },
+    modalidad: {
+        type: DataTypes.CHAR,
+        allowNull: false,
+        defaultValue: 'E'
     }
+},
+{
+    timestamps: true
 });
 
 

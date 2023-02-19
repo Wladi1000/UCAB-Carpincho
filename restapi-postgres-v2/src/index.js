@@ -2,7 +2,7 @@ import app from "./app.js";
 import { sequelize } from "./database/database.js";
 
 try {
-    await sequelize.sync({force: false});
+    await sequelize.sync();
     console.log('La conexion fue establecida de manera exitosa');
     app.listen(3000);
     console.log("Servidor iniciado en el puerto 3000");

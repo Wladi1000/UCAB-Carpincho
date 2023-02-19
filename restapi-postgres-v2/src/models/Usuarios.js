@@ -1,6 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 import  {Administradores} from './Administradores.js';
+import { Estudiantes } from "./Estudiantes.js";
+import { ProfesionalesExternos } from "./ProfesionalesExternos.js";
 import { Profesores } from './Profesores.js';
 
 export const Usuarios = sequelize.define('usuarios', {
@@ -51,5 +53,24 @@ Profesores.belongsTo(Usuarios, {
     targetId: 'id_usuario'
 });
 
+Usuarios.hasOne(Estudiantes, {
+    foreignKey: 'id_estudiante',
+    sourceKey: 'id_usuario'
+});
+
+Estudiantes.belongsTo(Usuarios, {
+    foreignKey: 'id_estudiante',
+    targetId: 'id_usuario'
+});
+
+Usuarios.hasOne(ProfesionalesExternos, {
+    foreignKey: 'id_profesionalE',
+    sourceKey: 'id_usuario'
+});
+
+ProfesionalesExternos.belongsTo(Usuarios, {
+    foreignKey: 'id_profesionalE',
+    targetId: 'id_usuario'
+});
 
 
