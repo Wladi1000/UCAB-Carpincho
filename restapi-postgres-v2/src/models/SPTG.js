@@ -26,7 +26,7 @@ export const SPTG = sequelize.define('sptg', {
     }
 },
 {
-    timestamps: true
+    timestamps: false
 });
 
 

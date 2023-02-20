@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 
 export const CDE = sequelize.define("cde", {
-    id_CDE: {
+    id_cde: {
         type: DataTypes.STRING(13),
         primaryKey: true
     },
@@ -11,4 +11,7 @@ export const CDE = sequelize.define("cde", {
         allowNull: false,
         defaultValue: new Date(),
     }
+},
+{
+    timestamps: false
 });

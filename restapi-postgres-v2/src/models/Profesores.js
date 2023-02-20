@@ -8,6 +8,9 @@ export const Profesores = sequelize.define('profesores', {
         type: DataTypes.INTEGER,
         primaryKey: true
     }
+},
+{
+    timestamps: false
 });
 
 Profesores.hasOne(SPTG, {
@@ -16,7 +19,10 @@ Profesores.hasOne(SPTG, {
     allowNull: true
 });
 
-SPTG.belongsTo(Profesores);
+SPTG.belongsTo(Profesores, {
+    foreignKey: 'id_ta',
+    targetId: 'id_profesor'
+});
 
 
 

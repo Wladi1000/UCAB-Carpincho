@@ -11,4 +11,7 @@ export const Especialidades = sequelize.define("especialidades", {
         type: DataTypes.STRING(100),
         allowNull: false
     }
+},
+{
+    timestamps: false
 });

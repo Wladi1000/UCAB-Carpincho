@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 
-export const CDE = sequelize.define("CTGs", {
-    id_CTG: {
+export const CTG = sequelize.define("ctg", {
+    id_ctg: {
         type: DataTypes.TEXT,
         primaryKey: true
     },
@@ -11,4 +11,7 @@ export const CDE = sequelize.define("CTGs", {
         allowNull: false,
         defaultValue: new Date()
     }
+},
+{
+    timestamps: false
 });

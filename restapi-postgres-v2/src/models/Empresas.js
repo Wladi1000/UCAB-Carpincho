@@ -25,6 +25,8 @@ export const Empresas = sequelize.define("empresas", {
         type: DataTypes.STRING(13),
         allowNull: false
     }
+},{
+    timestamps: false
 });
 
 Empresas.hasOne(ProfesionalesExternos, {
