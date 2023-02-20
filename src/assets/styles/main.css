@@ -82,7 +82,8 @@
 
 .navbar {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   width: 10%;
   background-color: #494748;
 }

@@ -1,16 +1,14 @@
 <script setup>
   import Login from './components/login.vue';
   import Navbar from './components/navbar.vue';
-  import Student from './components/student.vue';
 
 
-</script>
+</script>o
 
 <template>
   <div class="app">
-    <!--<login/>-->
-    <navbar/>
-    <student/>
+      <Navbar />
+      <router-view></router-view>
   </div>
 </template>
 
