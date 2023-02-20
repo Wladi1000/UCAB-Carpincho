@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 
-export const PE_J_TDGI = sequelize.define('pe_j_tdgis', {
-    id_PE_J_TDGI: {
+export const PE_J_TDGI = sequelize.define('pe_j_tdgi', {
+    id_pe_j_tdgi: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -14,6 +14,9 @@ export const PE_J_TDGI = sequelize.define('pe_j_tdgis', {
     },
     nota_final: {
         type: DataTypes.INTEGER,
-        allowNull: true
+        allowNull: true,
+        defaultValue: null
     }
+},{
+    timestamps: false
 });

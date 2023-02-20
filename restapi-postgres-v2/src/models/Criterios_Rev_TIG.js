@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 
-export const Criterios_Rev_TEG = sequelize.define('criterios_rev_tigs',{
-    id_Criterios_Rev_TIG: {
+export const Criterios_Rev_TIG = sequelize.define('criterios_rev_tig',{
+    id_criterios_rev_tig: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -11,4 +11,7 @@ export const Criterios_Rev_TEG = sequelize.define('criterios_rev_tigs',{
         type: DataTypes.TEXT,
         allowNull: false
     }
+},
+{
+    timestamps: false
 });

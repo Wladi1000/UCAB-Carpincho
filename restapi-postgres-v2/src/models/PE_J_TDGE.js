@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 
-export const PE_J_TDGE = sequelize.define('pe_j_tdges',{
-    id_PE_J_TDGE: {
+export const PE_J_TDGE = sequelize.define('pe_j_tdge',{
+    id_pe_j_tdge: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -14,6 +14,9 @@ export const PE_J_TDGE = sequelize.define('pe_j_tdges',{
     },
     nota_final: {
         type: DataTypes.INTEGER,
-        allowNull: true
+        allowNull: true,
+        defaultValue: null
     }
+},{
+    timestamps: false
 });

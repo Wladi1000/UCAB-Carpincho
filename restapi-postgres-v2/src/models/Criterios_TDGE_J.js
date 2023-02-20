@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 
-export const Criterios_TDGE_J = sequelize.define('criterios_tdge_js',{
-    id_Criterios_TDGE_J: {
+export const Criterios_TDGE_J = sequelize.define('criterios_tdge_j',{
+    id_criterios_tdge_j: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -11,4 +11,7 @@ export const Criterios_TDGE_J = sequelize.define('criterios_tdge_js',{
         type: DataTypes.TEXT,
         allowNull: false
     }
+},
+{
+    timestamps: false
 });
