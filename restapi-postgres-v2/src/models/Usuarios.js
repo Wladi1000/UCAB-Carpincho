@@ -64,12 +64,12 @@ Estudiantes.belongsTo(Usuarios, {
 });
 
 Usuarios.hasOne(ProfesionalesExternos, {
-    foreignKey: 'id_profesionalE',
+    foreignKey: 'id_profesionale',
     sourceKey: 'id_usuario'
 });
 
 ProfesionalesExternos.belongsTo(Usuarios, {
-    foreignKey: 'id_profesionalE',
+    foreignKey: 'id_profesionale',
     targetId: 'id_usuario'
 });
 

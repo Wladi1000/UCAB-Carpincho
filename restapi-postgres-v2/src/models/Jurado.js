@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
-import { Conforma_Jurado_Profesor } from "./Conforma_Jurado_Profesor";
+import { Conforma_Jurado_Profesor } from "./Conforma_Jurado_Profesor.js";
 
 export const Jurado = sequelize.define('jurado', {
     id_jurado: {
@@ -12,6 +12,9 @@ export const Jurado = sequelize.define('jurado', {
         allowNull: false,
         defaultValue: new Date()
     }
+},
+{
+    timestamps: false
 });
 
 Jurado.hasOne(Conforma_Jurado_Profesor, {

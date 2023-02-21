@@ -89,106 +89,7 @@ DROP DOMAIN IF EXISTS NAME_DOMAIN;
 --Código para definición de dominios
 CREATE DOMAIN NAME_DOMAIN AS VARCHAR(100);
 -------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS Usuarios (
-	id_usuario SERIAL,
-	nombres NAME_DOMAIN NOT NULL,
-	apellidos NAME_DOMAIN NOT NULL,
-	correo VARCHAR(250) NOT NULL,
-	cedula VARCHAR(10) NOT NULL,
-	PRIMARY KEY (id_usuario),
-	UNIQUE (cedula),
-	UNIQUE (correo)
-);
-CREATE TABLE IF NOT EXISTS Empresas (
-	id_empresa SERIAL,
-	nombre NAME_DOMAIN NOT NULL,
-	rif TEXT NOT NULL,
-	direccion TEXT,
-	telefono VARCHAR (15) NOT NULL,
-	PRIMARY KEY (id_empresa),
-	UNIQUE (rif)
-);
-CREATE TABLE IF NOT EXISTS CDE (
-	id_CDE VARCHAR(13) NOT NULL,
-	fecha_conformacion DATE NOT NULL DEFAULT CURRENT_DATE,
-	PRIMARY KEY (id_CDE)
-);
-CREATE TABLE IF NOT EXISTS Especialidades (
-	id_especialidad SERIAL,
-	nombre NAME_DOMAIN NOT NULL,
-	PRIMARY KEY (id_especialidad)
-);
-CREATE TABLE IF NOT EXISTS CTG (
-	id_CTG TEXT NOT NULL,
-	fecha_conformacion DATE NOT NULL DEFAULT CURRENT_DATE,
-	PRIMARY KEY (id_CTG)
-);
 
-CREATE TABLE IF NOT EXISTS PE_J_TDGI (
-	id_PE_J_TDGI SERIAL,
-	estatus CHAR(2) NOT NULL,
-	nota_final INTEGER DEFAULT NULL,
-	PRIMARY KEY (id_PE_J_TDGI)
-);
-
-CREATE TABLE Criterios_Rev_TIG (
-	id_Criterios_Rev_TIG SERIAL,
-	nombre TEXT NOT NULL,
-	PRIMARY KEY (id_Criterios_Rev_TIG)
-);
-
-CREATE TABLE Criterios_Rev_TEG (
-	id_Criterios_Rev_TEG SERIAL,
-	nombre TEXT NOT NULL,
-	PRIMARY KEY (id_Criterios_Rev_TEG)
-);
-
-CREATE TABLE IF NOT EXISTS Criterios_TDGE_J (
-	id_Criterios_TDGE_J SERIAL,
-	nombre TEXT NOT NULL,
-	PRIMARY KEY (id_Criterios_TDGE_J)
-);
-
-CREATE TABLE IF NOT EXISTS Criterios_TDGE_TA (
-	id_Criterios_TDGE_TA SERIAL,
-	nombre TEXT NOT NULL,
-	PRIMARY KEY (id_Criterios_TDGE_TA)
-);
-
-CREATE TABLE IF NOT EXISTS Criterios_TDGI_TA (
-	id_Criterios_TDGI_TA SERIAL,
-	nombre TEXT NOT NULL,
-	PRIMARY KEY (id_Criterios_TDGI_TA)
-);
-
-CREATE TABLE IF NOT EXISTS Criterios_TDGI_J (
-	id_Criterios_TDGI_J SERIAL,
-	nombre TEXT NOT NULL,
-	PRIMARY KEY (id_Criterios_TDGI_J)
-);
-CREATE TABLE IF NOT EXISTS Criterios_TDGI_TE (
-	id_Criterios_TDGI_TE SERIAL,
-	nombre TEXT NOT NULL,
-	PRIMARY KEY (id_Criterios_TDGI_TE)
-);
-CREATE TABLE IF NOT EXISTS PE_TA_TDGE (
-	id_PE_TA_TDGE SERIAL,
-	estatus CHAR(2) NOT NULL DEFAULT 'NR',
-	nota_final INTEGER DEFAULT NULL,
-	PRIMARY KEY (id_PE_TA_TDGE)
-);
-CREATE TABLE IF NOT EXISTS PE_TE_TDGI (
-	id_PE_TE_TDGI INTEGER NOT NULL,
-	estatus CHAR(2) NOT NULL DEFAULT 'NR',
-	nota_final INTEGER NOT NULL, 
-	PRIMARY KEY (id_PE_TE_TDGI)
-);
-CREATE TABLE IF NOT EXISTS PE_J_TDGE (
-	id_PE_J_TDGE SERIAL,
-	estatus CHAR(2) NOT NULL,
-	nota_final INTEGER DEFAULT NULL,
-	PRIMARY KEY (id_PE_J_TDGE)
-);
 ---------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS Profesores (
 	id_profesor INT NOT NULL,
@@ -354,7 +255,7 @@ CREATE TABLE IF NOT EXISTS SPTG (
 	fechaenvio DATE NOT NULL DEFAULT CURRENT_DATE,
 	estatus CHAR (2) NOT NULL DEFAULT 'PA',
 	id_TA INTEGER NOT NULL,
-	INTEGER DEFAULT NULL,
+	id_admin_evaluador INTEGER DEFAULT NULL,
 	PRIMARY KEY (id_SPTG),
 	FOREIGN KEY (id_TA) REFERENCES Profesores(id_profesor) 
 		ON UPDATE RESTRICT

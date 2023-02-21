@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 
 export const ProfesionalesExternos = sequelize.define('profesionalesexternos', {
-    id_profesionalE: {
+    id_profesionale: {
         type: DataTypes.INTEGER,
         primaryKey: true
     },
@@ -15,4 +15,17 @@ export const ProfesionalesExternos = sequelize.define('profesionalesexternos', {
         allowNull: false,
         defaultValue: new Date()
     }
+},{
+    timestamps: false
 });
+/*
+ProfesionalesExternos.hasOne(Conforma_Jurado_Profesor, {
+    foreignKey: 'id_profesor',
+    sourceKey: 'id_profesor'
+});
+
+Conforma_Jurado_Profesor.belongsTo(Profesores, {
+    foreignKey: 'id_profesor',
+    targetId: 'id_profesor'
+});
+*/

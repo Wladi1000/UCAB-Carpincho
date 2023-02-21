@@ -6,4 +6,7 @@ export const Estudiantes = sequelize.define('estudiantes', {
         type: DataTypes.INTEGER,
         primaryKey: true
     }
+},
+{
+    timestamps: false
 });
