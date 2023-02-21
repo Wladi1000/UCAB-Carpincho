@@ -1,11 +1,17 @@
 import {Profesores} from '../models/Profesores.js'
 export const obtenerProfesores = async (req,res) => {
-    const usuarios = await Usuarios.findAll();
-    res.json(usuarios);
+    const obtener = await Profesores.findAll();
+    res.json(obtener);
 };
 export const crearProfesores = async (req,res) => {
     try {
-        const nuevoProfesor = await Profesores.create();
+        const { id_usuario } = req.body;
+        const nuevoProfesor = await Profesores.create({
+            id_profesor: id_usuario
+        },
+        {
+            fields: ["id_profesor"]
+        });
         res.json(nuevoProfesor);
     } catch (error) {
         return res.status(500).json( { mensaje: "Error en creación de profesor", error: error.message })

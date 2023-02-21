@@ -19,6 +19,8 @@ export const Administradores = sequelize.define('administradores', {
         type: DataTypes.INTEGER,
         allowNull: false
     }
+},{
+    timestamps: false
 });
 
 Administradores.hasOne(SPTG, {

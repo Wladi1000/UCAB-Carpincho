@@ -4,19 +4,51 @@ export const obtener = async (req,res) => {
     res.json();
 };
 export const crear = async (req,res) => {
+    const { } = req.body;
     try {
-        const nuevo = await .create();
+        const nuevo = await .create({
+           
+           
+        },
+        {
+            fields: []
+        });
         res.json(nuevo);
     } catch (error) {
-        return res.status(500).json( { mensaje: "Error en creación de administrador", error: error.message })
+        return res.status(500).json( { mensaje: "Error en creación de ", error: error.message })
     }
 };
 export const actualizar = async (req,res) => {
-   
+   const { } = req.body;
+    const id = req.params.id;
+    try {
+        const buscar = await .findByPk(id);
+
+        buscar. = ;
+        buscar. = ;
+        buscar. = ;
+        buscar. = ;
+
+        const actualizar = await buscar.save();
+        
+        res.json( { mensaje: "Usuario actualizado correctamente", usuario: buscar });
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error al actualizar usuario", error: error.message});
+    }
 }
 
 export const eliminar = async (req,res) => {
-
+    const id = req.params.id;
+    try {
+        const eliminar = await .destroy({
+            where: {
+                : id
+            }
+        });
+        res.status(204).json('El  fue eliminado con exito ');
+    } catch (error) {
+        return res.status(500).json( { mensaje: "Error en eliminación de ", error: error.message })
+    }
 }
 
 export const buscar= async (req, res) => {
