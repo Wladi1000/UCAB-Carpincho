@@ -1,14 +1,11 @@
 <script setup>
-  import Login from './components/login.vue';
   import Navbar from './components/navbar.vue';
-
-
-</script>o
+</script>
 
 <template>
   <div class="app">
       <Navbar />
-      <router-view></router-view>
+      <router-view class="router"></router-view>
   </div>
 </template>
 
