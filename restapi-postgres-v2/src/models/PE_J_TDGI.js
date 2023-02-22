@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
+import { Contiene_PE_TE_TDGI } from "./Contiene_PE_TE_TDGI.js";
 
 export const PE_J_TDGI = sequelize.define('pe_j_tdgi', {
     id_pe_j_tdgi: {
@@ -19,4 +20,14 @@ export const PE_J_TDGI = sequelize.define('pe_j_tdgi', {
     }
 },{
     timestamps: false
+});
+
+PE_J_TDGI.hasOne(Contiene_PE_TE_TDGI, {
+    foreignKey: 'id_pe_j_tdgi',
+    sourceKey: 'id_pe_j_tdgi',
+});
+
+Contiene_PE_TE_TDGI.belongsTo(PE_J_TDGI, {
+    foreignKey: 'id_pe_j_tdgi',
+    targetId: 'id_pe_j_tdgi'
 });

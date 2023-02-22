@@ -1,7 +1,7 @@
 import {} from '../models/'
 export const obtener = async (req,res) => {
     const obtener = await .findAll();
-    res.json();
+    res.json(obtener);
 };
 export const crear = async (req,res) => {
     const { } = req.body;

@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 import { ProfesionalesExternos } from "./ProfesionalesExternos.js";
+import { SPTGI } from "./SPTGI.js";
 
 export const Empresas = sequelize.define("empresas", {
     id_empresa: {
@@ -35,6 +36,16 @@ Empresas.hasOne(ProfesionalesExternos, {
 });
 
 ProfesionalesExternos.belongsTo(Empresas, {
+    foreignKey: 'id_empresa',
+    targetId: 'id_empresa'
+});
+
+Empresas.hasOne(SPTGI, {
+    foreignKey: 'id_empresa',
+    sourceKey: 'id_empresa'
+});
+
+SPTGI.belongsTo(Empresas, {
     foreignKey: 'id_empresa',
     targetId: 'id_empresa'
 });

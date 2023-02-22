@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 
 export const PTG = sequelize.define("ptg", {
-    id_PTG: {
+    id_ptg: {
         type: DataTypes.INTEGER,
         primaryKey: true
     },
@@ -16,4 +16,7 @@ export const PTG = sequelize.define("ptg", {
         allowNull: false,
         defaultValue: 'PC'
     }
+},
+{
+    timestamps: false
 });

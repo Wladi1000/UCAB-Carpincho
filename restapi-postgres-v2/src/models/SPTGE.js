@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 
-export const TDGI = sequelize.define("tdgi", {
-    id_tdgi: {
+export const SPTGE = sequelize.define('solicitudteg', {
+    id_steg: {
         type: DataTypes.INTEGER,
         primaryKey: true
     }
@@ -10,3 +10,5 @@ export const TDGI = sequelize.define("tdgi", {
 {
     timestamps: false
 });
+
+
