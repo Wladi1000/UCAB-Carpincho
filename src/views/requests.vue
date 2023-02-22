@@ -5,7 +5,11 @@
     onMounted( async () =>{
 
         const res = await fetch("http://localhost:3000/Usuarios");
+        //const jalo = await fetch("http://localhost:3000/datosEstudiantes");
         data.value = await res.json();
+        //console.log('holiakjshajkshjkahs' + jalo);
+        
+        //data.value = data.value.filter(e => e.cedula == 'V-27301846');
         console.log(data);
     });
         
