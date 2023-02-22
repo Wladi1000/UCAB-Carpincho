@@ -1,11 +1,11 @@
 import app from "./app.js";
 import { sequelize } from "./database/database.js";
 
+const port = 3000;
 try {
     await sequelize.sync();
-    console.log('La conexion fue establecida de manera exitosa');
-    app.listen(3000);
-    console.log("Servidor iniciado en el puerto 3000");
+    app.listen(port);
+    console.log("Servidor iniciado en el puerto", port);
 } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    console.error('Error al iniciar servidor:', error);
 }

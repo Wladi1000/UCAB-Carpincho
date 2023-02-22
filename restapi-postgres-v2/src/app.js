@@ -37,6 +37,14 @@ import evalua_sptgRoutes from './routes/evalua_SPTG.routes.js';
 import conforma_consejoRoutes from './routes/Conforma_Consejo.routes.js';
 import ptgRoutes from './routes/PTG.routes.js';
 import designa_revisorRoutes from './routes/Designa_Revisor.routes.js';
+import tdgRoutes from './routes/TDG.routes.js';
+import aprueba_comiteRoutes from './routes/Aprueba_Comite.routes.js';
+import aprueba_consejoRoutes from './routes/Aprueba_Consejo.routes.js';
+import designa_taRoutes from './routes/Designa_TA.routes.js';
+import ptegRoutes from './routes/PTEG.routes.js';
+import ptigRoutes from './routes/PTIG.routes.js';
+import pe_revisor_ptegRoutes from './routes/PE_REVISOR_PTEG.routes.js';
+import pe_revisor_ptigRoutes from './routes/PE_REVISOR_PTIG.routes.js';
 
 import cors from 'cors'
 
@@ -83,4 +91,13 @@ app.use(evalua_sptgRoutes);
 app.use(conforma_consejoRoutes);
 app.use(ptgRoutes);
 app.use(designa_revisorRoutes);
+app.use(tdgRoutes);
+app.use(aprueba_comiteRoutes);
+app.use(aprueba_consejoRoutes);
+app.use(designa_taRoutes);
+app.use(ptegRoutes);
+app.use(ptigRoutes);
+app.use(pe_revisor_ptegRoutes);
+app.use(pe_revisor_ptigRoutes);
+
 export default app;

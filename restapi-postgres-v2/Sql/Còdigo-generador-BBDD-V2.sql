@@ -486,12 +486,12 @@ CREATE TABLE IF NOT EXISTS Aprueba_Comite (
 		ON DELETE RESTRICT
 );
 CREATE TABLE IF NOT EXISTS Aprueba_Consejo (
-	id_CTG TEXT NOT NULL,
+	id_CDE TEXT NOT NULL,
 	id_PTG INTEGER NOT NULL,
 	estatus CHAR(2) DEFAULT NULL,
 	descripcion TEXT DEFAULT NULL,
-	PRIMARY KEY (id_CTG,id_PTG),
-	FOREIGN KEY (id_CTG) REFERENCES CTG(id_CTG)
+	PRIMARY KEY (id_CDE,id_PTG),
+	FOREIGN KEY (id_CDE) REFERENCES CDE(id_CDE)
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT,
 	FOREIGN KEY (id_PTG) REFERENCES PTG(id_PTG)
@@ -640,6 +640,7 @@ INSERT INTO Administradores(id_administrador,oficina,cargo,experiencia) VALUES (
 INSERT INTO Estudiantes(id_estudiante) VALUES (1);
 INSERT INTO Profesores(id_profesor) VALUES (1);
 INSERT INTO Empresas(nombre,rif,direccion,telefono) VALUES ('hola','hola','hola','hola');
-INSERT INTO ProfesionalesExternos(id_profesionale,id_empresa,fecha_aceptacion) VALUES (1,3,'2022-02-21');
+INSERT INTO ProfesionalesExternos(id_profesionale,id_empresa,fecha_aceptacion) VALUES (1,1,'2022-02-21');
 INSERT INTO SPTG(titulo,modalidad,id_ta,id_admin_evaluador) VALUES('hola','E',1,1);
-INSERT INTO realiza_SPTG(id_sptg,id_estudiante) VALUES (1,1)
+INSERT INTO realiza_SPTG(id_sptg,id_estudiante) VALUES (1,1);
+INSERT INTO CDE(id_cde) VALUES ('001')
