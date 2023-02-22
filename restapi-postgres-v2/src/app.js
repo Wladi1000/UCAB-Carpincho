@@ -32,6 +32,11 @@ import contiene_pe_te_tdgiRoutes from './routes/Contiene_PE_TE_TDGI.routes.js';
 import especialidad_profesorRoutes from './routes/Especialidad_profesor.routes.js';
 import sptgeRoutes from './routes/SPTGE.routes.js';
 import sptgiRoutes from './routes/SPTGI.routes.js';
+import realiza_sptgRoutes from './routes/Realiza_SPTG.routes.js';
+import evalua_sptgRoutes from './routes/evalua_SPTG.routes.js';
+import conforma_consejoRoutes from './routes/Conforma_Consejo.routes.js';
+import ptgRoutes from './routes/PTG.routes.js';
+import designa_revisorRoutes from './routes/Designa_Revisor.routes.js';
 
 var app = express();
 
@@ -70,5 +75,9 @@ app.use(contiene_pe_te_tdgiRoutes);
 app.use(especialidad_profesorRoutes);
 app.use(sptgeRoutes);
 app.use(sptgiRoutes);
-
+app.use(realiza_sptgRoutes);
+app.use(evalua_sptgRoutes);
+app.use(conforma_consejoRoutes);
+app.use(ptgRoutes);
+app.use(designa_revisorRoutes);
 export default app;

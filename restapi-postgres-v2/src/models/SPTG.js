@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
+import { PTG } from "./PTG.js";
 
 import { realiza_SPTG } from "./realiza_SPTG.js";
 import { SPTGE } from "./SPTGE.js";
@@ -61,5 +62,15 @@ SPTG.hasOne(SPTGE, {
 
 SPTGE.belongsTo(SPTG, {
     foreignKey: 'id_steg',
+    targetId: 'id_sptg'
+});
+
+SPTG.hasOne(PTG, {
+    foreignKey: 'id_sptg',
+    sourceKey: 'id_sptg'
+});
+
+PTG.belongsTo(SPTG, {
+    foreignKey: 'id_sptg',
     targetId: 'id_sptg'
 });
