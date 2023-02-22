@@ -1,5 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
+import { Conforma_Jurado_ProfesionalExterno } from "./Conforma_Jurado_ProfesionalExterno.js";
+import { SPTGI } from "./SPTGI.js";
 
 export const ProfesionalesExternos = sequelize.define('profesionalesexternos', {
     id_profesionale: {
@@ -18,14 +20,22 @@ export const ProfesionalesExternos = sequelize.define('profesionalesexternos', {
 },{
     timestamps: false
 });
-/*
-ProfesionalesExternos.hasOne(Conforma_Jurado_Profesor, {
-    foreignKey: 'id_profesor',
-    sourceKey: 'id_profesor'
+ProfesionalesExternos.hasOne(SPTGI, {
+    foreignKey: 'id_profesionale',
+    sourceKey: 'id_profesionale'
 });
 
-Conforma_Jurado_Profesor.belongsTo(Profesores, {
-    foreignKey: 'id_profesor',
-    targetId: 'id_profesor'
+SPTGI.belongsTo(ProfesionalesExternos, {
+    foreignKey: 'id_profesionale',
+    targetId: 'id_profesionale'
 });
-*/
+
+ProfesionalesExternos.hasOne(Conforma_Jurado_ProfesionalExterno, {
+    foreignKey: 'id_profesionale',
+    sourceKey: 'id_profesionale'
+});
+
+Conforma_Jurado_ProfesionalExterno.belongsTo(ProfesionalesExternos, {
+    foreignKey: 'id_profesionale',
+    targetId: 'id_profesionale'
+});

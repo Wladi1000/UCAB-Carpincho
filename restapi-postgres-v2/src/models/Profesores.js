@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 import { Conforma_Jurado_Profesor } from "./Conforma_Jurado_Profesor.js";
+import { Especialidad_profesor } from "./Especialidad_profesor.js";
 
 import { SPTG } from "./SPTG.js";
 
@@ -35,5 +36,14 @@ Conforma_Jurado_Profesor.belongsTo(Profesores, {
     targetId: 'id_profesor'
 });
 
+Profesores.hasOne(Especialidad_profesor, {
+    foreignKey: 'id_profesor',
+    sourceKey: 'id_profesor'
+});
+
+Especialidad_profesor.belongsTo(Profesores, {
+    foreignKey: 'id_profesor',
+    targetId: 'id_profesor'
+});
 
 
