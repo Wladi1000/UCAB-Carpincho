@@ -634,3 +634,12 @@ CREATE TABLE IF NOT EXISTS Contiene_Criterios_TDGI_TA (
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
+
+INSERT INTO Usuarios(nombres,apellidos,correo,cedula) VALUES ('Luis Carlos', 'Somoza Ledezma', 'lcsomoza.19@est.ucab.edu.ve', 'V-27656348');
+INSERT INTO Administradores(id_administrador,oficina,cargo,experiencia) VALUES (1, 'Oficina', 'cargo',5);
+INSERT INTO Estudiantes(id_estudiante) VALUES (1);
+INSERT INTO Profesores(id_profesor) VALUES (1);
+INSERT INTO Empresas(nombre,rif,direccion,telefono) VALUES ('hola','hola','hola','hola');
+INSERT INTO ProfesionalesExternos(id_profesionale,id_empresa,fecha_aceptacion) VALUES (1,3,'2022-02-21');
+INSERT INTO SPTG(titulo,modalidad,id_ta,id_admin_evaluador) VALUES('hola','E',1,1);
+INSERT INTO realiza_SPTG(id_sptg,id_estudiante) VALUES (1,1)

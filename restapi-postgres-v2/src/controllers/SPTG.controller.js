@@ -1,5 +1,6 @@
 import { SPTG } from '../models/SPTG.js';
-
+import { QueryTypes } from 'sequelize';
+import { sequelize } from '../database/database.js';
 export const obtenerSPTG= async (req,res) => {
     const obtener = await SPTG.findAll();
     res.json(obtener);
@@ -61,5 +62,14 @@ export const buscarSPTG = async (req, res) => {
         return res.json(buscar);
     } catch (error) {
         return res.status(404).json("SPTG no encontrado");
+    }
+}
+
+export const datosEstudianteSPTG = async (req, res) => {
+    try {
+        const buscar = await sequelize.query("SELECT U.*,P.*, Pr.*,Ad.* FROM Usuarios as U, SPTG as P, realiza_SPTG as R, Estudiantes AS E,Profesores AS Pr, Administradores AS Ad WHERE U.id_usuario = E.id_estudiante AND E.id_estudiante = R.id_estudiante AND R.id_sptg = P.id_sptg AND P.id_ta = Pr.id_profesor AND P.id_admin_evaluador = Ad.id_administrador", { type: QueryTypes.SELECT });
+        res.json(buscar)
+    } catch (error) {
+        return res.status(404).json("Error al buscar informacion");
     }
 }

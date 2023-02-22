@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 
-export const SPTGI = sequelize.define('solicitudtigs', {
+export const SPTGI = sequelize.define('solicitudtig', {
     id_stig: {
         type: DataTypes.INTEGER,
         primaryKey: true
@@ -14,6 +14,9 @@ export const SPTGI = sequelize.define('solicitudtigs', {
         type: DataTypes.INTEGER,
         allowNull: true
     }
+},
+{
+    timestamps: false
 });
 
 
