@@ -1,13 +1,13 @@
 import { Router } from 'express';
-import { obtenerSPTG } from '../controllers/SPTG.controller.js';
+import { actualizarSPTG, buscarSPTG, crearSPTG, eliminarSPTG, obtenerSPTG } from '../controllers/SPTG.controller.js';
 
 const router = Router();
 
 router.get('/SPTG',obtenerSPTG);
-router.post('/SPTG',);
-router.put('/SPTG/:id',);
-router.delete('/SPTG/:id',);
-router.get('/SPTG/:id',);
+router.post('/SPTG',crearSPTG);
+router.put('/SPTG/:id',actualizarSPTG);
+router.delete('/SPTG/:id',eliminarSPTG);
+router.get('/SPTG/:id',buscarSPTG);
 
 
 export default router;
