@@ -45,6 +45,7 @@ import ptegRoutes from './routes/PTEG.routes.js';
 import ptigRoutes from './routes/PTIG.routes.js';
 import pe_revisor_ptegRoutes from './routes/PE_REVISOR_PTEG.routes.js';
 import pe_revisor_ptigRoutes from './routes/PE_REVISOR_PTIG.routes.js';
+import pe_contiene_ctigRoutes from './routes/PE_CONTIENE_CTIG.routes.js'
 
 import cors from 'cors'
 
@@ -99,5 +100,5 @@ app.use(ptegRoutes);
 app.use(ptigRoutes);
 app.use(pe_revisor_ptegRoutes);
 app.use(pe_revisor_ptigRoutes);
-
+app.use(pe_contiene_ctigRoutes);
 export default app;
