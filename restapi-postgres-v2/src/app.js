@@ -25,8 +25,11 @@ import conforma_jurado_profesorRoutes from './routes/Conforma_Jurado_Profesor.ro
 
 import estudiantesRoutes from './routes/Estudiantes.routes.js'
 
+import cors from 'cors'
+
 var app = express();
 
+app.use(cors())
 app.use(express.json());
 
 app.use(usuariosRoutes);
