@@ -1,4 +1,16 @@
 <script setup>
+    import { onMounted } from 'vue';
+    
+    onMounted(() => {
+        let router = document.getElementById('router');
+        router.classList.toggle('router')
+        console.log(router);
+    });
+
+    
+  //  console.log(router[0].nodeName);
+      
+    
 
 </script>
 

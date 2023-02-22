@@ -5,6 +5,6 @@
 <template>
   <div class="app">
     <Navbar />
-    <router-view class="router"></router-view>
+    <router-view id="router" class="router"></router-view>
   </div>
 </template>
