@@ -1,6 +1,47 @@
 @use '../abstracts/variables';
 .router{
-    background-color: variables.$c-bc-lg;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    background-color: variables.$c-input-lg;
     width: 90%;
     height: 625px;
+
+    h1{
+        padding: 15px 250px;
+        border-bottom: solid 1px variables.$c-h2;
+    }
+
+    .container{
+        align-self: flex-start;
+        margin: 25px 0 0 25px;
+        padding: 10px;
+        height: 80%;
+        width: 80%;
+        border-radius: 10px;
+        overflow-y: auto;
+
+        .record{
+            margin-top: 20px;
+            padding: 5px;
+            width: 55%;
+            height: 60px;
+            border-radius: 10px;
+            background-color: aliceblue;
+            box-shadow: -2px 2px 6px #000;
+            transition: 0.2s;
+
+            &:hover{
+                cursor: pointer;
+                transform: scale(1.02);
+            }
+            &:active{
+                transform: scale(1.03);
+            }
+
+        }
+    }
+
 }

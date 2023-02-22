@@ -14,5 +14,36 @@
         height: 100px;
         object-fit: contain;
     }
-    
+    &__list{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        margin-top: 20px;
+        list-style: none;
+
+        &__element{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 55px;
+            width: 90%;
+            border-bottom: 1px #fff solid;
+            transition: 0.2s;
+            a{
+                color: #fff;
+                text-decoration: none;
+            }
+            &:hover{
+                transform: scale(1.02);
+                &::before{
+                    content: '→';
+                    color: #fff;
+                    padding-right: 2px;
+                }
+            }
+
+        }
+    }
 }
