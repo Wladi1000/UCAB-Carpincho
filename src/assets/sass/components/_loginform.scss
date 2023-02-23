@@ -2,39 +2,23 @@
 .login__form{
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
-    width: 680px;
-    height: 560px;
+    width: variables.$px-w-lg-form;
+    height: variables.$px-h-lg-form;
 
-    border-radius: 10px;
-    opacity: 0.9;
+    border-radius: 10px;   
 
-    .login__form__welcome{
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        //align-items: center;
-        margin-top: 32px;
+    background-color: variables.$c-bc-lg;
 
-        opacity: 1;
-
-        width: 100%;
-        h1{
-            font-size: 36px;
-            text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-        }
-        h2{
-            align-self: center;
-            margin-top: 25px;
-            width: 300px;
-            font-size: 23px;
-            opacity: variables.$opacity-bc1-lg;
-        }
+    .login__form--msg{
+        color: variables.$c-h2;
     }
     
     .login__form__mail,
     .login__form__password{
-        opacity: 1;
+
         margin-top: 10px;
         h2{
             margin-top: 40px;
@@ -42,32 +26,34 @@
             text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
         }
         input{
-            margin-top: 10px;
-            padding: 0 15px;
-            height: 60px;
-            width: 95%;
+            margin: variables.$px-mrg-input;
+            padding: variables.$px-pdd-input;
+            width: variables.$px-w-input;
+            height: variables.$px-h-input;
 
             border-radius: 10px;
             border: none;
 
-            font-size: 23px;
+            font-size: variables.$px-txt-input;
 
             appearance: none;
             background-color: variables.$c-input-lg;
         }
     }
-    button{
-        margin-top: 45px;
-        border-radius: 10px;;
+    .login__form__btn{
+        margin: variables.$px-mrg-btn;
+        padding: variables.$px-pdd-btn;
+
+        border-radius: 10px;
         border: none;
 
-        width: 100%;
-        height: 60px;
+        width: variables.$px-w-btn;
+        height: variables.$px-h-btn;
 
         appearance: none;
         background-color: variables.$c-h1;
         color: variables.$c-input-lg;
-        font-size: 23px;
+        font-size: variables.$px-txt-btn;
 
         &:hover{
             cursor: pointer;
@@ -82,6 +68,21 @@
 
         transition: 0.2s;
     }
+    .login__form__btn.succes{
+        background-color: variables.$c-btn-sc;
+    }
+    .login__form__btn.cancel{
+        background-color: variables.$c-btn-cc;
+    }
+    .login__form--forget{
+        margin: 30px;
+
+        text-decoration: underline;
+        font-size: variables.$px-txt-a;
+        font-weight: variables.$px-txt-w-a;
     
-    background-color: variables.$c-bc-lg;
+        &:hover{
+            cursor: pointer;
+        }
+    }
 }

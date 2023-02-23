@@ -14,24 +14,23 @@
 
 </script>
 
+
+
 <template>
     <div class="login">
-        <div class="login__form">
-            <form action="">
-                <div class="login__form__welcome">
-                    <h1>¡Bienvenido a Practicas Profesionales!</h1>
-                    <h2>Inicia sesión para continuar</h2>
-                </div>
-                <div class="login__form__mail">
-                    <h2>Correo</h2>
-                    <input type="text" placeholder="example.num@est.ucab.edu.ve">
-                </div>
-                <div class="login__form__password">
-                    <h2>Contraseña</h2>
-                    <input type="password" placeholder="...........................">
-                </div>
-                <button>Iniciar Sesion</button>
-            </form>
-        </div>
+        <form class="login__form" action="">
+            <h2 class="login__form--msg">Ingresar a la aplicación</h2>
+            <div class="login__form__mail">
+                <!--<h3>Cédula</h3>-->
+                <input type="number" placeholder="Cédula">
+            </div>
+            <div class="login__form__password">
+                <!--<h3>Contraseña</h3>-->
+                <input type="password" placeholder="Contraseña">
+            </div>
+            <button class="login__form__btn succes">Iniciar Sesión</button>
+            <button class="login__form__btn cancel">Cancelar</button>
+            <a class="login__form--forget" ref="/council">Se me olvidó la contraseña</a>
+        </form>
     </div>
 </template>
