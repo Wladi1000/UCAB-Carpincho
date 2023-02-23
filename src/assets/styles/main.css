@@ -11,34 +11,18 @@
 .login__form {
   display: flex;
   justify-content: center;
-  width: 680px;
-  height: 560px;
+  align-items: center;
+  flex-direction: column;
+  width: 450px;
+  height: 450px;
   border-radius: 10px;
-  opacity: 0.9;
   background-color: #fff;
 }
-.login__form .login__form__welcome {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  margin-top: 32px;
-  opacity: 1;
-  width: 100%;
-}
-.login__form .login__form__welcome h1 {
-  font-size: 36px;
-  text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
-.login__form .login__form__welcome h2 {
-  align-self: center;
-  margin-top: 25px;
-  width: 300px;
-  font-size: 23px;
-  opacity: 0.7;
+.login__form .login__form--msg {
+  color: #0E0E2C;
 }
 .login__form .login__form__mail,
 .login__form .login__form__password {
-  opacity: 1;
   margin-top: 10px;
 }
 .login__form .login__form__mail h2,
@@ -49,21 +33,22 @@
 }
 .login__form .login__form__mail input,
 .login__form .login__form__password input {
-  margin-top: 10px;
+  margin: 10px 0 0 0;
   padding: 0 15px;
+  width: 370px;
   height: 60px;
-  width: 95%;
   border-radius: 10px;
   border: none;
   font-size: 23px;
   appearance: none;
   background-color: #d9d9d9;
 }
-.login__form button {
-  margin-top: 45px;
+.login__form .login__form__btn {
+  margin: 15px 0 0 0;
+  padding: 0 15px;
   border-radius: 10px;
   border: none;
-  width: 100%;
+  width: 400px;
   height: 60px;
   appearance: none;
   background-color: #0e0e2c;
@@ -71,14 +56,29 @@
   font-size: 23px;
   transition: 0.2s;
 }
-.login__form button:hover {
+.login__form .login__form__btn:hover {
   cursor: pointer;
   transform: scale(1.02);
   box-shadow: 5px 5px 15px black;
 }
-.login__form button:active {
+.login__form .login__form__btn:active {
   background-color: #d9d9d9;
   color: #0e0e2c;
+}
+.login__form .login__form__btn.succes {
+  background-color: #16822D;
+}
+.login__form .login__form__btn.cancel {
+  background-color: #BE1937;
+}
+.login__form .login__form--forget {
+  margin: 30px;
+  text-decoration: underline;
+  font-size: 18px;
+  font-weight: 700;
+}
+.login__form .login__form--forget:hover {
+  cursor: pointer;
 }
 
 .navbar {
@@ -135,10 +135,11 @@
 }
 .router h1 {
   padding: 15px 250px;
-  border-bottom: solid 1px rgba(14, 14, 44, 0.7019607843);
+  border-bottom: solid 1px #0E0E2C;
 }
 .router .container {
   display: flex;
+  justify-content: center;
   margin: 25px 0 0 25px;
   height: 80%;
   width: 100%;
@@ -146,12 +147,28 @@
   overflow-y: hidden;
   overflow-x: hidden;
 }
-.router .container .list {
-  width: 50%;
-  overflow-y: auto;
+.router .container .container__list {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.router .container .container__list .controllers {
+  display: flex;
+  justify-content: flex-end;
+}
+.router .container .container__list .controllers img {
+  height: 35px;
+  width: 35px;
+  padding: 0 20px;
+}
+.router .container .container__list .list {
+  width: 100%;
+  height: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
   padding: 20px;
 }
-.router .container .list .record {
+.router .container .container__list .list .record {
   margin-top: 20px;
   padding: 5px;
   width: 100%;
@@ -161,11 +178,11 @@
   box-shadow: -2px 2px 6px #000;
   transition: 0.2s;
 }
-.router .container .list .record:hover {
+.router .container .container__list .list .record:hover {
   cursor: pointer;
   transform: scale(1.02);
 }
-.router .container .list .record:active {
+.router .container .container__list .list .record:active {
   transform: scale(1.03);
 }
 .router .container .preview {
@@ -188,7 +205,7 @@
   justify-content: center;
   width: 90%;
   height: 625px;
-  background-image: url("../imgs/login-bk02.png");
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../imgs/login-bk02.png");
   background-repeat: no-repeat;
   background-size: cover;
 }
