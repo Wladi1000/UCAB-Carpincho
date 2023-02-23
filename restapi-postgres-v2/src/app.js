@@ -45,7 +45,12 @@ import ptegRoutes from './routes/PTEG.routes.js';
 import ptigRoutes from './routes/PTIG.routes.js';
 import pe_revisor_ptegRoutes from './routes/PE_REVISOR_PTEG.routes.js';
 import pe_revisor_ptigRoutes from './routes/PE_REVISOR_PTIG.routes.js';
-import pe_contiene_ctigRoutes from './routes/PE_CONTIENE_CTIG.routes.js'
+import pe_contiene_ctigRoutes from './routes/PE_CONTIENE_CTIG.routes.js';
+import contiene_criterios_tdge_taRoutes from './routes/Contiene_Criterios_TDGE_TA.routes.js';
+import contiene_criterios_tdge_jRoutes from './routes/Contiene_Criterios_TDGE_J.routes.js';
+import contiene_criterios_tdgi_jRoutes from './routes/Contiene_Criterios_TDGI_J.routes.js';
+import contiene_criterios_tdgi_taRoutes from './routes/Contiene_Criterios_TDGI_TA.routes.js';
+import contiene_criterios_tdgi_teRoutes from './routes/Contiene_Criterios_TDGI_TE.routes.js';
 
 import cors from 'cors'
 
@@ -101,4 +106,10 @@ app.use(ptigRoutes);
 app.use(pe_revisor_ptegRoutes);
 app.use(pe_revisor_ptigRoutes);
 app.use(pe_contiene_ctigRoutes);
+app.use(contiene_criterios_tdge_taRoutes);
+app.use(contiene_criterios_tdge_jRoutes);
+app.use(contiene_criterios_tdgi_jRoutes);
+app.use(contiene_criterios_tdgi_taRoutes);
+app.use(contiene_criterios_tdgi_teRoutes);
+
 export default app;
