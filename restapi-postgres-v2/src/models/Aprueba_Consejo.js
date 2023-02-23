@@ -2,10 +2,13 @@ import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 
 export const Aprueba_Consejo = sequelize.define("aprueba_consejo", {
-    fecha_consejo: {
-        type: DataTypes.DATE,
-        defaultValue: new Date(),
-        allowNull: false
+    id_cde: {
+        type: DataTypes.INTEGER,
+        primaryKey: true
+    },
+    id_ptg: {
+        type: DataTypes.INTEGER,
+        primaryKey: true
     },
     descripcion: {
         type: DataTypes.TEXT,
@@ -15,4 +18,7 @@ export const Aprueba_Consejo = sequelize.define("aprueba_consejo", {
         type: DataTypes.STRING(2),
         allowNull: true
     }
+},
+{
+    timestamps: false
 });

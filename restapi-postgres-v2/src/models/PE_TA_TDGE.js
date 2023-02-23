@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
+import { Contiene_Criterios_TDGE_TA } from "./Contiene_Criterios_TDGE_TA.js";
 import { PE_final_TDGE } from "./PE_final_TDGE.js";
 
 export const PE_TA_TDGE = sequelize.define('pe_ta_tdge',{
@@ -29,6 +30,16 @@ PE_TA_TDGE.hasOne(PE_final_TDGE, {
 });
 
 PE_final_TDGE.belongsTo(PE_TA_TDGE, {
+    foreignKey: 'id_pe_ta_tdge',
+    targetId: 'id_pe_ta_tdge'
+});
+
+PE_TA_TDGE.hasOne(Contiene_Criterios_TDGE_TA, {
+    foreignKey: 'id_pe_ta_tdge',
+    sourceKey: 'id_pe_ta_tdge'
+});
+
+Contiene_Criterios_TDGE_TA.belongsTo(PE_TA_TDGE, {
     foreignKey: 'id_pe_ta_tdge',
     targetId: 'id_pe_ta_tdge'
 });

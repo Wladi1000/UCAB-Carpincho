@@ -1,8 +1,10 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
+import { PTG } from './PTG.js';
+import { Designa_TA } from "./Designa_TA.js";
 
 export const TDG = sequelize.define("tdg", {
-    id_TDG: {
+    id_tdg: {
         type: DataTypes.INTEGER,
         primaryKey: true
     },
@@ -20,4 +22,17 @@ export const TDG = sequelize.define("tdg", {
         allowNull: false,
         defaultValue: 'PC'
     }
+},{
+    timestamps: false
 });
+
+TDG.hasOne(Designa_TA, {
+    foreignKey: 'id_tdg',
+    sourceKey: 'id_tdg'
+});
+
+Designa_TA.belongsTo(TDG, {
+    foreignKey: 'id_tdg',
+    targetId: 'id_tdg'
+});
+
