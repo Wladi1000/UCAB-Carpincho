@@ -1,5 +1,11 @@
+<script setup>
+  import planillaSolicitud from '../components/planillaSolicitud.vue'
+
+</script>
 <template>
   <div class="reviewers">
-    <h1>Soy Profesores revisores</h1>
+    <h1>Planilla de solicitud</h1>
+
+    <planillaSolicitud />
   </div>
 </template>
