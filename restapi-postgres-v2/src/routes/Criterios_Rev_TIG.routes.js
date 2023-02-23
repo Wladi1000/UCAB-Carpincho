@@ -8,5 +8,4 @@ router.put('/Criterios_Rev_TIG/:id',actualizarCriterios_Rev_TIG);
 router.delete('/Criterios_Rev_TIG/:id',eliminarCriterios_Rev_TIG);
 router.get('/Criterios_Rev_TIG/:id',buscarCriterios_Rev_TIG);
 
-
 export default router;

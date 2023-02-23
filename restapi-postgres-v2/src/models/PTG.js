@@ -1,5 +1,9 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
+import { TDG } from './TDG.js'
+import { Aprueba_Comite } from "./Aprueba_Comite.js";
+import { PTIG } from "./PTIG.js";
+import { PTEG } from './PTEG.js'
 
 export const PTG = sequelize.define("ptg", {
     id_ptg: {
@@ -19,4 +23,44 @@ export const PTG = sequelize.define("ptg", {
 },
 {
     timestamps: false
+});
+
+PTG.hasOne(TDG, {
+    foreignKey: 'id_ptg',
+    sourceKey: 'id_ptg'
+});
+
+TDG.belongsTo(PTG, {
+    foreignKey: 'id_ptg',
+    targetId: 'id_ptg'
+});
+
+PTG.hasOne(Aprueba_Comite, {
+    foreignKey: 'id_ptg',
+    sourceKey: 'id_ptg'
+});
+
+Aprueba_Comite.belongsTo(PTG, {
+    foreignKey: 'id_ptg',
+    targetId: 'id_ptg'
+});
+
+PTG.hasOne(PTIG, {
+    foreignKey: 'id_ptig',
+    sourceKey: 'id_ptg'
+});
+
+PTIG.belongsTo(PTG, {
+    foreignKey: 'id_ptig',
+    targetId: 'id_ptg'
+});
+
+PTG.hasOne(PTEG, {
+    foreignKey: 'id_pteg',
+    sourceKey: 'id_ptg'
+});
+
+PTEG.belongsTo(PTG, {
+    foreignKey: 'id_pteg',
+    targetId: 'id_ptg'
 });

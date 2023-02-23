@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from '../database/database.js';
 
 export const PE_REVISOR_PTEG = sequelize.define("pe_revisor_pteg", {
-    id_PE_REVISOR_PTEG: {
+    id_pe_revisor_pteg: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -16,4 +16,8 @@ export const PE_REVISOR_PTEG = sequelize.define("pe_revisor_pteg", {
         allowNull: false,
         defaultValue: new Date()
     }
+},
+{
+    timestamps: false
 });
+
