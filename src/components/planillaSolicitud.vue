@@ -1,55 +1,123 @@
 <script setup>
+
+    import { ref, reactive, onMounted } from 'vue';
+    const data = reactive([]);
+
+    let alumno = reactive({
+        id_usuario: '',
+        nombres: '',
+        apellidos: '',
+        cedula: '',
+        correo: ''
+    });
+    let profesor = reactive({
+        id_usuario: '',
+        nombres: '',
+        apellidos: '',
+        cedula: '',
+        correo: ''
+    });
+
+    // Datos solicitud
+    let temaPropuesto = ref('');
+    let organizacion = ref('');
+    const respuestaEmpresas = reactive([]);
+
+    // Datos faltantes
+    let telefonoAlumno = ref('');
+    let oficinaAlumno = ref('');
+    let habitacionAlumno = ref('');
+
+    // Datos primordiales    
+    let cedulaAlumno = ref('');
+    let cedulaProfesor = ref('');
+
+    onMounted( async () =>{
+        //const res = await fetch("http://localhost:3000/SPTG");
+        //data.value = await res.json();
+        //console.log(data);
+
+        const res = await fetch(`http://localhost:3000/Empresas`);
+        respuestaEmpresas.value = await res.json();
+        console.log(respuestaEmpresas);
+    });
+
+    async function obtenerAlumno (){
+
+        const res = await fetch(`http://localhost:3000/Estudiantes/cedula/${cedulaProfesor.value}`);
+        const respuestaAlumno = await res.json();
+        
+        alumno.id_usuario = respuestaAlumno.id_usuario;
+        alumno.nombres = respuestaAlumno.nombres;
+        alumno.apellidos = respuestaAlumno.apellidos;
+        alumno.cedula = respuestaAlumno.cedula;
+        alumno.correo = respuestaAlumno.correo;
+    }
+    async function obtenerProfesor (){
+
+        const res = await fetch(`http://localhost:3000/Profesores/cedula/${cedulaProfesor.value}`);
+        const respuestaProfesor = await res.json();
+         
+        profesor.id_usuario = respuestaProfesor.id_usuario;
+        profesor.nombres = respuestaProfesor.nombres;
+        profesor.apellidos = respuestaProfesor.apellidos;
+        profesor.cedula = respuestaProfesor.cedula;
+        profesor.correo = respuestaProfesor.correo;
+    }
+    async function obtenerEmpresas (){
+
+        const res = await fetch(`http://localhost:3000/Empresas`);
+        respuestaEmpresas.value = await res.json();
+    }
+
 </script>
 <template>
     <div class="planilla solicitud" action="">
         <h2>Tema Propuesto</h2>
         <input type="text" />
-        <h2>Organizacion donde se presentará: ucab</h2>
+        <h2>Organizacion donde se presentará</h2>
         <input type="text" />
         <div class="solicitud__alumno">
-            <label>Nombre</label>
-            <input type="text" />
-            <label>Cedula</label>
-            <input type="text" />
-            <label>Telefono</label>
-            <input type="text" />
-            <label>Correo</label>
-            <input type="text" />
-            <label>Oficina</label>
-            <input type="text" />
-            <label>Habitación</label>
-            <input type="text" />
-            <button>seguir</button>
+            <h2>Alumno</h2>
+            <label>Cedula: {{ alumno.cedula }}</label>
+            <p>{{ cedulaAlumno }}</p>
+            <input type="text" v-model="cedulaAlumno" />
+            <label>Nombres: {{ alumno.nombres }}</label>
+            <label>Apellidos: {{ alumno.apellidos }}</label>
+            <label>Correo: {{ alumno.correo }}</label>
+            <label>Telefono: </label>
+            <label>Oficina: </label>
+            <label>Habitación: </label>
+            <button @click="obtenerAlumno" >seguir</button>
         </div>
         <div class="solicitud__tutor-academico">
-            <label>Nombres</label>
-            <input type="text" />
-            <label>Apellidos</label>
-            <input type="text" />
-            <label>Cédula</label>
-            <input type="text" />
+            <h2>Tutor Academico</h2>
+            <label>Cédula {{ profesor.cedula }}</label>
+            <input type="text" v-model="cedulaProfesor"/>
+            <p>{{ cedulaProfesor }}</p>
+            <label>Nombres {{ profesor.nombres }}</label>
+            <label>Apellidos {{ profesor.apellidos }}</label>
             <label>Profesión</label>
-            <input type="text" />
             <label>Años de experiencia profesional</label>
-            <input type="text" />
             <label>Cargo actulal</label>
-            <input type="text" />
-            <label>Correo</label>
-            <input type="text" />
+            <label>Correo {{ profesor.correo }}</label>
             <label>Telefono</label>
-            <input type="text" />
-            <button>seguir</button>
-            <input type="text" />
+            <button @click="obtenerProfesor" >seguir</button>
         </div>
         <div class="solicitud__empresa">
+            <h2>Empresa</h2>
             <label>Nombres</label>
-            <input type="text" />
+            <select name="empresas" >
+                <option 
+                    v-for="emp in respuestaEmpresas.value" :key="emp.id_empresa" :value="emp.nombre"
+                    >{{ emp.nombre }}</option>
+            </select>
+            
             <label>Direccién</label>
-            <input type="text" />
             <label>Teléfono</label>
-            <input type="text" />
-            <button>seguir</button>
+            <button @click="obtenerEmpresas">seguir</button>
         </div>
+        <button>Llenar solicitud</button>
     </div>
 </template>
 <style>
