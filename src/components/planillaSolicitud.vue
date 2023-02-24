@@ -1,6 +1,6 @@
 <script setup>
 
-    import { ref, reactive, onMounted } from 'vue';
+    import { ref, reactive, onMounted} from 'vue';
     const data = reactive([]);
 
     let alumno = reactive({
@@ -19,7 +19,6 @@
     });
 
     // Datos solicitud
-    let temaPropuesto = ref('');
     let organizacion = ref('');
     const respuestaEmpresas = reactive([]);
 
@@ -29,6 +28,7 @@
     let habitacionAlumno = ref('');
 
     // Datos primordiales    
+    let temaPropuesto = ref('');
     let cedulaAlumno = ref('');
     let cedulaProfesor = ref('');
 
@@ -44,7 +44,7 @@
 
     async function obtenerAlumno (){
 
-        const res = await fetch(`http://localhost:3000/Estudiantes/cedula/${cedulaProfesor.value}`);
+        const res = await fetch(`http://localhost:3000/Estudiantes/cedula/${cedulaAlumno.value}`);
         const respuestaAlumno = await res.json();
         
         alumno.id_usuario = respuestaAlumno.id_usuario;
@@ -57,24 +57,52 @@
 
         const res = await fetch(`http://localhost:3000/Profesores/cedula/${cedulaProfesor.value}`);
         const respuestaProfesor = await res.json();
-         
+        
         profesor.id_usuario = respuestaProfesor.id_usuario;
         profesor.nombres = respuestaProfesor.nombres;
         profesor.apellidos = respuestaProfesor.apellidos;
         profesor.cedula = respuestaProfesor.cedula;
         profesor.correo = respuestaProfesor.correo;
     }
-    async function obtenerEmpresas (){
+    async function llenarSolicitud (){
+        //Aqui no sabemos que hacer pero debe crear la planilla
 
-        const res = await fetch(`http://localhost:3000/Empresas`);
-        respuestaEmpresas.value = await res.json();
+        //Esta es la funcion que crea la solicitud de trabajo de grado
+        const res = await fetch(`http://localhost:3000/SPTG`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'titulo': temaPropuesto.value,
+                'id_ta': profesor.id_usuario
+            })
+        });
+        const last_sptg = await fetch(`http://localhost:3000/ultimoSPTG`);
+        const respuesta_last_sptg = await last_sptg.json();
+        /*
+        const realiza_sptg = await fetch(`http://localhost:3000/realiza_sptg`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'id_s': temaPropuesto.value,
+                'id_ta': profesor.id_usuario
+            })
+        });
+        */
+        console.log(respuesta_last_sptg);
+
     }
 
 </script>
 <template>
     <div class="planilla solicitud" action="">
         <h2>Tema Propuesto</h2>
-        <input type="text" />
+        <input type="text" v-model="temaPropuesto" />
         <h2>Organizacion donde se presentará</h2>
         <input type="text" />
         <div class="solicitud__alumno">
@@ -88,7 +116,7 @@
             <label>Telefono: </label>
             <label>Oficina: </label>
             <label>Habitación: </label>
-            <button @click="obtenerAlumno" >seguir</button>
+            <button @click="obtenerAlumno()" >seguir</button>
         </div>
         <div class="solicitud__tutor-academico">
             <h2>Tutor Academico</h2>
@@ -102,7 +130,7 @@
             <label>Cargo actulal</label>
             <label>Correo {{ profesor.correo }}</label>
             <label>Telefono</label>
-            <button @click="obtenerProfesor" >seguir</button>
+            <button @click="obtenerProfesor()" >seguir</button>
         </div>
         <div class="solicitud__empresa">
             <h2>Empresa</h2>
@@ -117,7 +145,7 @@
             <label>Teléfono</label>
             <button @click="obtenerEmpresas">seguir</button>
         </div>
-        <button>Llenar solicitud</button>
+        <button @click="llenarSolicitud()" >Llenar solicitud</button>
     </div>
 </template>
 <style>
