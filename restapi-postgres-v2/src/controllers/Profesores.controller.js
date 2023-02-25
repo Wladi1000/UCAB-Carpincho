@@ -1,4 +1,7 @@
-import {Profesores} from '../models/Profesores.js'
+import {Profesores} from '../models/Profesores.js';
+import { QueryTypes } from 'sequelize';
+import { Usuarios } from '../models/Usuarios.js';
+
 export const obtenerProfesores = async (req,res) => {
     const obtener = await Profesores.findAll();
     res.json(obtener);
@@ -43,4 +46,22 @@ export const buscarProfesores = async (req, res) => {
     } catch (error) {
         return res.status(404).json("Profesor no encontrado");
     }
+}
+
+
+export const buscarProfesoresPorCedula = async (req, res) => {
+    const id = req.params.id;
+    const buscar = Profesores.findOne({
+        include: {
+            model: Usuarios,
+            where: {
+                cedula: id
+            }
+        },
+       }).then( (result) => {
+            return res.json(result.dataValues.usuario.dataValues);
+            //
+       }).catch ((error) => {
+            return res.status(404).json("La cedula no existe en la base de datos");
+       });
 }

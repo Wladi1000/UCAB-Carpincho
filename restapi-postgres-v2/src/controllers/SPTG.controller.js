@@ -73,3 +73,12 @@ export const datosEstudianteSPTG = async (req, res) => {
         return res.status(404).json("Error al buscar informacion");
     }
 }
+
+export const ultimoSPTG = async (req, res) => {
+    try {
+        const buscar = await sequelize.query('SELECT id_sptg FROM SPTG ORDER BY id_sptg DESC LIMIT 1', { type: QueryTypes.SELECT });
+        res.json(buscar);
+    } catch (error) {
+        return res.status(404).json("Error al buscar informacion");
+    }
+}
