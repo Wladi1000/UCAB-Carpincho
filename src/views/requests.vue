@@ -1,6 +1,7 @@
 <script setup>
     import Record from '../components/record.vue';
-    import { reactive, onMounted } from 'vue';
+    import PlanillaSolicitud from '../components/planillaSolicitud.vue';
+    import { ref, reactive, onMounted } from 'vue';
     const data = reactive([]);
     onMounted( async () =>{
 
@@ -12,20 +13,31 @@
         
         //data.value = data.value.filter(e => e.cedula == 'V-27301846');
     });
-        
+
+    let mostrarPlanilla = ref(false);
+
+    function swapMostrarPlanilla(){
+        mostrarPlanilla.value = !mostrarPlanilla.value;
+        console.log(mostrarPlanilla.value);
+    }
+
 </script>
 <template>
     <div class="request">
         <!-- Colocar un nuevo contenedor para colocar el agregado de solicitudes en el la parte de la lista -->
         <h1>Solicitudes de Propuestas de trabajo de grado</h1>
-        
+        <PlanillaSolicitud 
+            v-show="mostrarPlanilla" :mostrar="mostrarPlanilla" 
+            @responde = "( msg ) => mostrarPlanilla = msg"
+            />
         <div class="container request__container">
             <!-- Colocar un nuevo contenedor para el filtrado -->
             
             <div class="container__list">
                 <div class="controllers">
-                    <img src="../assets/imgs/icon-find.png">
-                    <img src="../assets/imgs/icon-upload.png">
+                    <button><img src="../assets/imgs/icon-find.png"></button>
+                    <button><img src="../assets/imgs/icon-upload.png"></button>
+                    <button @click="swapMostrarPlanilla()" >+</button>
                 </div>
 
                 <div class="list request__container__list">
