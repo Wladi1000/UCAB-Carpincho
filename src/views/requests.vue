@@ -15,7 +15,7 @@
     });
 
     onMounted( async () =>{
-        const res = await fetch("http://localhost:3000/SPTG")
+        const res = await fetch("http://localhost:3000/datosEstudiantes")
         const sptg = await res.json();
         data.value = sptg;
         console.log(sptg);
