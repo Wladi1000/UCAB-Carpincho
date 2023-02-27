@@ -14,13 +14,6 @@ let planilla = reactive({
   id_admin_evaluador: "",
 });
 
-onMounted(async () => {
-  const res = await fetch("http://localhost:3000/datosEstudiantes");
-  const sptg = await res.json();
-  data.value = sptg;
-  console.log(sptg);
-});
-
 let mostrarPlanilla = ref(false);
 
 function swapMostrarPlanilla() {
@@ -57,11 +50,11 @@ const actualizarPlanilla = async () => {
     }),
   });
   const actualizacion = await res.json();
-
+  
   const resi = await fetch("http://localhost:3000/datosEstudiantes");
   const sptg = await resi.json();
   data.value = sptg;
-
+  
   planilla.estatus = "";
   planilla.fechaenvio = "";
   planilla.id_admin_evaluador = "";
@@ -69,9 +62,10 @@ const actualizarPlanilla = async () => {
   planilla.id_ta = "";
   planilla.modalidad = "";
   planilla.titulo = "";
-
+  
   console.log(actualizacion);
 };
+
 const eliminarPlanilla = async () => {
   //Aqui el componente se tiene que renderizar nuevamente para cargar los cambios dentro de la base de datos
   const res = await fetch("http://localhost:3000/SPTG/" + planilla.id_sptg, {
@@ -81,61 +75,83 @@ const eliminarPlanilla = async () => {
   console.log(respuesta);
   return;
 };
+
+const obtenerProfesores = async () => {
+  //Aqui el componente se tiene que renderizar nuevamente para cargar los cambios dentro de la base de datos
+  const res = await fetch("http://localhost:3000/datosProfesores/");
+  const respuesta = await res.json();
+  console.log("respuesta");
+  console.log(respuesta);
+};
+
+obtenerProfesores();
+
+onMounted(async () => {
+  const res = await fetch("http://localhost:3000/datosEstudiantes");
+  const sptg = await res.json();
+  data.value = sptg;
+  console.log(sptg);
+});
 </script>
 <template>
   <div class="request">
     <!-- Colocar un nuevo contenedor para colocar el agregado de solicitudes en el la parte de la lista -->
     <h1>Solicitudes de Propuestas de trabajo de grado</h1>
     <!--<PlanillaSolicitud 
-            v-show="mostrarPlanilla" :mostrar="mostrarPlanilla" 
-            @responde = "( msg ) => mostrarPlanilla = msg"
-            /> -->
+      v-show="mostrarPlanilla" :mostrar="mostrarPlanilla" 
+      @responde = "( msg ) => mostrarPlanilla = msg"
+      /> -->
     <div class="container request__container">
       <!-- Colocar un nuevo contenedor para el filtrado -->
-
+      
       <div class="request__container__display">
         <div class="request__container__display__controllers">
-          <button><img src="../assets/imgs/icon-find.png" /></button>
-          <button><img src="../assets/imgs/icon-upload.png" /></button>
-          <button @click="swapMostrarPlanilla()">+</button>
+          <button><img src="../assets/imgs/search-circle-outline.svg" />Buscar Solicitud</button>
+          <button><img src="../assets/imgs/cloud-upload-outline.svg" />Cargar Solicitud</button>
+          <button @click="swapMostrarPlanilla()"><img src="../assets/imgs/add-circle-outline.svg" alt="">Crear Planilla</button>
         </div>
-
+        
         <div class="request__container__display__list">
           <Record
-            class="request__container__display__list__record"
-            v-for="e in data.value"
-            :key="e.id_sptg"
-            :titulo="e.titulo"
-            :estatus="e.estatus"
-            :fechaenvio="e.fechaenvio"
-            @click="clickenComponente(e.id_sptg)"
+          class="request__container__display__list__record"
+          v-for="e in data.value"
+          :key="e.id_sptg"
+          :titulo="e.titulo"
+          :estatus="e.estatus"
+          :fechaenvio="e.fechaenvio"
+          @click="clickenComponente(e.id_sptg)"
           />
         </div>
       </div>
-
+      
       <div class="request__container__preview">
         <h2>Visualizacion del documento de solicitud</h2>
         <form @submit.prevent="submit">
           <div class="request__container__preview__inputs">
             <p for="">Id: </p>
-            <input type="text" v-model="planilla.id_sptg" />
+            <input disabled type="number" v-model="planilla.id_sptg" />
             <p for="">Titulo del Trabajo </p>
             <input type="text" v-model="planilla.titulo" />
             <p for="">Modalidad </p>
-            <input type="text" v-model="planilla.modalidad" />
+            <select name="modalidad" id="">
+              <option value="E">Experimental</option>
+              <option value="I">Instrumental</option>
+            </select>
             <p for="">Fecha de envio </p>
-            <input type="text" v-model="planilla.fechaenvio" />
+            <input type="date" v-model="planilla.fechaenvio" />
             <p for="">Id del tutor </p>
             <input type="text" v-model="planilla.id_ta" />
             <p for="">Id del evaluador </p>
             <input type="text" v-model="planilla.id_admin_evaluador" />
           </div>
-          <button type="submit" v-on:click="actualizarPlanilla">
-            Actualizar planilla
-          </button>
-          <button type="submit" v-on:click="eliminarPlanilla">
-            Eliminar planilla
-          </button>
+          <div class="actions">
+            <button type="submit" v-on:click="actualizarPlanilla">
+              Actualizar planilla
+            </button>
+            <button type="submit" v-on:click="eliminarPlanilla">
+              Eliminar planilla
+            </button>
+          </div>
         </form>
       </div>
     </div>

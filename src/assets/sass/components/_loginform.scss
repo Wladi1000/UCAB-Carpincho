@@ -47,6 +47,7 @@
   }
 
   .login__form__btn {
+    appearance: none;
     margin: variables.$px-mrg-btn;
     padding: variables.$px-pdd-btn;
 
@@ -56,7 +57,6 @@
     width: variables.$px-w-btn;
     height: variables.$px-h-btn;
 
-    appearance: none;
     background-color: variables.$c-h1;
     color: variables.$c-input-lg;
     font-size: variables.$px-txt-btn;

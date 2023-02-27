@@ -109,13 +109,13 @@ body {
   background-color: #d9d9d9;
 }
 .login__form .login__form__btn {
-  margin: 15px 0 0 0;
+  appearance: none;
+  margin: 15px 5px 0 5px;
   padding: 0 15px;
   border-radius: 10px;
   border: none;
   width: 400px;
   height: 60px;
-  appearance: none;
   background-color: #0e0e2c;
   color: #d9d9d9;
   font-size: 23px;
@@ -204,13 +204,6 @@ body {
   overflow-y: hidden;
   transition: all ease-in 0.2s;
 }
-.request__container button {
-  width: 40px;
-}
-.request__container button img {
-  object-fit: contain;
-  width: 40px;
-}
 .request__container__display {
   display: flex;
   align-items: center;
@@ -220,6 +213,43 @@ body {
   height: 100%;
   width: 100%;
   border-radius: 10px;
+}
+.request__container__display__controllers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 15px;
+}
+.request__container__display__controllers button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  appearance: none;
+  background-color: #178a9e;
+  margin: 15px 5px 0 5px;
+  padding: 0 15px;
+  border-radius: 10px;
+  border: none;
+  width: 30%;
+  height: 60px;
+  background-color: #dadada;
+  transition: 0.2s;
+}
+.request__container__display__controllers button:hover {
+  cursor: pointer;
+  transform: scale(1.01);
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.192);
+  text-decoration: underline;
+}
+.request__container__display__controllers button:active {
+  transform: scale(0.98);
+}
+.request__container__display__controllers button img {
+  object-fit: contain;
+  width: 40px;
+  color: #dadada;
 }
 .request__container__display__list {
   display: flex;
@@ -250,6 +280,28 @@ body {
 .request__container__preview {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: #dadada;
+  height: 100%;
+  width: 100%;
+}
+.request__container__preview form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+.request__container__preview form input,
+.request__container__preview form p {
+  margin: 1px 0;
+  width: 100%;
+}
+.request__container__preview form .actions {
+  display: flex;
+  justify-content: center;
   align-items: center;
   width: 100%;
 }
