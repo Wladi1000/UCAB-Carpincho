@@ -402,7 +402,7 @@ CREATE TABLE IF NOT EXISTS SPTG (
 	titulo VARCHAR(200) NOT NULL,
 	modalidad CHAR(1) DEFAULT NULL,
 	fechaEnvio DATE NOT NULL DEFAULT CURRENT_DATE,
-	estatus CHAR (2) NOT NULL DEFAULT 'PA',
+	estatus CHAR (2) NOT NULL DEFAULT 'PG',
 	id_TA INTEGER NOT NULL,
 	id_admin_evaluador INTEGER DEFAULT NULL,
 	PRIMARY KEY (id_SPTG),
@@ -678,5 +678,9 @@ INSERT INTO Profesores(id_profesor) VALUES (5);
 INSERT INTO Empresas(nombre,rif,direccion,telefono) VALUES ('hola','hola','hola','hola');
 INSERT INTO ProfesionalesExternos(id_profesionale,id_empresa,fecha_aceptacion) VALUES (6,1,'2022-02-21');
 
-
+INSERT INTO SPTG(titulo, id_ta) VALUES ('Propuesta de Luis Somoza', 5);
+INSERT INTO SPTG(titulo, id_ta) VALUES ('Propuesta de Luis Somoza', 5);
+INSERT INTO SPTG(titulo, id_ta) VALUES ('Propuesta de Luis Somoza', 5);
+INSERT INTO SPTG(titulo, id_ta) VALUES ('Propuesta de Luis Somoza', 5);
+UPDATE SPTG SET estatus = 'PG' WHERE id_sptg = 2
 INSERT INTO CDE(id_cde) VALUES ('001');
