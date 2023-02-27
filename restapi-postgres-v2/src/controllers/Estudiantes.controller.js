@@ -78,3 +78,11 @@ export const buscarEstudiantesPorCedula = async (req, res) => {
             return res.status(404).json("La cedula no existe en la base de datos");
        });
     }
+
+    export const datosEstudiantes = async (req, res) => {
+        
+           const buscar = await Estudiantes.findAll({
+            include: Usuarios
+           });
+           return res.json(buscar);
+    }

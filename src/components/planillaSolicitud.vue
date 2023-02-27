@@ -35,13 +35,8 @@
     let cedulaProfesor = ref('');
 
     onMounted( async () =>{
-        //const res = await fetch("http://localhost:3000/SPTG");
-        //data.value = await res.json();
-        //console.log(data);
-
         const res = await fetch(`http://localhost:3000/Empresas`);
         respuestaEmpresas.value = await res.json();
-        console.log(respuestaEmpresas);
     });
 
     function swapMostrarPlanilla(){
@@ -74,7 +69,7 @@
         //Aqui no sabemos que hacer pero debe crear la planilla
 
         //Esta es la funcion que crea la solicitud de trabajo de grado
-        const res = await fetch(`http://localhost:3000/SPTG`, {
+        fetch(`http://localhost:3000/SPTG`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -84,23 +79,56 @@
                 'titulo': temaPropuesto.value,
                 'id_ta': profesor.id_usuario
             })
-        });
-        const last_sptg = await fetch(`http://localhost:3000/ultimoSPTG`);
-        const respuesta_last_sptg = await last_sptg.json();
-        /*
-        const realiza_sptg = await fetch(`http://localhost:3000/realiza_sptg`, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'id_s': temaPropuesto.value,
-                'id_ta': profesor.id_usuario
+        }).then( (response) => {
+            console.log("respuesta de fetch");
+            const objeto = response.json();
+            return objeto;
+        }).then( (data) => {
+            console.log(data);
+            fetch(`http://localhost:3000/realiza_sptg`, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'id_sptg': data.id_sptg,
+                    'id_estudiante': alumno.id_usuario
+                })
+            }).then( (response) => {
+                return response.json();
+            }).then( (data) => {
+                console.log(data);
             })
+            /*
+            .then( (response) => {
+                /*
+                fetch(`http://localhost:3000/evalua_sptg`, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'id_sptg': data.id_sptg,
+                    'id_administrador': 2 //Valor por defecto de Luz Medina dentro de la base de datos (Tiene que ser dinamico)
+                })
+                }).then( (response) => {
+                    return response.json();
+                }).then( (data) => {
+                    console.log(data);
+                });
+            });
+
+            */
+            //En esta seccion del codigo debemos insertar la peticion para guardar tambien al evaluador
+            //que esta enviando estos datos de la propuesta. El cual sera extraido de la memoria local del
+            //navegador, ya que es el usuario que manipula el sistema.
+            return;
+        } ).catch( (error) => {
+            console.log("Error en la creacion de SPTG");
+            console.log(error);
         });
-        */
-        console.log(respuesta_last_sptg);
 
     }
 

@@ -1,16 +1,19 @@
 <script setup>
 
     const props = defineProps({
-        nombres: String,
-        cedula: String,
-        correo: String
+        titulo: String,
+        modalidad: String,
+        fechaenvio: String,
+        estatus: String,
+        id_ta: Number,
+        id_admin_evaluador: Number
     });
 
 </script>
 <template>
     <div>
-        <p>Nombre(s) del alumno(s): {{ props.nombres }}</p>
-        <p>Cedula(s) del(os) alumno(s): {{ props.cedula }}</p>
-        <p>Correo del alumno: {{ props.correo }}</p>
+        <p>Titulo de propuesta: {{ props.titulo }}</p>
+        <p>estatus: {{ props.estatus }}</p>
+        <p>fechaenvio: {{ props.fechaenvio }}</p>
     </div>
 </template>

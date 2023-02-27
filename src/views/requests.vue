@@ -3,15 +3,22 @@
     import PlanillaSolicitud from '../components/planillaSolicitud.vue';
     import { ref, reactive, onMounted } from 'vue';
     const data = reactive([]);
-    onMounted( async () =>{
+    
+    let planilla = reactive({
+        id_sptg: '',
+        titulo: '',
+        modalidad: '',
+        fechaenvio: '',
+        estatus: '',
+        id_ta: '',
+        id_admin_evaluador: ''
+    });
 
-        const res = await fetch("http://localhost:3000/Usuarios");
-        data.value = await res.json();
-        console.log(data);
-        //const jalo = await fetch("http://localhost:3000/datosEstudiantes");
-        //console.log('holiakjshajkshjkahs' + jalo);
-        
-        //data.value = data.value.filter(e => e.cedula == 'V-27301846');
+    onMounted( async () =>{
+        const res = await fetch("http://localhost:3000/SPTG")
+        const sptg = await res.json();
+        data.value = sptg;
+        console.log(sptg);
     });
 
     let mostrarPlanilla = ref(false);
@@ -19,6 +26,46 @@
     function swapMostrarPlanilla(){
         mostrarPlanilla.value = !mostrarPlanilla.value;
         console.log(mostrarPlanilla.value);
+    }
+
+    const clickenComponente = async (id) => {
+        const res = await fetch("http://localhost:3000/SPTG/" + id)
+        const respuesta = await res.json();
+        console.log(respuesta);
+        planilla.id_sptg = respuesta.id_sptg
+        planilla.titulo = respuesta.titulo
+        planilla.modalidad = respuesta.modalidad
+        planilla.fechaenvio = respuesta.fechaenvio
+        planilla.estatus = respuesta.estatus
+        planilla.id_ta = respuesta.id_ta
+        planilla.id_admin_evaluador = respuesta.id_admin_evaluador
+    }
+
+    const actualizarPlanilla = async () => {
+        const res = await fetch("http://localhost:3000/SPTG/"+planilla.id_sptg, {
+            method: 'PUT',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                titulo: planilla.titulo,
+                modalidad: planilla.modalidad,
+                fechaenvio: planilla.fechaenvio,
+                id_ta: planilla.id_ta,
+                id_admin_evaluador: planilla.id_admin_evaluador,
+            })
+        });
+        const actualizacion = await res.json(); 
+        console.log(actualizacion)
+
+    }
+    const eliminarPlanilla = async () => {
+        //Aqui el componente se tiene que renderizar nuevamente para cargar los cambios dentro de la base de datos
+        const res = await fetch("http://localhost:3000/SPTG/"+planilla.id_sptg, {
+            method: 'DELETE'
+        });
+        return;
     }
 
 </script>
@@ -42,21 +89,32 @@
 
                 <div class="list request__container__list">
                     <Record class="record request__container__list__record"  
-                    v-for="e in data.value" :key="e.id_usuario" 
-                    :nombres="e.nombres" :cedula="e.cedula" :correo="e.correo" 
-                    />          
+                    v-for="e in data.value" :key="e.id_sptg" 
+                    :titulo="e.titulo" :estatus="e.estatus" :fechaenvio="e.fechaenvio" 
+                    @click="clickenComponente(e.id_sptg)"/>          
                 </div>
             </div>
 
             <div class="preview request__container__preview">
                 <h2>Visualizacion del documento de solicitud</h2>
-                <p>Esto es un documento de solicitud de trabajos de grado para </p>
-                <div class="request__container__preview__inputs">
-                    <label for="">Nombre:  </label>
-                    <input type="text">
-                    <label for="">Titutlo del Trabajo  </label>
-                    <input type="text">
-                </div>
+                <form @submit.prevent="submit">
+                    <div class="request__container__preview__inputs">
+                        <label for="">Id:  </label>
+                        <input type="text" v-model="planilla.id_sptg">
+                        <label for="">Titulo del Trabajo  </label>
+                        <input type="text" v-model="planilla.titulo">
+                        <label for="">Modalidad  </label>
+                        <input type="text" v-model="planilla.modalidad">
+                        <label for="">Fecha de envio </label>
+                        <input type="text" v-model="planilla.fechaenvio">
+                        <label for="">Id del tutor  </label>
+                        <input type="text" v-model="planilla.id_ta">
+                        <label for="">Id del evaluador  </label>
+                        <input type="text" v-model="planilla.id_admin_evaluador">
+                    </div>
+                    <button type="submit" v-on:click="actualizarPlanilla">Actualizar planilla</button>
+                    <button type="submit" v-on:click="eliminarPlanilla">Eliminar planilla</button>
+                </form>
             </div>
         </div>
     </div>
