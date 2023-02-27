@@ -3,15 +3,11 @@
     import PlanillaSolicitud from '../components/planillaSolicitud.vue';
     import { ref, reactive, onMounted } from 'vue';
     const data = reactive([]);
+    
     onMounted( async () =>{
-
-        const res = await fetch("http://localhost:3000/Usuarios");
-        data.value = await res.json();
-        console.log(data);
-        //const jalo = await fetch("http://localhost:3000/datosEstudiantes");
-        //console.log('holiakjshajkshjkahs' + jalo);
-        
-        //data.value = data.value.filter(e => e.cedula == 'V-27301846');
+        const res = await fetch("http://localhost:3000/listarEstudiantes")
+        const estudiantes = await res.json();
+        data.value = estudiantes;
     });
 
     let mostrarPlanilla = ref(false);
@@ -42,8 +38,8 @@
 
                 <div class="list request__container__list">
                     <Record class="record request__container__list__record"  
-                    v-for="e in data.value" :key="e.id_usuario" 
-                    :nombres="e.nombres" :cedula="e.cedula" :correo="e.correo" 
+                    v-for="e in data.value" :key="e.id_estudiante" 
+                    :nombres="e.usuario.nombres" :cedula="e.usuario.cedula" :correo="e.usuario.correo" 
                     />          
                 </div>
             </div>

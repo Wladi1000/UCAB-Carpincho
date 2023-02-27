@@ -87,17 +87,21 @@ DROP TABLE IF EXISTS CTG;
 DROP DOMAIN IF EXISTS NAME_DOMAIN;
 --Código para definición de dominios
 CREATE DOMAIN NAME_DOMAIN AS VARCHAR(100);
--------------------------------------------------------------
+/*************************************************/
 CREATE TABLE IF NOT EXISTS Usuarios (
 	id_usuario SERIAL,
 	nombres NAME_DOMAIN NOT NULL,
 	apellidos NAME_DOMAIN NOT NULL,
 	correo VARCHAR(250) NOT NULL,
 	cedula VARCHAR(10) NOT NULL,
+	telefono CHAR(14) NOT NULL,
+	contrasena VARCHAR(200) NOT NULL,
 	PRIMARY KEY (id_usuario),
 	UNIQUE (cedula),
 	UNIQUE (correo)
 );
+ALTER TABLE Usuarios DROP CONSTRAINT regex_contrasena 
+
 CREATE TABLE IF NOT EXISTS Empresas (
 	id_empresa SERIAL,
 	nombre NAME_DOMAIN NOT NULL,
@@ -107,27 +111,41 @@ CREATE TABLE IF NOT EXISTS Empresas (
 	PRIMARY KEY (id_empresa),
 	UNIQUE (rif)
 );
+/*************************************************/
 CREATE TABLE IF NOT EXISTS CDE (
 	id_CDE VARCHAR(13) NOT NULL,
 	fecha_conformacion DATE NOT NULL DEFAULT CURRENT_DATE,
 	PRIMARY KEY (id_CDE)
 );
+/*************************************************/
 CREATE TABLE IF NOT EXISTS Especialidades (
 	id_especialidad SERIAL,
 	nombre NAME_DOMAIN NOT NULL,
 	PRIMARY KEY (id_especialidad)
 );
+/*************************************************/
 CREATE TABLE IF NOT EXISTS CTG (
 	id_CTG TEXT NOT NULL,
 	fecha_conformacion DATE NOT NULL DEFAULT CURRENT_DATE,
 	PRIMARY KEY (id_CTG)
 );
+/************************************************/
 CREATE TABLE IF NOT EXISTS PE_J_TDGI (
 	id_PE_J_TDGI SERIAL,
-	estatus CHAR(2) NOT NULL,
+	estatus CHAR(2) NOT NULL DEFAULT 'PG',
 	nota_final INTEGER DEFAULT NULL,
 	PRIMARY KEY (id_PE_J_TDGI)
 );
+
+/*Una PE_J_TDGI puede tener los siguientes estatus
+	PG: Planilla generada y lista para imprimir, no contiene datos
+	PI: Planilla impresa, la planilla fue impresa para enviar a jurado
+	PR: Planilla revisada, y con datos del jurado cargados en el sistema
+*/
+ALTER TABLE PE_J_TDGI
+ADD CONSTRAINT estatus_constraint
+CHECK (estatus IN ('PG', 'PI','PR'));
+/************************************************/
 
 CREATE TABLE Criterios_Rev_TIG (
 	id_Criterios_Rev_TIG SERIAL,
@@ -174,24 +192,42 @@ CREATE TABLE IF NOT EXISTS Criterios_TDGI_TE (
 	nombre TEXT NOT NULL,
 	PRIMARY KEY (id_Criterios_TDGI_TE)
 );
+/************************************************/
 CREATE TABLE IF NOT EXISTS PE_TA_TDGE (
 	id_PE_TA_TDGE SERIAL,
-	estatus CHAR(2) NOT NULL DEFAULT 'NR',
+	estatus CHAR(2) NOT NULL DEFAULT 'PG',
 	nota_final INTEGER DEFAULT NULL,
 	PRIMARY KEY (id_PE_TA_TDGE)
 );
+/*Una PE_TA_TDGE puede tener los siguientes estatus
+	PG: Planilla generada y lista para imprimir, no contiene datos
+	PI: Planilla impresa, la planilla fue impresa para enviar a jurado
+	PR: Planilla revisada, y con datos del jurado cargados en el sistema
+*/
+ALTER TABLE PE_TA_TDGE
+ADD CONSTRAINT estatus_constraint
+CHECK (estatus IN ('PG', 'PI','PR'));
+/************************************************/
 CREATE TABLE IF NOT EXISTS PE_TE_TDGI (
 	id_PE_TE_TDGI SERIAL,
-	estatus CHAR(2) NOT NULL DEFAULT 'NR',
+	estatus CHAR(2) NOT NULL DEFAULT 'PG',
 	nota_final INTEGER DEFAULT NULL, 
 	PRIMARY KEY (id_PE_TE_TDGI)
 );
+ALTER TABLE PE_TE_TDGI
+ADD CONSTRAINT estatus_constraint
+CHECK (estatus IN ('PG', 'PI','PR'));
+/************************************************/
 CREATE TABLE IF NOT EXISTS PE_J_TDGE (
 	id_PE_J_TDGE SERIAL,
-	estatus CHAR(2) NOT NULL,
+	estatus CHAR(2) NOT NULL DEFAULT 'PG',
 	nota_final INTEGER DEFAULT NULL,
 	PRIMARY KEY (id_PE_J_TDGE)
 );
+ALTER TABLE PE_J_TDGE
+ADD CONSTRAINT estatus_constraint
+CHECK (estatus IN ('PG', 'PI','PR'));
+/************************************************/
 ---------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS Profesores (
 	id_profesor INT NOT NULL,
@@ -259,7 +295,7 @@ CREATE TABLE IF NOT EXISTS Conforma_Jurado_ProfesionalExterno(
 );
 CREATE TABLE IF NOT EXISTS PE_TA_TDGI (
 	id_PE_TA_TDGI SERIAL,
-	estatus CHAR(2) NOT NULL,
+	estatus CHAR(2) NOT NULL DEFAULT 'PG',
 	nota_final INTEGER DEFAULT NULL,
 	id_PE_TE_TDGI INTEGER NOT NULL,
 	PRIMARY KEY (id_PE_TA_TDGI),
@@ -267,9 +303,13 @@ CREATE TABLE IF NOT EXISTS PE_TA_TDGI (
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
+ALTER TABLE PE_TA_TDGI
+ADD CONSTRAINT estatus_constraint
+CHECK (estatus IN ('PG', 'PI','PR'));
+/************************************************/
 CREATE TABLE IF NOT EXISTS PE_final_TDGI (
 	id_PE_Final_TDGI SERIAL NOT NULL,
-	estatus CHAR(2) NOT NULL,
+	estatus CHAR(2) NOT NULL DEFAULT 'PG',
 	tipo_mencion CHAR(1) DEFAULT 'N',
 	razon_mencion TEXT DEFAULT NULL,
 	nota_final INTEGER DEFAULT NULL,
@@ -279,6 +319,10 @@ CREATE TABLE IF NOT EXISTS PE_final_TDGI (
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
+ALTER TABLE PE_final_TDGI
+ADD CONSTRAINT estatus_constraint
+CHECK (estatus IN ('PG', 'PI','PR'));
+/************************************************/
 CREATE TABLE IF NOT EXISTS Contiene_PE_J_TDGI (
 	id_PE_Final_TDGI INTEGER NOT NULL,
 	id_PE_J_TDGI INTEGER NOT NULL,
@@ -294,7 +338,7 @@ CREATE TABLE IF NOT EXISTS Contiene_PE_J_TDGI (
 ---
 CREATE TABLE IF NOT EXISTS PE_Final_TDGE (
 	id_PE_Final_TDGE SERIAL NOT NULL,
-	estatus CHAR(2) NOT NULL,
+	estatus CHAR(2) NOT NULL DEFAULT 'PG',
 	tipo_mencion CHAR(1) DEFAULT 'N',
 	razon_mencion TEXT DEFAULT NULL,
 	nota_final INTEGER DEFAULT NULL,
@@ -304,7 +348,10 @@ CREATE TABLE IF NOT EXISTS PE_Final_TDGE (
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
-
+ALTER TABLE PE_Final_TDGE
+ADD CONSTRAINT estatus_constraint
+CHECK (estatus IN ('PG', 'PI','PR'));
+/************************************************/
 
 CREATE TABLE IF NOT EXISTS TDGE (
 	id_TDGE INTEGER NOT NULL,
@@ -366,7 +413,7 @@ CREATE TABLE IF NOT EXISTS SPTG (
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
-
+DROP TABLE IF EXISTS SolicitudTEG;
 CREATE TABLE IF NOT EXISTS SolicitudTEG (
 	id_STEG INTEGER NOT NULL,
 	PRIMARY KEY (id_STEG),
@@ -374,6 +421,9 @@ CREATE TABLE IF NOT EXISTS SolicitudTEG (
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
+
+ALTER TABLE SolicitudTEG
+ADD CONSTRAINT existe_en_solicitudtig CHECK(validar_existencia_SPTIG(id_steg) = 'false');
 CREATE TABLE IF NOT EXISTS SolicitudTIG (
 	id_STIG INTEGER NOT NULL,
 	id_empresa INTEGER NOT NULL,
@@ -389,6 +439,8 @@ CREATE TABLE IF NOT EXISTS SolicitudTIG (
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
+ALTER TABLE SolicitudTIG
+ADD CONSTRAINT existe_en_solicitudteg CHECK(validar_existencia_SPTEG(id_stig) = 'false');
 ---RELACIONES CORRESPONDIENTES A LA SOLICITUD DE 
 ---PROPUESTA DE TRABAJO DE GRADO
 
@@ -536,6 +588,7 @@ CREATE TABLE PE_REVISOR_PTIG (
 		ON DELETE RESTRICT
 );
 
+
 CREATE TABLE PE_REVISOR_PTEG (
 	id_PE_REVISOR_PTEG SERIAL,
 	desicion_final TEXT NOT NULL,
@@ -611,19 +664,19 @@ CREATE TABLE IF NOT EXISTS Contiene_Criterios_TDGI_TA (
 		ON DELETE RESTRICT
 );
 /*Insertando listado de usuarios*/
-INSERT INTO Usuarios(nombres,apellidos,correo,cedula) VALUES ('Luis Carlos', 'Somoza Ledezma', 'lcsomoza.19@est.ucab.edu.ve', '27656348');
-INSERT INTO Usuarios(nombres,apellidos,correo,cedula) VALUES ('Luis Noel', 'Somoza Ledezma', 'lnsomoza.19@est.ucab.edu.ve', '27656349');
-INSERT INTO Usuarios(nombres,apellidos,correo,cedula) VALUES ('Luis Fernando', 'Somoza Ledezma', 'lfsomoza.19@est.ucab.edu.ve', '27656350');
-INSERT INTO Usuarios(nombres,apellidos,correo,cedula) VALUES ('Luz Esperanza', 'Medina', 'lemedina@ucab.edu.ve', '99999999');
-INSERT INTO Usuarios(nombres,apellidos,correo,cedula) VALUES ('Franklin', 'Bello', 'fbelloc@ucab.edu.ve', '00000000');
-INSERT INTO Usuarios(nombres,apellidos,correo,cedula) VALUES ('Wladimir', 'San Vicente', 'wjsanvicente.18@est.ucab.edu.ve', '27301846');
+INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Luis Carlos', 'Somoza Ledezma', 'lcsomoza.19@est.ucab.edu.ve', '27656348','04249749230','admin');
+INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Luz Esperanza', 'Medina', 'lemedina@ucab.edu.ve', '99999999','04249749230','admin');
+INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Luis Noel', 'Somoza Ledezma', 'lnsomoza.19@est.ucab.edu.ve', '27656349','04249749230','admin');
+INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Luis Fernando', 'Somoza Ledezma', 'lfsomoza.19@est.ucab.edu.ve', '27656350','04249749230','admin');
+INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Franklin', 'Bello', 'fbelloc@ucab.edu.ve', '00000000','04249749230','admin');
+INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Wladimir', 'San Vicente', 'wjsanvicente.18@est.ucab.edu.ve', '27301846','04249749230','admin');
 INSERT INTO Estudiantes(id_estudiante) VALUES (1);
-INSERT INTO Estudiantes(id_estudiante) VALUES (7);
-INSERT INTO Estudiantes(id_estudiante) VALUES (8);
+INSERT INTO Estudiantes(id_estudiante) VALUES (4);
+INSERT INTO Estudiantes(id_estudiante) VALUES (3);
 INSERT INTO Administradores(id_administrador,oficina,cargo,experiencia) VALUES (2, 'Oficina', 'cargo',5);
-INSERT INTO Profesores(id_profesor) VALUES (3);
+INSERT INTO Profesores(id_profesor) VALUES (5);
 INSERT INTO Empresas(nombre,rif,direccion,telefono) VALUES ('hola','hola','hola','hola');
-INSERT INTO ProfesionalesExternos(id_profesionale,id_empresa,fecha_aceptacion) VALUES (4,1,'2022-02-21');
+INSERT INTO ProfesionalesExternos(id_profesionale,id_empresa,fecha_aceptacion) VALUES (6,1,'2022-02-21');
 
 
 INSERT INTO CDE(id_cde) VALUES ('001');

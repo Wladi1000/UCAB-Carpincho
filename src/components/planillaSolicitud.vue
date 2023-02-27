@@ -69,7 +69,7 @@
         //Aqui no sabemos que hacer pero debe crear la planilla
 
         //Esta es la funcion que crea la solicitud de trabajo de grado
-        const respuesta = fetch(`http://localhost:3000/SPTG`, {
+        fetch(`http://localhost:3000/SPTG`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -99,7 +99,10 @@
                 return response.json();
             }).then( (data) => {
                 console.log(data);
-            }).then( (response) => {
+            })
+            /*
+            .then( (response) => {
+                /*
                 fetch(`http://localhost:3000/evalua_sptg`, {
                 method: 'POST',
                 mode: 'cors',
@@ -117,7 +120,7 @@
                 });
             });
 
-
+            */
             //En esta seccion del codigo debemos insertar la peticion para guardar tambien al evaluador
             //que esta enviando estos datos de la propuesta. El cual sera extraido de la memoria local del
             //navegador, ya que es el usuario que manipula el sistema.

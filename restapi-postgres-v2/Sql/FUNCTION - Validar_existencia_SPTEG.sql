@@ -1,0 +1,19 @@
+CREATE OR REPLACE FUNCTION validar_existencia_SPTEG (_id_sptg INTEGER)
+RETURNS BOOLEAN
+LANGUAGE PLPGSQL
+AS
+$$
+DECLARE
+	_result BOOLEAN;
+BEGIN
+	SELECT EXISTS (
+		SELECT STEG.id_steg
+		FROM SOLICITUDTEG AS STEG
+		WHERE STEG.id_steg = _id_sptg
+	)
+	INTO _result;
+	RETURN _result;
+END;
+$$;
+
+SELECT validar_existencia_SPTEG(1);
