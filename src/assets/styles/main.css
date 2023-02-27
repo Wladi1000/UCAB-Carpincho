@@ -4,8 +4,74 @@
   padding: 0;
 }
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 * {
   font-family: "Roboto", sans-serif;
+}
+
+.router {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+.router h1 {
+  padding: 15px 250px;
+  border-bottom: solid 1px #0E0E2C;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 10%;
+  height: 100%;
+  background-color: #494748;
+}
+.navbar img {
+  margin-top: 30px;
+  width: 88px;
+  height: 100px;
+  object-fit: contain;
+}
+.navbar__list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 20px;
+  list-style: none;
+}
+.navbar__list__element {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 55px;
+  width: 90%;
+  border-bottom: 1px #fff solid;
+  transition: 0.2s;
+}
+.navbar__list__element a {
+  color: #fff;
+  text-decoration: none;
+}
+.navbar__list__element:hover {
+  transform: scale(1.02);
+}
+.navbar__list__element:hover::before {
+  content: "→";
+  color: #fff;
+  padding-right: 2px;
 }
 
 .login__form {
@@ -80,133 +146,57 @@
   cursor: pointer;
 }
 
-.navbar {
+#app {
   display: flex;
-  align-items: center;
-  flex-direction: column;
-  width: 10%;
-  background-color: #494748;
-}
-.navbar img {
-  margin-top: 30px;
-  width: 88px;
-  height: 100px;
-  object-fit: contain;
-}
-.navbar__list {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin-top: 20px;
-  list-style: none;
-}
-.navbar__list__element {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 55px;
-  width: 90%;
-  border-bottom: 1px #fff solid;
-  transition: 0.2s;
-}
-.navbar__list__element a {
-  color: #fff;
-  text-decoration: none;
-}
-.navbar__list__element:hover {
-  transform: scale(1.02);
-}
-.navbar__list__element:hover::before {
-  content: "→";
-  color: #fff;
-  padding-right: 2px;
-}
-
-.router {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-color: #fff;
-  width: 90%;
-  overflow-y: hidden;
-  overflow-x: hidden;
-}
-.router h1 {
-  padding: 15px 250px;
-  border-bottom: solid 1px #0E0E2C;
-}
-.router .container {
-  display: flex;
-  justify-content: center;
-  margin: 25px 0 0 25px;
-  height: 80%;
+  height: 100%;
   width: 100%;
-  border-radius: 10px;
-  overflow-y: hidden;
-  overflow-x: hidden;
-}
-.router .container .container__list {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-}
-.router .container .container__list .controllers {
-  display: flex;
-  justify-content: flex-end;
-}
-.router .container .container__list .controllers img {
-  height: 35px;
-  width: 35px;
-  padding: 0 20px;
-}
-.router .container .container__list .list {
-  width: 100%;
-  height: auto;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  padding: 20px;
-}
-.router .container .container__list .list .record {
-  margin-top: 20px;
-  padding: 5px;
-  width: 100%;
-  height: 80px;
-  border-radius: 10px;
-  background-color: aliceblue;
-  box-shadow: -2px 2px 6px #000;
-  transition: 0.2s;
-}
-.router .container .container__list .list .record:hover {
-  cursor: pointer;
-  transform: scale(1.02);
-}
-.router .container .container__list .list .record:active {
-  transform: scale(1.03);
-}
-.router .container .preview {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 20px;
-  width: 50%;
-}
-
-.app {
-  display: flex;
-  justify-content: space-between;
 }
 
 .login {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 90%;
-  height: 625px;
-  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../imgs/login-bk02.png");
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(0deg, hsla(0, 0%, 0%, 0.6), rgba(0, 0, 0, 0.6)), url("../imgs/login-bk02.png");
   background-repeat: no-repeat;
   background-size: cover;
+}
+.login .login-bc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  backdrop-filter: blur(3px);
+}
+
+.request__container {
+  display: flex;
+  align-items: center;
+  background-color: antiquewhite;
+}
+.request__container button {
+  width: 40px;
+}
+.request__container button img {
+  object-fit: contain;
+  width: 40px;
+}
+.request__container__list {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: azure;
+}
+.request__container__preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
 /*# sourceMappingURL=main.css.map */
