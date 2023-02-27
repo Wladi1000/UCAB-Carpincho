@@ -1,8 +1,13 @@
 .request__container {
   display: flex;
   align-items: center;
+  justify-content: center;
 
-  background-color: antiquewhite;
+  height: 100%;
+  width: 100%;
+
+  overflow-y: hidden;
+  transition: all ease-in 0.2s;
 
   button {
     width: 40px;
@@ -13,22 +18,57 @@
     }
   }
 
-  &__list {
+  &__display {
     display: flex;
     align-items: center;
     flex-direction: column;
 
+    overflow-y: hidden;
+    overflow-x: hidden;
+
     height: 100%;
     width: 100%;
 
-    background-color: azure;
+    border-radius: 10px;
+
+    &__list {
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      padding: 10px 0;
+
+      height: 100%;
+      width: 100%;
+
+      overflow-y: scroll;
+
+      &::-webkit-scrollbar {
+        appearance: none;
+      }
+      &::-webkit-scrollbar:vertical {
+        width: 10px;
+      }
+      &::-webkit-scrollbar:horizontal {
+        height: 10px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: #797979;
+        border-radius: 20px;
+        border: 2px solid #f1f2f3;
+      }
+      &::-webkit-scrollbar-track {
+        border-radius: 10px;
+      }
+    }
   }
 
   &__preview {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
     width: 100%;
+
   }
 }

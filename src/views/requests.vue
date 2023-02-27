@@ -93,16 +93,16 @@ const eliminarPlanilla = async () => {
     <div class="container request__container">
       <!-- Colocar un nuevo contenedor para el filtrado -->
 
-      <div class="container__list">
-        <div class="controllers">
+      <div class="request__container__display">
+        <div class="request__container__display__controllers">
           <button><img src="../assets/imgs/icon-find.png" /></button>
           <button><img src="../assets/imgs/icon-upload.png" /></button>
           <button @click="swapMostrarPlanilla()">+</button>
         </div>
 
-        <div class="list request__container__list">
+        <div class="request__container__display__list">
           <Record
-            class="record request__container__list__record"
+            class="request__container__display__list__record"
             v-for="e in data.value"
             :key="e.id_sptg"
             :titulo="e.titulo"
@@ -113,7 +113,7 @@ const eliminarPlanilla = async () => {
         </div>
       </div>
 
-      <div class="preview request__container__preview">
+      <div class="request__container__preview">
         <h2>Visualizacion del documento de solicitud</h2>
         <form @submit.prevent="submit">
           <div class="request__container__preview__inputs">
