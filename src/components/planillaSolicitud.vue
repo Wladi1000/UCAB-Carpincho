@@ -1,8 +1,10 @@
 <script setup>
 
     import { ref, reactive, onMounted} from 'vue';
+    
+    const emit = defineEmits(['response']);
     const data = reactive([]);
-
+    
     let alumno = reactive({
         id_usuario: '',
         nombres: '',
@@ -36,6 +38,10 @@
         const res = await fetch(`http://localhost:3000/Empresas`);
         respuestaEmpresas.value = await res.json();
     });
+
+    function swapMostrarPlanilla(){
+        emit('response', false);
+    }
 
     async function obtenerAlumno (){
 
@@ -126,6 +132,7 @@
 </script>
 <template>
     <div class="planilla solicitud" action="">
+        <button @click="swapMostrarPlanilla" >Este boton echa para atras</button>
         <h2>Tema Propuesto</h2>
         <input type="text" v-model="temaPropuesto" />
         <h2>Organizacion donde se presentará</h2>
@@ -135,19 +142,21 @@
             <label>Cedula: {{ alumno.cedula }}</label>
             <p>{{ cedulaAlumno }}</p>
             <input type="text" v-model="cedulaAlumno" />
+            <button @click="obtenerAlumno()" >Buscar Alumno</button>
             <label>Nombres: {{ alumno.nombres }}</label>
             <label>Apellidos: {{ alumno.apellidos }}</label>
             <label>Correo: {{ alumno.correo }}</label>
             <label>Telefono: </label>
             <label>Oficina: </label>
             <label>Habitación: </label>
-            <button @click="obtenerAlumno()" >seguir</button>
+            <button disabled>No hacer caso a este boton seguir</button>
         </div>
         <div class="solicitud__tutor-academico">
             <h2>Tutor Academico</h2>
             <label>Cédula {{ profesor.cedula }}</label>
             <input type="text" v-model="cedulaProfesor"/>
             <p>{{ cedulaProfesor }}</p>
+            <button @click="obtenerProfesor()" >Buscar Tutor </button>
             <label>Nombres {{ profesor.nombres }}</label>
             <label>Apellidos {{ profesor.apellidos }}</label>
             <label>Profesión</label>
@@ -155,7 +164,7 @@
             <label>Cargo actulal</label>
             <label>Correo {{ profesor.correo }}</label>
             <label>Telefono</label>
-            <button @click="obtenerProfesor()" >seguir</button>
+            <button disabled>No hacer caso a este boton seguir</button>
         </div>
         <div class="solicitud__empresa">
             <h2>Empresa</h2>
@@ -168,16 +177,22 @@
             
             <label>Direccién</label>
             <label>Teléfono</label>
-            <button @click="obtenerEmpresas">seguir</button>
+            <button disabled>No hacer caso a este boton seguir</button>
         </div>
         <button @click="llenarSolicitud()" >Llenar solicitud</button>
+        <button>Elimitar solicitud</button>
+        <button>Actualizar solicitud</button>
     </div>
 </template>
 <style>
     .planilla{
+        position: absolute;
+        margin: 10px 0;
         padding: 15px;
         width: 500px;
         background-color: #D9D9D9;
+        border: solid 1px #000;
+        border-radius: 10px;
     }
     .planilla h2{
         margin: 10px 0;
