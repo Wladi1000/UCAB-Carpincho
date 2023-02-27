@@ -158,7 +158,7 @@ body {
   transform: scale(1.02);
 }
 .request__container__display__list__record:active {
-  transform: scale(1.01);
+  transform: scale(1);
 }
 .request__container__display__list__record:nth-child(2n) {
   background-color: #e2e2e2;

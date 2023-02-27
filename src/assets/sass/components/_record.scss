@@ -15,7 +15,7 @@
     transform: scale(1.02);
   }
   &:active{
-    transform: scale(1.01);
+    transform: scale(1.00);
   }
   &:nth-child(2n){
     background-color: variables.$c-bc-record1;
