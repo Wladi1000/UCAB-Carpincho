@@ -15,11 +15,13 @@ body {
 
 @import './base/_typography.scss';
 
-@import './pages/router';
 @import './components/navbar';
 @import './components/loginform';
 @import './components/record';
+@import './components/planillaRequest';
+@import './components//planillaRequestCreate';
 
+@import './pages/router';
 @import'./pages/app';
 @import './pages/login';
 @import './pages/request';

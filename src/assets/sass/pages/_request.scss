@@ -1,4 +1,5 @@
 @use '../abstracts/variables';
+
 .request__container {
   display: flex;
   align-items: center;
@@ -9,6 +10,45 @@
 
   overflow-y: hidden;
   transition: all ease-in 0.2s;
+
+  button {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    appearance: none;
+    background-color: #178a9e;
+
+    margin: variables.$px-mrg-btn;
+    padding: variables.$px-pdd-btn + 2px;
+
+    border-radius: 10px;
+    border: solid 2px #8686868f;
+
+    width: 30%;
+    height: variables.$px-h-btn;
+
+    background-color: #dadada;
+
+    transition: 0.2s;
+
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.01);
+      box-shadow: 5px 5px 15px #4e65885d;
+
+      background-color: #7da0d496;
+      border: #7da0d4 solid 2px;
+
+      //text-decoration: underline;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
 
   &__display {
     display: flex;
@@ -33,46 +73,11 @@
 
       padding: 15px;
 
-      button {
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-
-        appearance: none;
-        background-color: #178a9e;
-
-        margin: variables.$px-mrg-btn;
-        padding: variables.$px-pdd-btn;
-
-        border-radius: 10px;
-        border: none;
-
-        width: 30%;
-        height: variables.$px-h-btn;
-        
-        background-color: #dadada;
-        
-        transition: 0.2s;
-        &:hover {
-          cursor: pointer;
-          transform: scale(1.01);
-          box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.192);
-          text-decoration: underline;
-        }
-    
-        &:active {
-          transform: scale(0.98);
-        }
-        img {
-          object-fit: contain;
-          width: 40px;
-          color: #dadada;
-        }
+      button img {
+        object-fit: contain;
+        width: 30px;
+        color: #dadada;
       }
-
-      
     }
 
     &__list {
@@ -113,38 +118,18 @@
   }
 
   &__preview {
+
     display: flex;
+    justify-content: start;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-
-    background-color: #dadada;
-
+    
     height: 100%;
     width: 100%;
-
-    form {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-
-      height: 100%;
-      width: 100%;
-
-      input,
-      p {
-        margin: 1px 0;
-        width: 100%;
-      }
-
-      .actions {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-      }
+    
+    background-color: #dadada;
+    h2{
+      padding: 20px 0 0 0;
     }
-
   }
 }
