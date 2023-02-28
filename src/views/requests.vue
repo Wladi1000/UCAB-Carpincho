@@ -93,6 +93,13 @@ const obtenerProfesores = async () => {
   console.log("respuesta");
   console.log(respuesta);
 };
+const obtenerEmpresas = async () => {
+  //Aqui el componente se tiene que renderizar nuevamente para cargar los cambios dentro de la base de datos
+  const res = await fetch("http://localhost:3000/Empresas/");
+  const empresas = await res.json();
+  console.log("respuesta");
+  console.log(empresas);
+};
 
 obtenerProfesores();
 
@@ -102,6 +109,7 @@ onMounted(async () => {
   data.value = sptg;
   console.log(sptg);
 });
+
 </script>
 <template>
   <div class="request">
@@ -112,11 +120,11 @@ onMounted(async () => {
 
       <div class="request__container__display">
         <div class="request__container__display__controllers">
-          <button>
+          <button @click="obtenerEmpresas" >
             <img src="../assets/imgs/search-circle-outline.svg" />Buscar
             Solicitud
           </button>
-          <button>
+          <button @click="obtenerProfesores">
             <img src="../assets/imgs/cloud-upload-outline.svg" />Cargar
             Solicitud
           </button>
@@ -170,37 +178,67 @@ onMounted(async () => {
             </button>
           </div>
         </form>
-        <form
-          class="request__container__preview__form create"
-          v-show="showPlanillaCreate"
-        >
+        <div class="create-state" v-show="showPlanillaCreate">
           <div class="progressbar">
             <div class="progressbar--content"></div>
           </div>
-          <div class="request__container__preview__form__inputs">
-            <div class="studens"></div>
-            <div class="tutor"></div>
-            <div class="company"></div>
-            <p for="">Id:</p>
-            <input disabled type="number" v-model="planilla.id_sptg" />
-            <p for="">Titulo del Trabajo</p>
-            <input type="text" v-model="planilla.titulo" />
-            <p for="">Modalidad</p>
-            <select name="modalidad" id="">
-              <option value="E">Experimental</option>
-              <option value="I">Instrumental</option>
-            </select>
-            <p for="">Fecha de envio</p>
-            <input type="date" v-model="planilla.fechaenvio" />
-            <p for="">Id del tutor</p>
-            <input type="text" v-model="planilla.id_ta" />
-            <p for="">Id del evaluador</p>
-            <input type="text" v-model="planilla.id_admin_evaluador" />
+          <div class="create-carousel">
+            <div class="students">
+              <form class="request__container__preview__form">
+                <div class="request__container__preview__form__inputs">
+                  <p for="">Titulo del Trabajo</p>
+                  <input type="text" placeholder="Bolivar ¿Heroe o Dictador?" />
+                  <p for="">Modalidad</p>
+                  <select name="modalidad" id="">
+                    <option value="E">Experimental</option>
+                    <option value="I">Instrumental</option>
+                  </select>
+                  <p for="">Cedula Alumno</p>
+                  <input type="number" placeholder="27301846" />
+                  <p for="">Nombre Completo</p>
+                  <input disabled type="text" placeholder="Wladimir Sanvicente">
+                </div>
+                <div class="actions">
+                  <button type="submit">Siguiente</button>
+                </div>
+              </form>
+            </div>
+            <div class="tutor">
+              <form class="request__container__preview__form">
+                <div class="request__container__preview__form__inputs">
+                  <p for="">Cédula de Tutor Académico</p>
+                  <input type="number" placeholder="27301846" />
+                  <p for="">Nombre Completo</p>
+                  <input disabled type="text" placeholder="Wladimir Josué Sanvicente Suarez">
+                  <p for="">Años de Experiencia</p>
+                  <input disabled type="number" placeholder="4 años">
+                </div>
+                <div class="actions">
+                  <button type="submit">Siguiente</button>
+                </div>
+              </form>
+            </div>
+            <div class="company">
+              <form class="request__container__preview__form">
+                <div class="request__container__preview__form__inputs">
+                  <p for="">Cédula de Tutor Académico</p>
+                  <input type="number" placeholder="27301846" />
+                  <p for="">Nombre Completo</p>
+                  <input disabled type="text" placeholder="Wladimir Josué Sanvicente Suarez">
+                  <select name="modalidad" id="">
+                    <option value="E">Experimental</option>
+                    <option value="I">Instrumental</option>
+                  </select>
+                  <p for="">Años de Experiencia</p>
+                  <input disabled type="number" placeholder="4 años">
+                </div>
+                <div class="actions">
+                  <button type="submit">Siguiente</button>
+                </div>
+              </form>
+            </div>
           </div>
-          <div class="actions">
-            <button type="submit">Crear Planilla</button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>

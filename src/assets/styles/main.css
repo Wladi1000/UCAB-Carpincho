@@ -156,6 +156,53 @@ body {
   margin: 5px;
 }
 
+.progressbar {
+  margin: 10px 20px;
+  width: 100%;
+  height: 15px;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+.progressbar--content {
+  width: 40%;
+  height: 100%;
+  border-radius: 5px;
+  background-color: rgb(49, 148, 24);
+  transition: all 0.3s;
+}
+
+.create-state {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 255, 149, 0.432);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.create-state .create-carousel {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+.create-state .create-carousel .students {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(135, 150, 6, 0.3137254902);
+}
+.create-state .create-carousel .tutor {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+}
+.create-state .create-carousel .company {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(141, 20, 20, 0.4039215686);
+}
+
 .request__container__preview__form {
   display: flex;
   justify-content: center;
@@ -167,7 +214,7 @@ body {
 .request__container__preview__form input,
 .request__container__preview__form select {
   margin: 5px 0;
-  padding: 5px 5px;
+  padding: 5px;
   width: 100%;
   appearance: none;
   border: #7da0d4 solid 2px;
@@ -187,21 +234,6 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
-}
-
-.request__container__preview__form .progressbar {
-  margin: 0 20px;
-  width: 80%;
-  height: 20px;
-  border-radius: 5px;
-  background-color: #ffffff;
-}
-.request__container__preview__form .progressbar--content {
-  width: 10%;
-  height: 100%;
-  border-radius: 5px;
-  background-color: aqua;
-  transition: all 0.3s;
 }
 
 .router {
@@ -336,6 +368,7 @@ body {
   background-color: #dadada;
 }
 .request__container__preview h2 {
+  display: none;
   padding: 20px 0 0 0;
 }
 
