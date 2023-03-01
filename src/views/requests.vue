@@ -1,7 +1,9 @@
 <script setup>
 import Record from "../components/record.vue";
 import { ref, reactive, onMounted } from "vue";
-const data = reactive([]);
+
+let data = reactive([]);
+let dataEmpresas = reactive([]);
 
 let planilla = reactive({
   id_sptg: "",
@@ -18,33 +20,49 @@ let crearSolicitudForm = reactive({
   showTutor: false,
   showEmpresa: false,
 
+  progressbarState: 0,
+
   trabajoDeGrado: {
-    tituloTG: '',
-    modaliad: ''
+    tituloTG: "",
+    modaliad: "",
   },
 
-  cedulaAlumno: '',
-  cedulaTutor: '', 
-  nombreEmpresa: '',
+  cedulaAlumno: "",
+  cedulaTutor: "",
+  nombreEmpresa: "",
 
   crearSolicitud() {
     this.showTituloAlumno = true;
     this.showTutor = false;
     this.showEmpresa = false;
 
-    this.trabajoDeGrado.tituloTG = '';
-    this.trabajoDeGrado.modaliad = '';
-    this.cedulaAlumno = '';
-    this.cedulaTutor = '';
-    this.nombreEmpresa = ''
+    this.progressbarState = 0;
+
+    this.trabajoDeGrado.tituloTG = "";
+    this.trabajoDeGrado.modaliad = "";
+    this.cedulaAlumno = "";
+    this.cedulaTutor = "";
+    this.nombreEmpresa = "";
   },
   tituloAlumnoCompletado() {
     this.showTituloAlumno = false;
     this.showTutor = true;
+    this.progressbarState += 33.3;
+  },
+  volverATituloAlumno() {
+    this.showTituloAlumno = true;
+    this.showTutor = false;
+    this.progressbarState -= 33.3;
   },
   tutorCompletado() {
     this.showTutor = false;
     this.showEmpresa = true;
+    this.progressbarState += 33.3;
+  },
+  volverATutor() {
+    this.showTutor = true;
+    this.showEmpresa = false;
+    this.progressbarState -= 33.3;
   },
 });
 
@@ -55,11 +73,11 @@ function actionShowPlanillaCrear() {
   showPlanillaUpDe.value = false;
   showPlanillaCreate.value = true;
   crearSolicitudForm.crearSolicitud();
-};
+}
 function actionShowPlanillaUpDe() {
   showPlanillaUpDe.value = true;
   showPlanillaCreate.value = false;
-};
+}
 const clickenComponente = async (id) => {
   actionShowPlanillaUpDe();
   const res = await fetch("http://localhost:3000/SPTG/" + id);
@@ -117,7 +135,7 @@ const obtenerProfesores = async () => {
   //Aqui el componente se tiene que renderizar nuevamente para cargar los cambios dentro de la base de datos
   const res = await fetch("http://localhost:3000/datosProfesores/");
   const respuesta = await res.json();
-  console.log("respuesta");
+  console.log("Profesores");
   console.log(respuesta);
 };
 const obtenerEmpresas = async () => {
@@ -131,12 +149,20 @@ const obtenerEmpresas = async () => {
 obtenerProfesores();
 
 onMounted(async () => {
-  const res = await fetch("http://localhost:3000/datosEstudiantes");
-  const sptg = await res.json();
+  const resSolicitudes = await fetch("http://localhost:3000/datosEstudiantes");
+  const sptg = await resSolicitudes.json();
   data.value = sptg;
   console.log(sptg);
+  
+  const resEmpresas = await fetch("http://localhost:3000/Empresas/");
+  const empresas = await resEmpresas.json();
+  dataEmpresas.values = empresas;
+  console.log("Empresas");
+  console.log(empresas);
 });
+
 </script>
+
 <template>
   <div class="request">
     <!-- Colocar un nuevo contenedor para colocar el agregado de solicitudes en el la parte de la lista -->
@@ -196,9 +222,7 @@ onMounted(async () => {
             <input type="text" v-model="planilla.id_admin_evaluador" />
           </div>
           <div class="actions">
-            <button @click="eliminarPlanilla">
-              Eliminar planilla
-            </button>
+            <button @click="eliminarPlanilla">Eliminar planilla</button>
             <button type="submit" @click="actualizarPlanilla">
               Actualizar planilla
             </button>
@@ -206,13 +230,15 @@ onMounted(async () => {
         </form>
         <div class="create-state" v-show="showPlanillaCreate">
           <div class="progressbar">
-            <div class="progressbar--content"></div>
+            <div
+              class="progressbar--content"
+              :style="{ width: crearSolicitudForm.progressbarState + '%' }"
+            ></div>
           </div>
           <div class="create-carousel">
-            <div class="students"
-              v-show="crearSolicitudForm.showTituloAlumno"
-            >
-              <form class="request__container__preview__form"
+            <div class="students" v-show="crearSolicitudForm.showTituloAlumno">
+              <form
+                class="request__container__preview__form"
                 @submit.prevent="submit"
               >
                 <div class="request__container__preview__form__inputs">
@@ -233,16 +259,25 @@ onMounted(async () => {
                   />
                 </div>
                 <div class="actions">
-                  <button type="submit" @click="crearSolicitudForm.tituloAlumnoCompletado()">Siguiente</button>
+                  <button
+                    type="submit"
+                    @click="crearSolicitudForm.tituloAlumnoCompletado()"
+                  >
+                    Siguiente
+                  </button>
                 </div>
               </form>
             </div>
-            <div class="tutor"
-              v-show="crearSolicitudForm.showTutor"
-            >
-              <form class="request__container__preview__form"
+            <div class="tutor" v-show="crearSolicitudForm.showTutor">
+              <form
+                class="request__container__preview__form"
                 @submit.prevent="submit"
               >
+                <img
+                  src="../assets/imgs/arrow-back-circle-outline.svg"
+                  alt=""
+                  @click="crearSolicitudForm.volverATituloAlumno"
+                />
                 <div class="request__container__preview__form__inputs">
                   <p for="">Cédula de Tutor Académico</p>
                   <input type="number" placeholder="27301846" />
@@ -256,16 +291,25 @@ onMounted(async () => {
                   <input disabled type="number" placeholder="4 años" />
                 </div>
                 <div class="actions">
-                  <button type="submit" @click="crearSolicitudForm.tutorCompletado()">Siguiente</button>
+                  <button
+                    type="submit"
+                    @click="crearSolicitudForm.tutorCompletado()"
+                  >
+                    Siguiente
+                  </button>
                 </div>
               </form>
             </div>
-            <div class="company"
-              v-show="crearSolicitudForm.showEmpresa"
-            >
-              <form class="request__container__preview__form"
+            <div class="company" v-show="crearSolicitudForm.showEmpresa">
+              <form
+                class="request__container__preview__form"
                 @submit.prevent="submit"
               >
+                <img
+                  src="../assets/imgs/arrow-back-circle-outline.svg"
+                  alt=""
+                  @click="crearSolicitudForm.volverATutor()"
+                />
                 <div class="request__container__preview__form__inputs">
                   <p for="">Cédula de Tutor Académico</p>
                   <input type="number" placeholder="27301846" />
@@ -275,10 +319,17 @@ onMounted(async () => {
                     type="text"
                     placeholder="Wladimir Josué Sanvicente Suarez"
                   />
-                  <select name="modalidad" id="">
-                    <option value="E">Experimental</option>
-                    <option value="I">Instrumental</option>
+                  <br>
+                  <select name="Empresa" id="">
+                    <option 
+                      v-for="t in dataEmpresas"
+                      :key="t.id_empresa"
+                      :value="t.id_empresa"
+                    >
+                      {{ t.nombre }}
+                    </option>
                   </select>
+                  <br>
                   <p for="">Años de Experiencia</p>
                   <input disabled type="number" placeholder="4 años" />
                 </div>
