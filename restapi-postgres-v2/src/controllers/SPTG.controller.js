@@ -1,18 +1,20 @@
 import { SPTG } from '../models/SPTG.js';
 import { QueryTypes } from 'sequelize';
 import { sequelize } from '../database/database.js';
+import { Estudiantes } from '../models/Estudiantes.js';
+import { realiza_SPTG } from '../models/realiza_SPTG.js';
+import { Usuarios } from '../models/Usuarios.js';
 export const obtenerSPTG= async (req,res) => {
     const obtener = await SPTG.findAll();
     res.json(obtener);
 };
 export const crearSPTG = async (req,res) => {
-    const {titulo, modalidad,id_ta,id_admin_evaluador} = req.body;
+    const {titulo, modalidad,id_ta} = req.body;
     try {
         const nuevo = await SPTG.create({
             titulo,
             modalidad,
-            id_ta,
-            id_admin_evaluador
+            id_ta
         },
         {
             fields: ["titulo","modalidad","id_ta","id_admin_evaluador"]
@@ -69,15 +71,30 @@ export const buscarSPTG = async (req, res) => {
 export const datosEstudianteSPTG = async (req, res) => {
     try {
         
+        const buscar = await SPTG.findAll({
+            include: {
+                model: realiza_SPTG,
+                required: true
+            },
+        })
+        //const buscar = await sequelize.query("SELECT U.*,P.*, Pr.*,Ad.* FROM Usuarios as U, SPTG as P, realiza_SPTG as R, Estudiantes AS E,Profesores AS Pr, Administradores AS Ad WHERE U.id_usuario = E.id_estudiante AND E.id_estudiante = R.id_estudiante AND R.id_sptg = P.id_sptg AND P.id_ta = Pr.id_profesor AND P.id_admin_evaluador = Ad.id_administrador", { type: QueryTypes.SELECT });
+        res.json(buscar)
+    } catch (error) {
+        console.log(error)
+        return res.status(404).json( {mensaje: "Error al buscar informacion", error: error.message});
+    }
+}
+
+export const SPTGSinRevisar = async (req, res) => {
+    try {
+        
         const buscar = await sequelize.query(`
-        SELECT DISTINCT U.*,P.*, Pr.*,Ad.* 
-        FROM Usuarios as U, SPTG as P, realiza_SPTG as R, Estudiantes AS E,Profesores AS Pr, Administradores AS Ad 
-        WHERE U.id_usuario = E.id_estudiante
-        AND P.id_ta = Pr.id_profesor 
-        AND P.id_admin_evaluador = Ad.id_administrador`
+        SELECT P.*
+        FROM SPTG AS P
+        WHERE id_admin_evaluador IS NULL
+        `
             , { type: QueryTypes.SELECT 
         });
-        //const buscar = await sequelize.query("SELECT U.*,P.*, Pr.*,Ad.* FROM Usuarios as U, SPTG as P, realiza_SPTG as R, Estudiantes AS E,Profesores AS Pr, Administradores AS Ad WHERE U.id_usuario = E.id_estudiante AND E.id_estudiante = R.id_estudiante AND R.id_sptg = P.id_sptg AND P.id_ta = Pr.id_profesor AND P.id_admin_evaluador = Ad.id_administrador", { type: QueryTypes.SELECT });
         res.json(buscar)
     } catch (error) {
         console.log(error)

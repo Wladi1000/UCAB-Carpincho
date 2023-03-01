@@ -24,11 +24,11 @@ let crearSolicitudForm = reactive({
 
   trabajoDeGrado: {
     tituloTG: "",
-    modaliad: "",
+    modalidad: "",
   },
 
-  cedulaAlumnos: ['',''],
-  cedulaTutor: "1",
+  cedulaAlumnos: ["", ""],
+  cedulaTutor: "",
   idEmpresa: "",
 
   crearSolicitud() {
@@ -67,7 +67,96 @@ let crearSolicitudForm = reactive({
     this.showEmpresa = false;
     this.progressbarState -= 33.3;
     console.log(this.idEmpresa);
-  }
+  },
+  async obtenerIdTutor() {
+    const res = await fetch(
+      "http://localhost:3000/Profesores/cedula/" + this.cedulaTutor
+    );
+    const response = await res.json();
+    return response;
+  },
+  async obtenerIdEstudiante() {
+    const res = await fetch(
+      "http://localhost:3000/Estudiantes/cedula/" + this.cedulaAlumnos[0]
+    );
+    const response = await res.json();
+    return response;
+  },
+  async insertarSolicitud() {
+    this.progressbarState += 33.3;
+    const tutor = await this.obtenerIdTutor();
+    const estudiante = await this.obtenerIdEstudiante();
+    console.log(tutor);
+    fetch("http://localhost:3000/SPTG/", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        modalidad: this.trabajoDeGrado.modalidad,
+        id_ta: tutor.id_usuario,
+        titulo: this.trabajoDeGrado.tituloTG,
+        id_admin_evaluador: null,
+      }),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        ( modalidad === 'E')
+        ?
+        fetch('http://localhost:3000/SPTGE',{
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_spteg: data.id_sptg,
+          }),
+        })
+        :
+        fetch('http://localhost:3000/SPTGE',{
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_sptig: data.id_sptg,
+            empresa: this.idEmpresa,
+          }),
+        })
+        
+        fetch("http://localhost:3000/realiza_SPTG/", {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_sptg: data.id_sptg,
+            id_estudiante: estudiante.id_usuario,
+          }),
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+          });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    const resSolicitudes = await fetch(
+      "http://localhost:3000/datosEstudiantes"
+    );
+    const sptg = await resSolicitudes.json();
+    data.value = sptg;
+  },
 });
 
 const showPlanillaUpDe = ref(false);
@@ -157,12 +246,11 @@ onMounted(async () => {
   const resSolicitudes = await fetch("http://localhost:3000/datosEstudiantes");
   const sptg = await resSolicitudes.json();
   data.value = sptg;
-  
+
   const resEmpresas = await fetch("http://localhost:3000/Empresas/");
   const empresas = await resEmpresas.json();
   dataEmpresas.value = empresas;
 });
-
 </script>
 
 <template>
@@ -227,7 +315,9 @@ onMounted(async () => {
             <button type="submit" @click="actualizarPlanilla">
               Actualizar planilla
             </button>
-            <button type="submit" @click="eliminarPlanilla">Eliminar planilla</button>
+            <button type="submit" @click="eliminarPlanilla">
+              Eliminar planilla
+            </button>
           </div>
         </form>
         <div class="create-state" v-show="showPlanillaCreate">
@@ -246,27 +336,31 @@ onMounted(async () => {
                 <div class="request__container__preview__form__inputs">
                   <!-- Trabajo de grado -->
                   <p for="">Titulo del Trabajo</p>
-                  <input type="text" placeholder="Bolivar ¿Heroe o Dictador?" v-model="crearSolicitudForm.trabajoDeGrado.tituloTG" />
+                  <input
+                    type="text"
+                    placeholder="Bolivar ¿Heroe o Dictador?"
+                    v-model="crearSolicitudForm.trabajoDeGrado.tituloTG"
+                  />
                   <p for="">Modalidad</p>
-                  <select name="modalidad" id="" v-model="crearSolicitudForm.trabajoDeGrado.modaliad">
+                  <select
+                    name="modalidad"
+                    id=""
+                    v-model="crearSolicitudForm.trabajoDeGrado.modalidad"
+                  >
                     <option value="E">Experimental</option>
                     <option value="I">Instrumental</option>
                   </select>
                   <!-- Estudiante -->
                   <p for="">Cedula Alumno</p>
-                  <input type="number" placeholder="27301846" v-model="crearSolicitudForm.cedulaAlumnos[0]" />
+                  <input
+                    type="number"
+                    placeholder="27301846"
+                    v-model="crearSolicitudForm.cedulaAlumnos[0]"
+                  />
                   <p for="">Nombres</p>
-                  <input
-                    disabled
-                    type="text"
-                    placeholder="Wladimir Josué"
-                  />
+                  <input disabled type="text" placeholder="Wladimir Josué" />
                   <p for="">Apellidos</p>
-                  <input
-                    disabled
-                    type="text"
-                    placeholder="Sanvicente Suárez"
-                  />
+                  <input disabled type="text" placeholder="Sanvicente Suárez" />
                 </div>
                 <div class="actions">
                   <button
@@ -291,20 +385,16 @@ onMounted(async () => {
                 <!-- Tutor Academico -->
                 <div class="request__container__preview__form__inputs">
                   <p for="">Cédula de Tutor Académico</p>
-                  <input type="number" placeholder="27301846" v-model="crearSolicitudForm.cedulaTutor" />
+                  <input
+                    type="number"
+                    placeholder="27301846"
+                    v-model="crearSolicitudForm.cedulaTutor"
+                  />
                   <p for="">Nombres</p>
-                  <input
-                    disabled
-                    type="text"
-                    placeholder="Wladimir Josué"
-                  />
+                  <input disabled type="text" placeholder="Wladimir Josué" />
                   <p for="">Apellidos</p>
-                  <input
-                    disabled
-                    type="text"
-                    placeholder="Sanvicente Suarez"
-                  />
-                  <p for="">Años de Experienci  a</p>
+                  <input disabled type="text" placeholder="Sanvicente Suarez" />
+                  <p for="">Años de Experienci a</p>
                   <input disabled type="number" placeholder="4 años" />
                 </div>
                 <div class="actions">
@@ -330,8 +420,12 @@ onMounted(async () => {
                 <div class="request__container__preview__form__inputs">
                   <!-- Empresa-->
                   <p>Seleccione la empresa:</p>
-                  <select name="Empresa" id="" v-model="crearSolicitudForm.idEmpresa">
-                    <option 
+                  <select
+                    name="Empresa"
+                    id=""
+                    v-model="crearSolicitudForm.idEmpresa"
+                  >
+                    <option
                       v-for="t in dataEmpresas.value"
                       :key="t.id_empresa"
                       :value="t.id_empresa"
@@ -341,7 +435,12 @@ onMounted(async () => {
                   </select>
                 </div>
                 <div class="actions">
-                  <button type="submit">Completado!</button>
+                  <button
+                    type="submit"
+                    @click="crearSolicitudForm.insertarSolicitud()"
+                  >
+                    Completado!
+                  </button>
                 </div>
               </form>
             </div>
