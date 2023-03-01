@@ -13,23 +13,53 @@ let planilla = reactive({
   id_admin_evaluador: "",
 });
 
+let crearSolicitudForm = reactive({
+  showTituloAlumno: false,
+  showTutor: false,
+  showEmpresa: false,
+
+  trabajoDeGrado: {
+    tituloTG: '',
+    modaliad: ''
+  },
+
+  cedulaAlumno: '',
+  cedulaTutor: '', 
+  nombreEmpresa: '',
+
+  crearSolicitud() {
+    this.showTituloAlumno = true;
+    this.showTutor = false;
+    this.showEmpresa = false;
+
+    this.trabajoDeGrado.tituloTG = '';
+    this.trabajoDeGrado.modaliad = '';
+    this.cedulaAlumno = '';
+    this.cedulaTutor = '';
+    this.nombreEmpresa = ''
+  },
+  tituloAlumnoCompletado() {
+    this.showTituloAlumno = false;
+    this.showTutor = true;
+  },
+  tutorCompletado() {
+    this.showTutor = false;
+    this.showEmpresa = true;
+  },
+});
+
 const showPlanillaUpDe = ref(false);
 const showPlanillaCreate = ref(false);
 
 function actionShowPlanillaCrear() {
   showPlanillaUpDe.value = false;
   showPlanillaCreate.value = true;
-}
+  crearSolicitudForm.crearSolicitud();
+};
 function actionShowPlanillaUpDe() {
   showPlanillaUpDe.value = true;
   showPlanillaCreate.value = false;
-}
-
-function swapMostrarPlanilla() {
-  mostrarPlanilla.value = !mostrarPlanilla.value;
-  console.log(mostrarPlanilla.value);
-}
-
+};
 const clickenComponente = async (id) => {
   actionShowPlanillaUpDe();
   const res = await fetch("http://localhost:3000/SPTG/" + id);
@@ -43,7 +73,6 @@ const clickenComponente = async (id) => {
   planilla.id_ta = respuesta.id_ta;
   planilla.id_admin_evaluador = respuesta.id_admin_evaluador;
 };
-
 const actualizarPlanilla = async () => {
   const res = await fetch("http://localhost:3000/SPTG/" + planilla.id_sptg, {
     method: "PUT",
@@ -75,7 +104,6 @@ const actualizarPlanilla = async () => {
 
   console.log(actualizacion);
 };
-
 const eliminarPlanilla = async () => {
   //Aqui el componente se tiene que renderizar nuevamente para cargar los cambios dentro de la base de datos
   const res = await fetch("http://localhost:3000/SPTG/" + planilla.id_sptg, {
@@ -85,7 +113,6 @@ const eliminarPlanilla = async () => {
   console.log(respuesta);
   return;
 };
-
 const obtenerProfesores = async () => {
   //Aqui el componente se tiene que renderizar nuevamente para cargar los cambios dentro de la base de datos
   const res = await fetch("http://localhost:3000/datosProfesores/");
@@ -109,7 +136,6 @@ onMounted(async () => {
   data.value = sptg;
   console.log(sptg);
 });
-
 </script>
 <template>
   <div class="request">
@@ -120,7 +146,7 @@ onMounted(async () => {
 
       <div class="request__container__display">
         <div class="request__container__display__controllers">
-          <button @click="obtenerEmpresas" >
+          <button @click="obtenerEmpresas">
             <img src="../assets/imgs/search-circle-outline.svg" />Buscar
             Solicitud
           </button>
@@ -170,7 +196,7 @@ onMounted(async () => {
             <input type="text" v-model="planilla.id_admin_evaluador" />
           </div>
           <div class="actions">
-            <button type="submit" @click="eliminarPlanilla">
+            <button @click="eliminarPlanilla">
               Eliminar planilla
             </button>
             <button type="submit" @click="actualizarPlanilla">
@@ -183,8 +209,12 @@ onMounted(async () => {
             <div class="progressbar--content"></div>
           </div>
           <div class="create-carousel">
-            <div class="students">
-              <form class="request__container__preview__form">
+            <div class="students"
+              v-show="crearSolicitudForm.showTituloAlumno"
+            >
+              <form class="request__container__preview__form"
+                @submit.prevent="submit"
+              >
                 <div class="request__container__preview__form__inputs">
                   <p for="">Titulo del Trabajo</p>
                   <input type="text" placeholder="Bolivar ¿Heroe o Dictador?" />
@@ -196,44 +226,64 @@ onMounted(async () => {
                   <p for="">Cedula Alumno</p>
                   <input type="number" placeholder="27301846" />
                   <p for="">Nombre Completo</p>
-                  <input disabled type="text" placeholder="Wladimir Sanvicente">
+                  <input
+                    disabled
+                    type="text"
+                    placeholder="Wladimir Sanvicente"
+                  />
                 </div>
                 <div class="actions">
-                  <button type="submit">Siguiente</button>
+                  <button type="submit" @click="crearSolicitudForm.tituloAlumnoCompletado()">Siguiente</button>
                 </div>
               </form>
             </div>
-            <div class="tutor">
-              <form class="request__container__preview__form">
+            <div class="tutor"
+              v-show="crearSolicitudForm.showTutor"
+            >
+              <form class="request__container__preview__form"
+                @submit.prevent="submit"
+              >
                 <div class="request__container__preview__form__inputs">
                   <p for="">Cédula de Tutor Académico</p>
                   <input type="number" placeholder="27301846" />
                   <p for="">Nombre Completo</p>
-                  <input disabled type="text" placeholder="Wladimir Josué Sanvicente Suarez">
+                  <input
+                    disabled
+                    type="text"
+                    placeholder="Wladimir Josué Sanvicente Suarez"
+                  />
                   <p for="">Años de Experiencia</p>
-                  <input disabled type="number" placeholder="4 años">
+                  <input disabled type="number" placeholder="4 años" />
                 </div>
                 <div class="actions">
-                  <button type="submit">Siguiente</button>
+                  <button type="submit" @click="crearSolicitudForm.tutorCompletado()">Siguiente</button>
                 </div>
               </form>
             </div>
-            <div class="company">
-              <form class="request__container__preview__form">
+            <div class="company"
+              v-show="crearSolicitudForm.showEmpresa"
+            >
+              <form class="request__container__preview__form"
+                @submit.prevent="submit"
+              >
                 <div class="request__container__preview__form__inputs">
                   <p for="">Cédula de Tutor Académico</p>
                   <input type="number" placeholder="27301846" />
                   <p for="">Nombre Completo</p>
-                  <input disabled type="text" placeholder="Wladimir Josué Sanvicente Suarez">
+                  <input
+                    disabled
+                    type="text"
+                    placeholder="Wladimir Josué Sanvicente Suarez"
+                  />
                   <select name="modalidad" id="">
                     <option value="E">Experimental</option>
                     <option value="I">Instrumental</option>
                   </select>
                   <p for="">Años de Experiencia</p>
-                  <input disabled type="number" placeholder="4 años">
+                  <input disabled type="number" placeholder="4 años" />
                 </div>
                 <div class="actions">
-                  <button type="submit">Siguiente</button>
+                  <button type="submit">Completado!</button>
                 </div>
               </form>
             </div>
