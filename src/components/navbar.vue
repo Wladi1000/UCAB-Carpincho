@@ -10,16 +10,16 @@
         <router-link to="/requests">Requests</router-link>
       </li>
       <li class="navbar__list__element">
-        <router-link to="/reviewers">Planilla Solicitudes</router-link>
+        <router-link to="/committee">Comité de escuela</router-link>
       </li>
       <li class="navbar__list__element">
-        <router-link to="/assignment">Planilla del comite</router-link>
+        <router-link to="/reviewers">Asignacion de revisor</router-link>
       </li>
       <li class="navbar__list__element">
-        <router-link to="/committee">Planilla de revision</router-link>
+        <router-link to="/council">Consejo Escuela</router-link>
       </li>
       <li class="navbar__list__element">
-        <router-link to="/council">Planilla revision Profesor</router-link>
+        <router-link to="/assignment">Asignacion de tutor academico</router-link>
       </li>
     </ul>
   </div>

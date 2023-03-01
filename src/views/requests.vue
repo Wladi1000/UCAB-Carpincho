@@ -262,11 +262,11 @@ onMounted(async () => {
 
       <div class="request__container__display">
         <div class="request__container__display__controllers">
-          <button @click="obtenerEmpresas">
+          <button>
             <img src="../assets/imgs/search-circle-outline.svg" />Buscar
             Solicitud
           </button>
-          <button @click="obtenerProfesores">
+          <button>
             <img src="../assets/imgs/cloud-upload-outline.svg" />Cargar
             Solicitud
           </button>
