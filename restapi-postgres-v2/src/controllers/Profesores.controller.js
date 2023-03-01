@@ -65,3 +65,12 @@ export const buscarProfesoresPorCedula = async (req, res) => {
             return res.status(404).json("La cedula no existe en la base de datos");
        });
 }
+
+export const datosProfesores = async (req, res) => {
+    const respuesta = await Profesores.findOne({
+        include: {
+            model: Usuarios
+        },
+    });
+    return res.json(respuesta.dataValues)
+}

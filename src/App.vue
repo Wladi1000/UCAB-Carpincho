@@ -3,8 +3,6 @@
 </script>
 
 <template>
-  <div class="app">
-    <Navbar />
-    <router-view id="router" class="router"></router-view>
-  </div>
+  <Navbar />
+  <router-view id="router" class="router"></router-view>
 </template>

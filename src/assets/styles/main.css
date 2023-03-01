@@ -4,80 +4,16 @@
   padding: 0;
 }
 
-* {
-  font-family: "Roboto", sans-serif;
+html,
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.login__form {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 15px;
-  border-radius: 10px;
-  background-color: #fff;
-}
-.login__form .login__form--msg {
-  color: #0E0E2C;
-}
-.login__form .login__form__mail,
-.login__form .login__form__password {
-  margin-top: 10px;
-}
-.login__form .login__form__mail h2,
-.login__form .login__form__password h2 {
-  margin-top: 40px;
-  opacity: 1;
-  text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
-.login__form .login__form__mail input,
-.login__form .login__form__password input {
-  margin: 10px 0 0 0;
-  padding: 0 15px;
-  width: 370px;
-  height: 60px;
-  border-radius: 10px;
-  border: none;
-  font-size: 23px;
-  appearance: none;
-  background-color: #d9d9d9;
-}
-.login__form .login__form__btn {
-  margin: 15px 0 0 0;
-  padding: 0 15px;
-  border-radius: 10px;
-  border: none;
-  width: 400px;
-  height: 60px;
-  appearance: none;
-  background-color: #0e0e2c;
-  color: #d9d9d9;
-  font-size: 23px;
-  transition: 0.2s;
-}
-.login__form .login__form__btn:hover {
-  cursor: pointer;
-  transform: scale(1.02);
-  box-shadow: 5px 5px 15px black;
-}
-.login__form .login__form__btn:active {
-  background-color: #d9d9d9;
-  color: #0e0e2c;
-}
-.login__form .login__form__btn.succes {
-  background-color: #16822D;
-}
-.login__form .login__form__btn.cancel {
-  background-color: #BE1937;
-}
-.login__form .login__form--forget {
-  margin: 30px;
-  text-decoration: underline;
-  font-size: 18px;
-  font-weight: 700;
-}
-.login__form .login__form--forget:hover {
-  cursor: pointer;
+* {
+  font-family: "Roboto", sans-serif;
 }
 
 .navbar {
@@ -85,6 +21,7 @@
   align-items: center;
   flex-direction: column;
   width: 10%;
+  height: 100%;
   background-color: #494748;
 }
 .navbar img {
@@ -123,90 +60,326 @@
   padding-right: 2px;
 }
 
+.login__form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #fff;
+}
+.login__form .login__form--msg {
+  color: #0E0E2C;
+}
+.login__form .login__form__mail,
+.login__form .login__form__password {
+  margin-top: 10px;
+}
+.login__form .login__form__mail h2,
+.login__form .login__form__password h2 {
+  margin-top: 40px;
+  opacity: 1;
+  text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+.login__form .login__form__mail input,
+.login__form .login__form__password input {
+  margin: 10px 0 0 0;
+  padding: 0 15px;
+  width: 370px;
+  height: 60px;
+  border-radius: 10px;
+  border: none;
+  font-size: 23px;
+  appearance: none;
+  background-color: #d9d9d9;
+}
+.login__form .login__form__btn {
+  appearance: none;
+  margin: 15px 5px 0 5px;
+  padding: 0 15px;
+  border-radius: 10px;
+  border: none;
+  width: 400px;
+  height: 60px;
+  background-color: #0e0e2c;
+  color: #d9d9d9;
+  font-size: 23px;
+  transition: 0.2s;
+}
+.login__form .login__form__btn:hover {
+  cursor: pointer;
+  transform: scale(1.02);
+  box-shadow: 5px 5px 15px black;
+}
+.login__form .login__form__btn:active {
+  background-color: #d9d9d9;
+  color: #0e0e2c;
+}
+.login__form .login__form__btn.succes {
+  background-color: #16822D;
+}
+.login__form .login__form__btn.cancel {
+  background-color: #BE1937;
+}
+.login__form .login__form--forget {
+  margin: 30px;
+  text-decoration: underline;
+  font-size: 18px;
+  font-weight: 700;
+}
+.login__form .login__form--forget:hover {
+  cursor: pointer;
+}
+
+.request__container__display__list__record {
+  margin: 5px;
+  padding: 5px;
+  width: 90%;
+  border-radius: 10px;
+  transition: all ease 0.2s;
+}
+.request__container__display__list__record:hover {
+  cursor: pointer;
+  transform: scale(1.02);
+}
+.request__container__display__list__record:active {
+  transform: scale(1);
+}
+.request__container__display__list__record:nth-child(2n) {
+  background-color: #e2e2e2;
+}
+.request__container__display__list__record:nth-child(2n+1) {
+  background-color: #f1f1f1;
+}
+.request__container__display__list__record p {
+  margin: 5px;
+}
+
+.create-state {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+}
+.create-state .progressbar {
+  margin: 10px 0 10px;
+  width: 90%;
+  height: 15px;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+.create-state .progressbar--content {
+  height: 100%;
+  border-radius: 5px;
+  background-color: #319418;
+  transition: all 0.3s;
+}
+.create-state .create-carousel {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+.create-state .create-carousel img {
+  padding-right: 180px;
+  padding-bottom: 20px;
+  width: 5%;
+}
+.create-state .create-carousel img:hover {
+  cursor: pointer;
+}
+.create-state .create-carousel .students {
+  width: 100%;
+  height: 100%;
+}
+.create-state .create-carousel .tutor {
+  width: 100%;
+  height: 100%;
+}
+.create-state .create-carousel .company {
+  width: 100%;
+  height: 100%;
+}
+.create-state .create-carousel .company button:hover {
+  background-color: rgba(77, 235, 90, 0.4666666667);
+  border: #44ff53 solid 2px;
+  box-shadow: 0px 0 15px rgba(255, 241, 47, 0.568627451);
+  transform: scale(1.1);
+}
+.create-state .create-carousel .company button:active {
+  transform: scale(1);
+}
+
+.request__container__preview__form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 40px;
+  height: 100%;
+  width: 100%;
+}
+.request__container__preview__form input,
+.request__container__preview__form select {
+  margin: 5px 0;
+  padding: 5px;
+  width: 100%;
+  appearance: none;
+  border: #7da0d4 solid 2px;
+  transition: all 0.1s;
+}
+.request__container__preview__form input:focus,
+.request__container__preview__form select:focus {
+  border-radius: 10px;
+  box-shadow: 0 1px 1px hsla(216, 50%, 66%, 0.075) nset, 0 0 8px hsla(216, 50%, 66%, 0.6);
+  outline: 0 none;
+}
+.request__container__preview__form p {
+  width: 100%;
+}
+.request__container__preview__form .actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row-reverse;
+  width: 100%;
+}
+
 .router {
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #fff;
-  width: 90%;
-  overflow-y: hidden;
+  background-color: #F8F8F8;
+  width: 100%;
+  height: 100%;
   overflow-x: hidden;
 }
 .router h1 {
   padding: 15px 250px;
   border-bottom: solid 1px #0E0E2C;
 }
-.router .container {
-  display: flex;
-  justify-content: center;
-  margin: 25px 0 0 25px;
-  height: 80%;
-  width: 100%;
-  border-radius: 10px;
-  overflow-y: hidden;
-  overflow-x: hidden;
-}
-.router .container .container__list {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-}
-.router .container .container__list .controllers {
-  display: flex;
-  justify-content: flex-end;
-}
-.router .container .container__list .controllers img {
-  height: 35px;
-  width: 35px;
-  padding: 0 20px;
-}
-.router .container .container__list .list {
-  width: 100%;
-  height: auto;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  padding: 20px;
-}
-.router .container .container__list .list .record {
-  margin-top: 20px;
-  padding: 5px;
-  width: 100%;
-  height: 80px;
-  border-radius: 10px;
-  background-color: aliceblue;
-  box-shadow: -2px 2px 6px #000;
-  transition: 0.2s;
-}
-.router .container .container__list .list .record:hover {
-  cursor: pointer;
-  transform: scale(1.02);
-}
-.router .container .container__list .list .record:active {
-  transform: scale(1.03);
-}
-.router .container .preview {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 20px;
-  width: 50%;
-}
 
-.app {
+#app {
   display: flex;
-  justify-content: space-between;
+  height: 100%;
+  width: 100%;
 }
 
 .login {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 90%;
-  height: 625px;
-  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../imgs/login-bk02.png");
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(0deg, hsla(0, 0%, 0%, 0.6), rgba(0, 0, 0, 0.6)), url("../imgs/login-bk02.png");
   background-repeat: no-repeat;
   background-size: cover;
+}
+.login .login-bc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  backdrop-filter: blur(3px);
+}
+
+.request__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  overflow-y: hidden;
+  transition: all ease-in 0.2s;
+}
+.request__container button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  appearance: none;
+  background-color: #178a9e;
+  margin: 15px 5px 0 5px;
+  padding: 0 15px2px;
+  border-radius: 10px;
+  border: solid 2px rgba(134, 134, 134, 0.5607843137);
+  width: 30%;
+  height: 60px;
+  background-color: #dadada;
+  transition: 0.2s;
+}
+.request__container button:hover {
+  cursor: pointer;
+  transform: scale(1.01);
+  box-shadow: 5px 5px 15px rgba(78, 101, 136, 0.3647058824);
+  background-color: rgba(125, 160, 212, 0.5882352941);
+  border: #7da0d4 solid 2px;
+}
+.request__container button:active {
+  transform: scale(0.98);
+}
+.request__container__display {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
+.request__container__display__controllers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 15px;
+}
+.request__container__display__controllers button img {
+  object-fit: contain;
+  width: 30px;
+  color: #dadada;
+}
+.request__container__display__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+}
+.request__container__display__list::-webkit-scrollbar {
+  appearance: none;
+}
+.request__container__display__list::-webkit-scrollbar:vertical {
+  width: 10px;
+}
+.request__container__display__list::-webkit-scrollbar:horizontal {
+  height: 10px;
+}
+.request__container__display__list::-webkit-scrollbar-thumb {
+  background-color: #797979;
+  border-radius: 20px;
+  border: 2px solid #f1f2f3;
+}
+.request__container__display__list::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+.request__container__preview {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: #dadada;
+}
+.request__container__preview h2 {
+  display: none;
+  padding: 20px 0 0 0;
 }
 
 /*# sourceMappingURL=main.css.map */
