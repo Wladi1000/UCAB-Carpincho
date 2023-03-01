@@ -1,90 +1,97 @@
 @use '../abstracts/variables';
-.login__form{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
 
-    padding: 15px;
+.login__form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
-    //width: variables.$px-w-lg-form;
-    //height: variables.$px-h-lg-form;
+  padding: 15px;
 
-    border-radius: 10px;   
+  //width: variables.$px-w-lg-form;
+  //height: variables.$px-h-lg-form;
 
-    background-color: variables.$c-bc-lg;
+  border-radius: 10px;
 
-    .login__form--msg{
-        color: variables.$c-h2;
+  background-color: variables.$c-bc-lg;
+
+  .login__form--msg {
+    color: variables.$c-h2;
+  }
+
+  .login__form__mail,
+  .login__form__password {
+
+    margin-top: 10px;
+
+    h2 {
+      margin-top: 40px;
+      opacity: 1;
+      text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
     }
-    
-    .login__form__mail,
-    .login__form__password{
 
-        margin-top: 10px;
-        h2{
-            margin-top: 40px;
-            opacity: 1;
-            text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-        }
-        input{
-            margin: variables.$px-mrg-input;
-            padding: variables.$px-pdd-input;
-            width: variables.$px-w-input;
-            height: variables.$px-h-input;
+    input {
+      margin: variables.$px-mrg-input;
+      padding: variables.$px-pdd-input;
+      width: variables.$px-w-input;
+      height: variables.$px-h-input;
 
-            border-radius: 10px;
-            border: none;
+      border-radius: 10px;
+      border: none;
 
-            font-size: variables.$px-txt-input;
+      font-size: variables.$px-txt-input;
 
-            appearance: none;
-            background-color: variables.$c-input-lg;
-        }
+      appearance: none;
+      background-color: variables.$c-input-lg;
     }
-    .login__form__btn{
-        margin: variables.$px-mrg-btn;
-        padding: variables.$px-pdd-btn;
+  }
 
-        border-radius: 10px;
-        border: none;
+  .login__form__btn {
+    appearance: none;
+    margin: variables.$px-mrg-btn;
+    padding: variables.$px-pdd-btn;
 
-        width: variables.$px-w-btn;
-        height: variables.$px-h-btn;
+    border-radius: 10px;
+    border: none;
 
-        appearance: none;
-        background-color: variables.$c-h1;
-        color: variables.$c-input-lg;
-        font-size: variables.$px-txt-btn;
+    width: variables.$px-w-btn;
+    height: variables.$px-h-btn;
 
-        &:hover{
-            cursor: pointer;
-            transform: scale(1.02);
-            box-shadow: 5px 5px 15px black;
-        }
+    background-color: variables.$c-h1;
+    color: variables.$c-input-lg;
+    font-size: variables.$px-txt-btn;
 
-        &:active{
-            background-color: variables.$c-input-lg;
-            color: variables.$c-h1;
-        }
-
-        transition: 0.2s;
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.02);
+      box-shadow: 5px 5px 15px black;
     }
-    .login__form__btn.succes{
-        background-color: variables.$c-btn-sc;
-    }
-    .login__form__btn.cancel{
-        background-color: variables.$c-btn-cc;
-    }
-    .login__form--forget{
-        margin: 30px;
 
-        text-decoration: underline;
-        font-size: variables.$px-txt-a;
-        font-weight: variables.$px-txt-w-a;
-    
-        &:hover{
-            cursor: pointer;
-        }
+    &:active {
+      background-color: variables.$c-input-lg;
+      color: variables.$c-h1;
     }
+
+    transition: 0.2s;
+  }
+
+  .login__form__btn.succes {
+    background-color: variables.$c-btn-sc;
+  }
+
+  .login__form__btn.cancel {
+    background-color: variables.$c-btn-cc;
+  }
+
+  .login__form--forget {
+    margin: 30px;
+
+    text-decoration: underline;
+    font-size: variables.$px-txt-a;
+    font-weight: variables.$px-txt-w-a;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
