@@ -27,9 +27,9 @@ let crearSolicitudForm = reactive({
     modaliad: "",
   },
 
-  cedulaAlumno: "",
-  cedulaTutor: "",
-  nombreEmpresa: "",
+  cedulaAlumnos: ['',''],
+  cedulaTutor: "1",
+  idEmpresa: "",
 
   crearSolicitud() {
     this.showTituloAlumno = true;
@@ -48,6 +48,8 @@ let crearSolicitudForm = reactive({
     this.showTituloAlumno = false;
     this.showTutor = true;
     this.progressbarState += 33.3;
+    console.log(this.cedulaAlumnos);
+    console.log(this.trabajoDeGrado);
   },
   volverATituloAlumno() {
     this.showTituloAlumno = true;
@@ -58,12 +60,14 @@ let crearSolicitudForm = reactive({
     this.showTutor = false;
     this.showEmpresa = true;
     this.progressbarState += 33.3;
+    console.log(this.cedulaTutor);
   },
   volverATutor() {
     this.showTutor = true;
     this.showEmpresa = false;
     this.progressbarState -= 33.3;
-  },
+    console.log(this.idEmpresa);
+  }
 });
 
 const showPlanillaUpDe = ref(false);
@@ -142,23 +146,21 @@ const obtenerEmpresas = async () => {
   //Aqui el componente se tiene que renderizar nuevamente para cargar los cambios dentro de la base de datos
   const res = await fetch("http://localhost:3000/Empresas/");
   const empresas = await res.json();
-  console.log("respuesta");
+  console.log("empresas");
   console.log(empresas);
 };
 
-obtenerProfesores();
+//obtenerProfesores();
+//obtenerEmpresas();
 
 onMounted(async () => {
   const resSolicitudes = await fetch("http://localhost:3000/datosEstudiantes");
   const sptg = await resSolicitudes.json();
   data.value = sptg;
-  console.log(sptg);
   
   const resEmpresas = await fetch("http://localhost:3000/Empresas/");
   const empresas = await resEmpresas.json();
-  dataEmpresas.values = empresas;
-  console.log("Empresas");
-  console.log(empresas);
+  dataEmpresas.value = empresas;
 });
 
 </script>
@@ -222,10 +224,10 @@ onMounted(async () => {
             <input type="text" v-model="planilla.id_admin_evaluador" />
           </div>
           <div class="actions">
-            <button @click="eliminarPlanilla">Eliminar planilla</button>
             <button type="submit" @click="actualizarPlanilla">
               Actualizar planilla
             </button>
+            <button type="submit" @click="eliminarPlanilla">Eliminar planilla</button>
           </div>
         </form>
         <div class="create-state" v-show="showPlanillaCreate">
@@ -242,20 +244,28 @@ onMounted(async () => {
                 @submit.prevent="submit"
               >
                 <div class="request__container__preview__form__inputs">
+                  <!-- Trabajo de grado -->
                   <p for="">Titulo del Trabajo</p>
-                  <input type="text" placeholder="Bolivar ¿Heroe o Dictador?" />
+                  <input type="text" placeholder="Bolivar ¿Heroe o Dictador?" v-model="crearSolicitudForm.trabajoDeGrado.tituloTG" />
                   <p for="">Modalidad</p>
-                  <select name="modalidad" id="">
+                  <select name="modalidad" id="" v-model="crearSolicitudForm.trabajoDeGrado.modaliad">
                     <option value="E">Experimental</option>
                     <option value="I">Instrumental</option>
                   </select>
+                  <!-- Estudiante -->
                   <p for="">Cedula Alumno</p>
-                  <input type="number" placeholder="27301846" />
-                  <p for="">Nombre Completo</p>
+                  <input type="number" placeholder="27301846" v-model="crearSolicitudForm.cedulaAlumnos[0]" />
+                  <p for="">Nombres</p>
                   <input
                     disabled
                     type="text"
-                    placeholder="Wladimir Sanvicente"
+                    placeholder="Wladimir Josué"
+                  />
+                  <p for="">Apellidos</p>
+                  <input
+                    disabled
+                    type="text"
+                    placeholder="Sanvicente Suárez"
                   />
                 </div>
                 <div class="actions">
@@ -278,16 +288,23 @@ onMounted(async () => {
                   alt=""
                   @click="crearSolicitudForm.volverATituloAlumno"
                 />
+                <!-- Tutor Academico -->
                 <div class="request__container__preview__form__inputs">
                   <p for="">Cédula de Tutor Académico</p>
-                  <input type="number" placeholder="27301846" />
-                  <p for="">Nombre Completo</p>
+                  <input type="number" placeholder="27301846" v-model="crearSolicitudForm.cedulaTutor" />
+                  <p for="">Nombres</p>
                   <input
                     disabled
                     type="text"
-                    placeholder="Wladimir Josué Sanvicente Suarez"
+                    placeholder="Wladimir Josué"
                   />
-                  <p for="">Años de Experiencia</p>
+                  <p for="">Apellidos</p>
+                  <input
+                    disabled
+                    type="text"
+                    placeholder="Sanvicente Suarez"
+                  />
+                  <p for="">Años de Experienci  a</p>
                   <input disabled type="number" placeholder="4 años" />
                 </div>
                 <div class="actions">
@@ -311,27 +328,17 @@ onMounted(async () => {
                   @click="crearSolicitudForm.volverATutor()"
                 />
                 <div class="request__container__preview__form__inputs">
-                  <p for="">Cédula de Tutor Académico</p>
-                  <input type="number" placeholder="27301846" />
-                  <p for="">Nombre Completo</p>
-                  <input
-                    disabled
-                    type="text"
-                    placeholder="Wladimir Josué Sanvicente Suarez"
-                  />
-                  <br>
-                  <select name="Empresa" id="">
+                  <!-- Empresa-->
+                  <p>Seleccione la empresa:</p>
+                  <select name="Empresa" id="" v-model="crearSolicitudForm.idEmpresa">
                     <option 
-                      v-for="t in dataEmpresas"
+                      v-for="t in dataEmpresas.value"
                       :key="t.id_empresa"
                       :value="t.id_empresa"
                     >
                       {{ t.nombre }}
                     </option>
                   </select>
-                  <br>
-                  <p for="">Años de Experiencia</p>
-                  <input disabled type="number" placeholder="4 años" />
                 </div>
                 <div class="actions">
                   <button type="submit">Completado!</button>
