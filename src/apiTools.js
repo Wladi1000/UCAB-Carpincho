@@ -90,8 +90,9 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
     })
     .then((data) => {
       console.log(data);
-      (planillaSolicitud.trabajoDeGrado.modalidad === 'E')
-        ?
+      console.log(data.id_sptg);
+      console.log(planillaSolicitud.trabajoDeGrado.modalidad)
+      if(planillaSolicitud.trabajoDeGrado.modalidad === 'E'){
         fetch('http://localhost:3000/SPTGE', {
           method: "POST",
           mode: "cors",
@@ -99,21 +100,28 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            id_spteg: data.id_sptg,
+            id_steg: data.id_sptg,
           }),
-        })
-        :
-        fetch('http://localhost:3000/SPTGE', {
+        }).then( (response) => {
+          return response.json();
+        }).then( (data) => {
+          console.log(data)
+        }).catch( (error) => {
+          console.log({mensaje: "Error en la asignación de modalidad", error: error});
+        });
+      }else if(planillaSolicitud.trabajoDeGrado.modalidad === 'I'){
+        fetch('http://localhost:3000/SPTGI', {
           method: "POST",
           mode: "cors",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            id_sptig: data.id_sptg,
-            empresa: planillaSolicitud.idEmpresa,
+            id_stig: data.id_sptg,
           }),
         })
+      }
+
       fetch("http://localhost:3000/realiza_SPTG/", {
         method: "POST",
         mode: "cors",
@@ -131,9 +139,10 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
         .then((data) => {
           console.log(data);
         });
+
     })
     .catch((e) => {
-      console.log(e);
+      console.log("Error en la inserción de realiza_SPTG");
     });
   const resSolicitudes = await fetch(
     "http://localhost:3000/datosEstudiantes"
