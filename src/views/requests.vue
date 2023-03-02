@@ -1,6 +1,7 @@
 <script setup>
 import Record from "../components/record.vue";
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, onUnmounted } from "vue";
+import * as api from '../apiTools.js';
 
 let data = reactive([]);
 let dataEmpresas = reactive([]);
@@ -67,96 +68,7 @@ let crearSolicitudForm = reactive({
     this.showEmpresa = false;
     this.progressbarState -= 33.3;
     console.log(this.idEmpresa);
-  },
-  async obtenerIdTutor() {
-    const res = await fetch(
-      "http://localhost:3000/Profesores/cedula/" + this.cedulaTutor
-    );
-    const response = await res.json();
-    return response;
-  },
-  async obtenerIdEstudiante() {
-    const res = await fetch(
-      "http://localhost:3000/Estudiantes/cedula/" + this.cedulaAlumnos[0]
-    );
-    const response = await res.json();
-    return response;
-  },
-  async insertarSolicitud() {
-    this.progressbarState += 33.3;
-    const tutor = await this.obtenerIdTutor();
-    const estudiante = await this.obtenerIdEstudiante();
-    console.log(tutor);
-    fetch("http://localhost:3000/SPTG/", {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        modalidad: this.trabajoDeGrado.modalidad,
-        id_ta: tutor.id_usuario,
-        titulo: this.trabajoDeGrado.tituloTG,
-        id_admin_evaluador: null,
-      }),
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        ( modalidad === 'E')
-        ?
-        fetch('http://localhost:3000/SPTGE',{
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id_spteg: data.id_sptg,
-          }),
-        })
-        :
-        fetch('http://localhost:3000/SPTGE',{
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id_sptig: data.id_sptg,
-            empresa: this.idEmpresa,
-          }),
-        })
-        
-        fetch("http://localhost:3000/realiza_SPTG/", {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id_sptg: data.id_sptg,
-            id_estudiante: estudiante.id_usuario,
-          }),
-        })
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data);
-          });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    const resSolicitudes = await fetch(
-      "http://localhost:3000/datosEstudiantes"
-    );
-    const sptg = await resSolicitudes.json();
-    data.value = sptg;
-  },
+  }
 });
 
 const showPlanillaUpDe = ref(false);
@@ -184,72 +96,11 @@ const clickenComponente = async (id) => {
   planilla.id_ta = respuesta.id_ta;
   planilla.id_admin_evaluador = respuesta.id_admin_evaluador;
 };
-const actualizarPlanilla = async () => {
-  const res = await fetch("http://localhost:3000/SPTG/" + planilla.id_sptg, {
-    method: "PUT",
-    mode: "cors",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      titulo: planilla.titulo,
-      modalidad: planilla.modalidad,
-      fechaenvio: planilla.fechaenvio,
-      id_ta: planilla.id_ta,
-      id_admin_evaluador: planilla.id_admin_evaluador,
-    }),
-  });
-  const actualizacion = await res.json();
-
-  const resi = await fetch("http://localhost:3000/datosEstudiantes");
-  const sptg = await resi.json();
-  data.value = sptg;
-
-  planilla.estatus = "";
-  planilla.fechaenvio = "";
-  planilla.id_admin_evaluador = "";
-  planilla.id_sptg = "";
-  planilla.id_ta = "";
-  planilla.modalidad = "";
-  planilla.titulo = "";
-
-  console.log(actualizacion);
-};
-const eliminarPlanilla = async () => {
-  //Aqui el componente se tiene que renderizar nuevamente para cargar los cambios dentro de la base de datos
-  const res = await fetch("http://localhost:3000/SPTG/" + planilla.id_sptg, {
-    method: "DELETE",
-  });
-  const respuesta = await res.json();
-  console.log(respuesta);
-  return;
-};
-const obtenerProfesores = async () => {
-  //Aqui el componente se tiene que renderizar nuevamente para cargar los cambios dentro de la base de datos
-  const res = await fetch("http://localhost:3000/datosProfesores/");
-  const respuesta = await res.json();
-  console.log("Profesores");
-  console.log(respuesta);
-};
-const obtenerEmpresas = async () => {
-  //Aqui el componente se tiene que renderizar nuevamente para cargar los cambios dentro de la base de datos
-  const res = await fetch("http://localhost:3000/Empresas/");
-  const empresas = await res.json();
-  console.log("empresas");
-  console.log(empresas);
-};
-
-//obtenerProfesores();
-//obtenerEmpresas();
 
 onMounted(async () => {
-  const resSolicitudes = await fetch("http://localhost:3000/datosEstudiantes");
-  const sptg = await resSolicitudes.json();
-  data.value = sptg;
-
-  const resEmpresas = await fetch("http://localhost:3000/Empresas/");
-  const empresas = await resEmpresas.json();
-  dataEmpresas.value = empresas;
+  data = await api.obtenerSoliciturdes();
+  console.log(data);
+  dataEmpresas = await api.obtenerEmpresas();
 });
 </script>
 
@@ -279,7 +130,7 @@ onMounted(async () => {
         <div class="request__container__display__list">
           <Record
             class="request__container__display__list__record"
-            v-for="e in data.value"
+            v-for="e in data"
             :key="e.id_sptg"
             :titulo="e.titulo"
             :estatus="e.estatus"
@@ -312,10 +163,10 @@ onMounted(async () => {
             <input type="text" v-model="planilla.id_admin_evaluador" />
           </div>
           <div class="actions">
-            <button type="submit" @click="actualizarPlanilla">
+            <button type="submit" @click="api.actualizarPlanilla(planilla, data)">
               Actualizar planilla
             </button>
-            <button type="submit" @click="eliminarPlanilla">
+            <button type="submit" @click="api.eliminarPlanilla(planilla.id_sptg)">
               Eliminar planilla
             </button>
           </div>
@@ -426,7 +277,7 @@ onMounted(async () => {
                     v-model="crearSolicitudForm.idEmpresa"
                   >
                     <option
-                      v-for="t in dataEmpresas.value"
+                      v-for="t in dataEmpresas"
                       :key="t.id_empresa"
                       :value="t.id_empresa"
                     >
@@ -437,7 +288,7 @@ onMounted(async () => {
                 <div class="actions">
                   <button
                     type="submit"
-                    @click="crearSolicitudForm.insertarSolicitud()"
+                    @click="api.insertarSolicitudTg(crearSolicitudForm, data)"
                   >
                     Completado!
                   </button>
