@@ -92,6 +92,25 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
       console.log(data);
       console.log(data.id_sptg);
       console.log(planillaSolicitud.trabajoDeGrado.modalidad)
+      fetch("http://localhost:3000/evalua_SPTG/", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id_sptg: data.id_sptg,
+          id_administrador: 1
+        }),
+      })
+      .then((response) => {
+          return response.json();
+      })
+      .then((data) => {
+          console.log(data);
+      }).catch((error)=>{
+        console.log(error)
+      } );
       if(planillaSolicitud.trabajoDeGrado.modalidad === 'E'){
         fetch('http://localhost:3000/SPTGE', {
           method: "POST",
@@ -133,12 +152,82 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
           id_estudiante: estudiante.id_usuario,
         }),
       })
-        .then((response) => {
+      .then((response) => {
           return response.json();
-        })
-        .then((data) => {
+      })
+      .then((data) => {
           console.log(data);
-        });
+      });
+
+
+      //Se crea la propuesta de trabajo de grado
+      fetch("http://localhost:3000/PTG/", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id_sptg: data.id_sptg,
+        }),
+      })
+      .then((response) => {
+          return response.json();
+      })
+      .then((data) => {
+          console.log(data);
+          if(planillaSolicitud.trabajoDeGrado.modalidad === 'E'){
+            fetch("http://localhost:3000/PTEG/", {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  id_pteg: data.id_ptg,
+                }),
+              })
+              .then((response) => {
+                return response.json();
+              })
+              .then( (data) => {
+                console.log(data)
+              })
+          }else{
+            fetch("http://localhost:3000/PTIG/", {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  id_ptig: data.id_ptg,
+                }),
+              })
+              .then((response) => {
+                return response.json();
+              })
+              .then( (data) => {
+                  console.log(data)
+              })
+          }
+          fetch("http://localhost:3000/evalua_SPTG/", {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id_pteg: data.id_ptg,
+          }),
+          })
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+          });
+      });
 
     })
     .catch((e) => {

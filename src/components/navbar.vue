@@ -7,7 +7,10 @@
       </li>
       <!--<li class="navbar__list__element"><router-link to="/upload-propouse">Upload<br>propuose</router-link></li>-->
       <li class="navbar__list__element">
-        <router-link to="/requests">Requests</router-link>
+        <router-link to="/requests">Planilla Solicitud</router-link>
+      </li>
+      <li class="navbar__list__element">
+        <router-link to="/">Requests</router-link>
       </li>
       <li class="navbar__list__element">
         <router-link to="/committee">Comité de escuela</router-link>

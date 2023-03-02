@@ -32,7 +32,7 @@ const crearSolicitudForm = reactive({
     this.progressbarState = 0;
 
     this.trabajoDeGrado.tituloTG = "";
-    this.trabajoDeGrado.modaliad = "";
+    this.trabajoDeGrado.modalidad = "";
     this.cedulaAlumno = "";
     this.cedulaTutor = "";
     this.nombreEmpresa = "";
