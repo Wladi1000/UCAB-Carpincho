@@ -13,7 +13,7 @@
 <template>
     <div>
         <p>Titulo de propuesta: {{ props.titulo }}</p>
-        <p>estatus: {{ props.estatus }}</p>
-        <p>fechaenvio: {{ props.fechaenvio }}</p>
+        <p>Modalidad: {{ props.modalidad == 'E'?'Experimental' : 'Instrumental' }}</p>
+        <p>Fecha envio: {{ props.fechaenvio }}</p>
     </div>
 </template>

@@ -1,7 +1,7 @@
 <script setup>
 import PlanillaRevisor from "../components/planillaRevisor.vue";
 import { reactive, onMounted } from 'vue';
-import * as api from "../apiTools.js";
+import * as api from "../modules/apiTools.js";
 
 let data = reactive([]);
 let dataProfesores = reactive ([]);

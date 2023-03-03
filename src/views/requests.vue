@@ -1,12 +1,12 @@
 <script setup>
 import Record from "../components/record.vue";
 import crearSolicitud from "../components/planillaSolicitudCrear.vue";
-import { ref, reactive, onMounted } from "vue";
-import * as api from "../apiTools.js";
+import { ref, reactive, onMounted, computed } from "vue";
+import * as api from "../modules/apiTools.js";
 
 let data = reactive([]);
-let dataEmpresas = reactive([]);
 
+// Objeto para guardar los datos de la planilla que se esta leyendo
 let planilla = reactive({
   id_sptg: "",
   titulo: "",
@@ -16,64 +16,10 @@ let planilla = reactive({
   id_ta: "",
   id_admin_evaluador: "",
 });
-/*
-let crearSolicitudForm = reactive({
-  showTituloAlumno: false,
-  showTutor: false,
-  showEmpresa: false,
 
-  progressbarState: 0,
-
-  trabajoDeGrado: {
-    tituloTG: "",
-    modalidad: "",
-  },
-
-  cedulaAlumnos: ["", ""],
-  cedulaTutor: "",
-  idEmpresa: "",
-
-  crearSolicitud() {
-    this.showTituloAlumno = true;
-    this.showTutor = false;
-    this.showEmpresa = false;
-
-    this.progressbarState = 0;
-
-    this.trabajoDeGrado.tituloTG = "";
-    this.trabajoDeGrado.modaliad = "";
-    this.cedulaAlumno = "";
-    this.cedulaTutor = "";
-    this.nombreEmpresa = "";
-  },
-  tituloAlumnoCompletado() {
-    this.showTituloAlumno = false;
-    this.showTutor = true;
-    this.progressbarState += 33.3;
-    console.log(this.cedulaAlumnos);
-    console.log(this.trabajoDeGrado);
-  },
-  volverATituloAlumno() {
-    this.showTituloAlumno = true;
-    this.showTutor = false;
-    this.progressbarState -= 33.3;
-  },
-  tutorCompletado() {
-    this.showTutor = false;
-    this.showEmpresa = true;
-    this.progressbarState += 33.3;
-    console.log(this.cedulaTutor);
-  },
-  volverATutor() {
-    this.showTutor = true;
-    this.showEmpresa = false;
-    this.progressbarState -= 33.3;
-    console.log(this.idEmpresa);
-  }
-});
-*/
 const showPlanillaUpDe = ref(false);
 const showPlanillaCreate = ref(false);
+const actualizarLista = ref(false);
 
 function actionShowPlanillaCrear() {
   showPlanillaUpDe.value = false;
@@ -87,7 +33,6 @@ const clickenComponente = async (id) => {
   actionShowPlanillaUpDe();
   const res = await fetch("http://localhost:3000/SPTG/" + id);
   const respuesta = await res.json();
-  console.log(respuesta);
   planilla.id_sptg = respuesta.id_sptg;
   planilla.titulo = respuesta.titulo;
   planilla.modalidad = respuesta.modalidad;
@@ -97,10 +42,22 @@ const clickenComponente = async (id) => {
   planilla.id_admin_evaluador = respuesta.id_admin_evaluador;
 };
 
-onMounted(async () => {
-  data = await api.obtenerSoliciturdes();
-  dataEmpresas = await api.obtenerEmpresas();
+async function actualizarPlanilla(){
+  await api.actualizarPlanilla(planilla, data.value);
+  data.value = await api.obtenerSoliciturdes();
+}
+
+actualizarLista.value = computed( async () =>{
+  let falso = actualizarLista.value
+  console.log(actualizarLista.value);
+  await actualizarPlanilla();
+  return actualizarLista.value = false; 
 });
+
+onMounted(async () => {
+  data.value = await api.obtenerSoliciturdes();
+});
+//------------------------------------------------------>
 </script>
 
 <template>
@@ -129,9 +86,10 @@ onMounted(async () => {
         <div class="request__container__display__list">
           <Record
             class="request__container__display__list__record"
-            v-for="e in data"
+            v-for="e in data.value"
             :key="e.id_sptg"
             :titulo="e.titulo"
+            :modalidad="e.modalidad"
             :estatus="e.estatus"
             :fechaenvio="e.fechaenvio"
             @click="clickenComponente(e.id_sptg)"
@@ -164,12 +122,11 @@ onMounted(async () => {
           <div class="actions">
             <button
               type="submit"
-              @click="api.actualizarPlanilla(planilla, data)"
+              @click=" actualizarPlanilla()"
             >
               Actualizar planilla
             </button>
             <button
-              type="submit"
               @click="api.eliminarPlanilla(planilla.id_sptg)"
             >
               Eliminar planilla
@@ -177,7 +134,7 @@ onMounted(async () => {
           </div>
         </form>
 
-        <crearSolicitud :showPlanillaCreate="showPlanillaCreate" />
+        <crearSolicitud :showPlanillaCreate="showPlanillaCreate" @actualizarData="()=> actualizarLista = true" />
       </div>
     </div>
   </div>
