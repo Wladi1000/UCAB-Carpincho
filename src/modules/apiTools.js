@@ -20,9 +20,9 @@ export const obtenerEmpresaById = async (idEmpresa) => {
   return empresa;
 };
 
-export const obtenerIdEstudiante = async (cedulaAlumno) => {
+export const obtenerIdEstudiante = async (cedulaEstudiante) => {
   const res = await fetch(
-    "http://localhost:3000/Estudiantes/cedula/" + cedulaAlumno
+    "http://localhost:3000/Estudiantes/cedula/" + cedulaEstudiante
   );
   const response = await res.json();
   return response;
@@ -36,7 +36,18 @@ export const obtenerIdTutor = async (cedulaTutor) => {
   return response;
 };
 
-export const actualizarPlanilla = async (planilla) => {
+export const obtenerProfesionalesExternos = async () =>{
+  const resProfesionalesExternos = await fetch("http://localhost:3000/Profesionalesexternos/");
+  const profesionales = await resProfesionalesExternos.json();
+  return profesionales;
+}
+export const obtenerProfesionalExternoById = async (idProfesionalExterno) =>{
+  const resProfesionalesExternos = await fetch(`http://localhost:3000/Profesionalesexternos/${idProfesionalExterno}`);
+  const profesionales = await resProfesionalesExternos.json();
+  return profesionales;
+}
+
+export const actualizarPlanilla = async (planilla, data) => {
   const res = await fetch("http://localhost:3000/SPTG/" + planilla.id_sptg, {
     method: "PUT",
     mode: "cors",
@@ -75,8 +86,8 @@ export const eliminarPlanilla = async (idPlanilla) => {
 
 export const insertarSolicitudTg = async (planillaSolicitud, data) => {
 
-  const tutor = await obtenerIdTutor(planillaSolicitud.cedulaTutor);
-  const estudiante = await obtenerIdEstudiante(planillaSolicitud.cedulaAlumnos[0]);
+  const tutor = await obtenerIdTutor(planillaSolicitud.tutor.cedula);
+  const estudiante = await obtenerIdEstudiante(planillaSolicitud.alumnos[0].cedula);
   console.log(tutor);
   fetch("http://localhost:3000/SPTG/", {
     method: "POST",
