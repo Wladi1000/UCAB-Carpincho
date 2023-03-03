@@ -87,8 +87,8 @@ const generarCelda = (text, width, after, before) => {
 }
 const doc = new docx.Document({
     creator: "Luis C. Somoza",
-    title: "Planilla de evaluaciòn de revisor de TEG",
-    description: "Planilla de evaluaciòn de revisor de TEG",
+    title: "Planilla de evaluaciòn de revisor de TIG",
+    description: "Planilla de evaluaciòn de revisor de TIG",
     styles: {
         default: {
             heading1: {
@@ -202,7 +202,7 @@ const doc = new docx.Document({
             style: "aside",
             children: [
                 new docx.TextRun({
-                    text: "Evaluación Propuesta Trabajo Experimental de Grado (TEG)",
+                    text: "Evaluación Propuesta Trabajo Experimental de Grado (TIG)",
                     bold: true
                 })
             ],
@@ -254,7 +254,7 @@ const doc = new docx.Document({
         new docx.Paragraph({
             children: [
                 new docx.TextRun({
-                    text: "Organización donde desarrollará el TEG: ",
+                    text: "Organización donde desarrollará el TIG: ",
                     bold: true
                 })
             ],
@@ -1572,6 +1572,6 @@ const doc = new docx.Document({
 });
 
 docx.Packer.toBuffer(doc).then((buffer) => {
-    fs.writeFileSync("Evaluaciòn Propuesta TEG - Revisor.docx", buffer);
+    fs.writeFileSync("Evaluaciòn Propuesta TIG - Revisor.docx", buffer);
 });
 
