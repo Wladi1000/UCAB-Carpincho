@@ -1,6 +1,7 @@
 @use '../abstracts/variables';
 
-.request__container {
+.request__container,
+.committe__container{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,6 +51,7 @@
     }
   }
 
+  &__display,
   &__display {
     display: flex;
     align-items: center;
@@ -125,7 +127,7 @@
     align-items: center;
     
     height: 100%;
-    width: 100%;
+    width: 70%;
     
     background-color: #dadada;
     h2{
