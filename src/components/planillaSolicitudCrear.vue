@@ -66,6 +66,7 @@ const crearSolicitudForm = reactive({
 onMounted(async () => {
   crearSolicitudForm.crearSolicitud();
   dataEmpresas = await api.obtenerEmpresas();
+  console.log(await api.obtenerEmpresaById(2));
 });
 </script>
 <template>

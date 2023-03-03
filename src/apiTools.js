@@ -14,6 +14,12 @@ export const obtenerEmpresas = async () => {
   return empresas;
 };
 
+export const obtenerEmpresaById = async (idEmpresa) => {
+  const resEmpresa = await fetch(`http://localhost:3000/Empresas/${idEmpresa}`);
+  const empresa = await resEmpresa.json();
+  return empresa;
+};
+
 export const obtenerIdEstudiante = async (cedulaAlumno) => {
   const res = await fetch(
     "http://localhost:3000/Estudiantes/cedula/" + cedulaAlumno
@@ -177,6 +183,7 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
       .then((data) => {
           console.log(data);
           if(planillaSolicitud.trabajoDeGrado.modalidad === 'E'){
+            
             fetch("http://localhost:3000/PTEG/", {
                 method: "POST",
                 mode: "cors",
@@ -211,22 +218,6 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
                   console.log(data)
               })
           }
-          fetch("http://localhost:3000/evalua_SPTG/", {
-            method: "POST",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              id_pteg: data.id_ptg,
-          }),
-          })
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data);
-          });
       });
 
     })
