@@ -4,14 +4,13 @@ export const obtenerPTG = async (req,res) => {
     res.json(obtener);
 };
 export const crearPTG = async (req,res) => {
-    const { id_ptg, id_sptg } = req.body;
+    const { id_sptg } = req.body;
     try {
         const nuevo = await PTG.create({
-           id_ptg,
            id_sptg
         },
         {
-            fields: ["id_ptg", "id_sptg"]
+            fields: ["id_sptg"]
         });
         res.json(nuevo);
     } catch (error) {
