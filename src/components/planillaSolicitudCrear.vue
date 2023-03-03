@@ -1,77 +1,67 @@
 <script setup>
-import { reactive, onMounted } from "vue";
-import * as api from "../apiTools.js";
+import { ref, reactive, onMounted, computed } from "vue";
+import * as api from "../modules/apiTools.js";
+import { PlanillaCrearSolicitud } from "../modules/planillaCrearSolicitud.js";
 
 const props = defineProps({
-  showPlanillaCreate: Boolean,
+  showPlanillaCreate: Boolean
 });
+
+const emit = defineEmits(['actualizarData'])
+const crearSolicitudForm = reactive(new PlanillaCrearSolicitud());
 
 let dataEmpresas = reactive([]);
+let dataProfesionalesExternos = reactive([])
+let idEmpresaSeleccionada = ref(null);
 
-const crearSolicitudForm = reactive({
-  showTituloAlumno: false,
-  showTutor: false,
-  showEmpresa: false,
+async function buscarEstudiante() {
+  const resEstudiante = await api.obtenerIdEstudiante(
+    crearSolicitudForm.alumnos[0].cedula
+  );
+  crearSolicitudForm.alumnos[0].apellidos = resEstudiante.apellidos;
+  crearSolicitudForm.alumnos[0].nombres = resEstudiante.nombres;
+  crearSolicitudForm.alumnos[0].cedula = resEstudiante.cedula;
+}
 
-  progressbarState: 0,
+async function buscarTutor() {
+  const resTutor = await api.obtenerIdTutor(crearSolicitudForm.tutor.cedula);
+  crearSolicitudForm.tutor.apellidos = resTutor.apellidos;
+  crearSolicitudForm.tutor.nombres = resTutor.nombres;
+  crearSolicitudForm.tutor.cedula = resTutor.cedula;
+}
 
-  trabajoDeGrado: {
-    tituloTG: "",
-    modalidad: "",
-  },
+crearSolicitudForm.empresa.idEmpresa = computed(() => {
+  
+  if( idEmpresaSeleccionada.value != null ){
 
-  cedulaAlumnos: ["", ""],
-  cedulaTutor: "",
-  idEmpresa: "",
-
-  crearSolicitud() {
-    this.showTituloAlumno = true;
-    this.showTutor = false;
-    this.showEmpresa = false;
-
-    this.progressbarState = 0;
-
-    this.trabajoDeGrado.tituloTG = "";
-    this.trabajoDeGrado.modalidad = "";
-    this.cedulaAlumno = "";
-    this.cedulaTutor = "";
-    this.nombreEmpresa = "";
-  },
-  tituloAlumnoCompletado() {
-    this.showTituloAlumno = false;
-    this.showTutor = true;
-    this.progressbarState += 33.3;
-    console.log(this.cedulaAlumnos);
-    console.log(this.trabajoDeGrado);
-  },
-  volverATituloAlumno() {
-    this.showTituloAlumno = true;
-    this.showTutor = false;
-    this.progressbarState -= 33.3;
-  },
-  tutorCompletado() {
-    this.showTutor = false;
-    this.showEmpresa = true;
-    this.progressbarState += 33.3;
-    console.log(this.cedulaTutor);
-  },
-  volverATutor() {
-    this.showTutor = true;
-    this.showEmpresa = false;
-    this.progressbarState -= 33.3;
-    console.log(this.idEmpresa);
-  },
+    let arregloEmpresa = dataEmpresas.filter( t => t.id_empresa == idEmpresaSeleccionada.value );
+  
+    crearSolicitudForm.empresa.rif = arregloEmpresa[0].rif;
+    crearSolicitudForm.empresa.direccion = arregloEmpresa[0].direccion;
+    crearSolicitudForm.empresa.telefono = arregloEmpresa[0].telefono;
+  
+    return arregloEmpresa[0].id_empresa;
+  }
+  return '';
 });
+
+async function insertarPlanilla(){
+  await api.insertarSolicitudTg(crearSolicitudForm);
+  emit('actualizarData');
+}
 
 onMounted(async () => {
   crearSolicitudForm.crearSolicitud();
   dataEmpresas = await api.obtenerEmpresas();
-  console.log(await api.obtenerEmpresaById(2));
+  dataProfesionalesExternos = await api.obtenerProfesionalesExternos();
 });
+
+//------------------------------------------------------>
 </script>
 <template>
   <div class="create-state" v-show="showPlanillaCreate">
     <div class="progressbar">
+      <p>{{ idEmpresaSeleccionada }}</p>
       <div
         class="progressbar--content"
         :style="{ width: crearSolicitudForm.progressbarState + '%' }"
@@ -88,7 +78,7 @@ onMounted(async () => {
             <p for="">Titulo del Trabajo</p>
             <input
               type="text"
-              placeholder="Bolivar ¿Heroe o Dictador?"
+              placeholder="Tutilo de Propuesta TG"
               v-model="crearSolicitudForm.trabajoDeGrado.tituloTG"
             />
             <p for="">Modalidad</p>
@@ -104,17 +94,37 @@ onMounted(async () => {
             <p for="">Cedula Alumno</p>
             <input
               type="number"
-              placeholder="27301846"
-              v-model="crearSolicitudForm.cedulaAlumnos[0]"
+              placeholder="98765432"
+              v-model="crearSolicitudForm.alumnos[0].cedula"
             />
             <p for="">Nombres</p>
-            <input disabled type="text" placeholder="Wladimir Josué" />
+            <input
+              disabled
+              type="text"
+              v-model="crearSolicitudForm.alumnos[0].nombres"
+            />
             <p for="">Apellidos</p>
-            <input disabled type="text" placeholder="Sanvicente Suárez" />
+            <input
+              disabled
+              type="text"
+              v-model="crearSolicitudForm.alumnos[0].apellidos"
+            />
           </div>
           <div class="actions">
             <button
-              type="submit"
+              style="display: none"
+              type="submit "
+              @click="buscarEstudiante()"
+            ></button>
+
+            <button
+              :disabled="
+                crearSolicitudForm.alumnos[0].nombres == '' ||
+                crearSolicitudForm.trabajoDeGrado.modalidad == '' ||
+                crearSolicitudForm.trabajoDeGrado.tituloTG == ''
+                  ? true
+                  : false
+              "
               @click="crearSolicitudForm.tituloAlumnoCompletado()"
             >
               Siguiente
@@ -137,18 +147,35 @@ onMounted(async () => {
             <p for="">Cédula de Tutor Académico</p>
             <input
               type="number"
-              placeholder="27301846"
-              v-model="crearSolicitudForm.cedulaTutor"
+              placeholder="98765432"
+              v-model="crearSolicitudForm.tutor.cedula"
             />
             <p for="">Nombres</p>
-            <input disabled type="text" placeholder="Wladimir Josué" />
+            <input
+              disabled
+              type="text"
+              v-model="crearSolicitudForm.tutor.nombres"
+            />
             <p for="">Apellidos</p>
-            <input disabled type="text" placeholder="Sanvicente Suarez" />
+            <input
+              disabled
+              type="text"
+              v-model="crearSolicitudForm.tutor.apellidos"
+            />
             <p for="">Años de Experienci a</p>
             <input disabled type="number" placeholder="4 años" />
           </div>
           <div class="actions">
-            <button type="submit" @click="crearSolicitudForm.tutorCompletado()">
+            <button
+              style="display: none"
+              type="submit "
+              @click="buscarTutor()"
+            ></button>
+            <button
+              type="submit"
+              :disabled="crearSolicitudForm.tutor.nombres == '' ? true : false"
+              @click="crearSolicitudForm.tutorCompletado()"
+            >
               Siguiente
             </button>
           </div>
@@ -167,7 +194,7 @@ onMounted(async () => {
           <div class="request__container__preview__form__inputs">
             <!-- Empresa-->
             <p>Seleccione la empresa:</p>
-            <select name="Empresa" id="" v-model="crearSolicitudForm.idEmpresa">
+            <select name="Empresa" id="" v-model="idEmpresaSeleccionada">
               <option
                 v-for="t in dataEmpresas"
                 :key="t.id_empresa"
@@ -176,11 +203,39 @@ onMounted(async () => {
                 {{ t.nombre }}
               </option>
             </select>
+            <input
+              type="text"
+              disabled
+              v-model="crearSolicitudForm.empresa.rif"
+              placeholder="rif"
+            />
+            <input
+              type="text"
+              disabled
+              v-model="crearSolicitudForm.empresa.direccion"
+              placeholder="direccion"
+            />
+            <input
+              type="text"
+              disabled
+              v-model="crearSolicitudForm.empresa.telefono"
+              placeholder="telefono"
+            />
+            <select v-show="crearSolicitudForm.trabajoDeGrado.modalidad != 'I'? false: true" name="ProfesionalExterno" id="">
+              <option
+                v-for="t in dataProfesionalesExternos"
+                :key="t.id_profesionale"
+                :value="t.id_profesionale"
+              >
+                {{ t.id_profesionale }}
+              </option>
+            </select>
           </div>
           <div class="actions">
             <button
               type="submit"
-              @click="api.insertarSolicitudTg(crearSolicitudForm, data)"
+              :disabled="crearSolicitudForm.empresa.idEmpresa == -1 ? true : false"
+              @click="insertarPlanilla()"
             >
               Completado!
             </button>
