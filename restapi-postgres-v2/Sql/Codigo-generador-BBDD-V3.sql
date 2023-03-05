@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS Usuarios (
 	UNIQUE (cedula),
 	UNIQUE (correo)
 );
-ALTER TABLE Usuarios DROP CONSTRAINT regex_contrasena 
+--ALTER TABLE Usuarios DROP CONSTRAINT regex_contrasena;
 
 CREATE TABLE IF NOT EXISTS Empresas (
 	id_empresa SERIAL,
@@ -422,8 +422,7 @@ CREATE TABLE IF NOT EXISTS SolicitudTEG (
 		ON DELETE RESTRICT
 );
 
-ALTER TABLE SolicitudTEG
-ADD CONSTRAINT existe_en_solicitudtig CHECK(validar_existencia_SPTIG(id_steg) = 'false');
+--ADD CONSTRAINT existe_en_solicitudtig CHECK(validar_existencia_SPTIG(id_steg) = 'false');
 CREATE TABLE IF NOT EXISTS SolicitudTIG (
 	id_STIG INTEGER NOT NULL,
 	id_empresa INTEGER NOT NULL,
@@ -663,24 +662,3 @@ CREATE TABLE IF NOT EXISTS Contiene_Criterios_TDGI_TA (
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
-/*Insertando listado de usuarios*/
-INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Luis Carlos', 'Somoza Ledezma', 'lcsomoza.19@est.ucab.edu.ve', '27656348','04249749230','admin');
-INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Luz Esperanza', 'Medina', 'lemedina@ucab.edu.ve', '99999999','04249749230','admin');
-INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Luis Noel', 'Somoza Ledezma', 'lnsomoza.19@est.ucab.edu.ve', '27656349','04249749230','admin');
-INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Luis Fernando', 'Somoza Ledezma', 'lfsomoza.19@est.ucab.edu.ve', '27656350','04249749230','admin');
-INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Franklin', 'Bello', 'fbelloc@ucab.edu.ve', '00000000','04249749230','admin');
-INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Wladimir', 'San Vicente', 'wjsanvicente.18@est.ucab.edu.ve', '27301846','04249749230','admin');
-INSERT INTO Estudiantes(id_estudiante) VALUES (1);
-INSERT INTO Estudiantes(id_estudiante) VALUES (4);
-INSERT INTO Estudiantes(id_estudiante) VALUES (3);
-INSERT INTO Administradores(id_administrador,oficina,cargo,experiencia) VALUES (2, 'Oficina', 'cargo',5);
-INSERT INTO Profesores(id_profesor) VALUES (5);
-INSERT INTO Empresas(nombre,rif,direccion,telefono) VALUES ('hola','hola','hola','hola');
-INSERT INTO ProfesionalesExternos(id_profesionale,id_empresa,fecha_aceptacion) VALUES (6,1,'2022-02-21');
-
-INSERT INTO SPTG(titulo, id_ta) VALUES ('Propuesta de Luis Somoza', 5);
-INSERT INTO SPTG(titulo, id_ta) VALUES ('Propuesta de Luis Somoza', 5);
-INSERT INTO SPTG(titulo, id_ta) VALUES ('Propuesta de Luis Somoza', 5);
-INSERT INTO SPTG(titulo, id_ta) VALUES ('Propuesta de Luis Somoza', 5);
-UPDATE SPTG SET estatus = 'PG' WHERE id_sptg = 2
-INSERT INTO CDE(id_cde) VALUES ('001');
