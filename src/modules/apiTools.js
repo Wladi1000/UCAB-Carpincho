@@ -2,8 +2,26 @@ export const decirHola = () => {
   alert('Hola, buenas noches');
 };
 
-export const obtenerSoliciturdes = async () => {
+export const obtenerSolicitudes = async () => {
   const resSolicitudes = await fetch("http://localhost:3000/datosEstudiantes");
+  const sptg = await resSolicitudes.json();
+  return sptg;
+};
+
+export const obtenerPropuestas = async () => {
+  const resSolicitudes = await fetch("http://localhost:3000/PTG");
+  const sptg = await resSolicitudes.json();
+  return sptg;
+};
+
+export const obtenerSolicitudById = async (solicitudId) => {
+  const resSolicitud = await fetch("http://localhost:3000/SPTG/" + solicitudId);
+  const solicitud = await resSolicitud.json();
+  return solicitud;
+};
+
+export const obtenerProfesores = async () => {
+  const resSolicitudes = await fetch("http://localhost:3000/Profesores");
   const sptg = await resSolicitudes.json();
   return sptg;
 };
@@ -53,18 +71,19 @@ export const obtenerIdTutorEmpresarialByCedula = async (cedulaTutorEmpresarial) 
   return response;
 };
 
-export const obtenerProfesionalesExternos = async () =>{
+export const obtenerProfesionalesExternos = async () => {
   const resProfesionalesExternos = await fetch("http://localhost:3000/Profesionalesexternos/");
   const profesionales = await resProfesionalesExternos.json();
   return profesionales;
-}
-export const obtenerProfesionalExternoById = async (idProfesionalExterno) =>{
+};
+
+export const obtenerProfesionalExternoById = async (idProfesionalExterno) => {
   const resProfesionalesExternos = await fetch(`http://localhost:3000/Profesionalesexternos/${idProfesionalExterno}`);
   const profesionales = await resProfesionalesExternos.json();
   return profesionales;
-}
+};
 
-export const actualizarPlanilla = async (planilla, data) => {
+export const actualizarPlanilla = async (planilla) => {
   const res = await fetch("http://localhost:3000/SPTG/" + planilla.id_sptg, {
     method: "PUT",
     mode: "cors",
@@ -102,7 +121,7 @@ export const eliminarPlanilla = async (idPlanilla) => {
 };
 
 export const insertarSolicitudTg = async (planillaSolicitud, data) => {
-  if ( planillaSolicitud.trabajoDeGrado.modalidad == 'I' ){const profesionalExterno = await obtenerIdTutorEmpresarialByCedula(planillaSolicitud.tutorEmpresarial.cedula);}
+  if (planillaSolicitud.trabajoDeGrado.modalidad == 'I') { const profesionalExterno = await obtenerIdTutorEmpresarialByCedula(planillaSolicitud.tutorEmpresarial.cedula); }
   const tutor = await obtenerIdTutorAcademico(planillaSolicitud.tutor.cedula);
   const estudiante = await obtenerIdEstudiante(planillaSolicitud.alumnos[0].cedula);
   console.log(tutor);
@@ -137,15 +156,15 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
           id_administrador: 2
         }),
       })
-      .then((response) => {
+        .then((response) => {
           return response.json();
-      })
-      .then((data) => {
+        })
+        .then((data) => {
           console.log(data);
-      }).catch((error)=>{
-        console.log(error)
-      } );
-      if(planillaSolicitud.trabajoDeGrado.modalidad === 'E'){
+        }).catch((error) => {
+          console.log(error)
+        });
+      if (planillaSolicitud.trabajoDeGrado.modalidad === 'E') {
         fetch('http://localhost:3000/SPTGE', {
           method: "POST",
           mode: "cors",
@@ -155,15 +174,15 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
           body: JSON.stringify({
             id_steg: data.id_sptg,
           }),
-        }).then( (response) => {
+        }).then((response) => {
           return response.json();
-        }).then( (data) => {
+        }).then((data) => {
           console.log(data)
-        }).catch( (error) => {
-          console.log({mensaje: "Error en la asignación de modalidad", error: error});
+        }).catch((error) => {
+          console.log({ mensaje: "Error en la asignación de modalidad", error: error });
         });
-      }else if(planillaSolicitud.trabajoDeGrado.modalidad === 'I'){
-       fetch('http://localhost:3000/SPTGI', {
+      } else if (planillaSolicitud.trabajoDeGrado.modalidad === 'I') {
+        fetch('http://localhost:3000/SPTGI', {
           method: "POST",
           mode: "cors",
           headers: {
@@ -174,11 +193,11 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
             id_empresa: planillaSolicitud.empresa.idEmpresa,
             id_profesionale: profesionalExterno.id_profesionale
           }),
-        }).then( (response) => {
+        }).then((response) => {
           return response.json()
-        }).then( (data) => {
+        }).then((data) => {
           console.log(data)
-        }).catch( (e) => { console.log(e)})
+        }).catch((e) => { console.log(e) })
       }
 
       fetch("http://localhost:3000/realiza_SPTG/", {
@@ -192,12 +211,12 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
           id_estudiante: estudiante.id_usuario,
         }),
       })
-      .then((response) => {
+        .then((response) => {
           return response.json();
-      })
-      .then((data) => {
+        })
+        .then((data) => {
           console.log(data);
-      });
+        });
 
 
       //Se crea la propuesta de trabajo de grado
@@ -211,48 +230,48 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
           id_sptg: data.id_sptg,
         }),
       })
-      .then((response) => {
+        .then((response) => {
           return response.json();
-      })
-      .then((data) => {
+        })
+        .then((data) => {
           console.log(data);
-          if(planillaSolicitud.trabajoDeGrado.modalidad === 'E'){
-            
+          if (planillaSolicitud.trabajoDeGrado.modalidad === 'E') {
+
             fetch("http://localhost:3000/PTEG/", {
-                method: "POST",
-                mode: "cors",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  id_pteg: data.id_ptg,
-                }),
-              })
+              method: "POST",
+              mode: "cors",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id_pteg: data.id_ptg,
+              }),
+            })
               .then((response) => {
                 return response.json();
               })
-              .then( (data) => {
+              .then((data) => {
                 console.log(data)
               })
-          }else{
+          } else {
             fetch("http://localhost:3000/PTIG/", {
-                method: "POST",
-                mode: "cors",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  id_ptig: data.id_ptg,
-                }),
-              })
+              method: "POST",
+              mode: "cors",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id_ptig: data.id_ptg,
+              }),
+            })
               .then((response) => {
                 return response.json();
               })
-              .then( (data) => {
-                  console.log(data)
+              .then((data) => {
+                console.log(data)
               })
           }
-      });
+        });
 
     })
     .catch((e) => {
