@@ -1,8 +1,14 @@
-
-import { saveAs } from "file-saver";
+import file_saver from 'file-saver'
+const { saveAs } = file_saver
 // Load the full build.
-import { _ } from 'lodash';
-import { TableRow,BorderStyle, HeightRule, TableCell,WidthType,Paragraph, TextRun, AlignmentType, VerticalAlign, Document, SectionType, Header, Footer, LineRuleType, ImageRun, Table, PageBreak, HeadingLevel,Packer } from 'docx'
+import lodash from 'lodash';
+const { _ } =  lodash;
+import docx from 'docx';
+const { TableRow,BorderStyle, HeightRule, TableCell,WidthType,Paragraph, TextRun, AlignmentType, VerticalAlign, Document, SectionType, Header, Footer, LineRuleType, ImageRun, Table, PageBreak, HeadingLevel,Packer } = docx;
+
+import fs from 'fs'
+const { writeFileSync } = fs;
+
 const sin_bordes = {
     top: {
         style: BorderStyle.NONE,
@@ -31,57 +37,6 @@ function is_char(value)
      return false;
     return value && value.length === 1;
 }
- 
-/*
-const planilla_propuesta_TEG = {
-    fecha_envio : "Julio 29 del 2023",
-    titulo : "Desarrollo de sistema para generacion de planillas",
-    organizacion : "UCAB Guayana",
-    alumno : [{
-        nombre: "Luis C. Somoza",
-        cedula: "27656348",
-        telefono: "4249749230",
-        email: "lcsomoza.19@est.ucab.edu.ve",
-        oficina: '',
-        habitacion: '',
-        fecha_inicio: '',
-        horario_propuesto: ''
-    },
-    {
-        nombre: "Luis C. Somoza 2",
-        cedula: "27656348",
-        telefono: "4249749230",
-        email: "lcsomoza.19@est.ucab.edu.ve",
-        oficina: '',
-        habitacion: '',
-        fecha_inicio: '',
-        horario_propuesto: ''
-    }
-    ],
-    empresa : {
-        nombre: "TIMACA LLC",
-        direccion: "No tiene direccion",
-        telefono: "4249749230"
-    },
-    tutor_academico : {
-        nombre: "Pedro Perez",
-        cedula: "12345678",
-        email: "pperez.19@gmail.com",
-        telefono: "4249749230",
-        profesion: "Ingeniero Civil",
-        oficina: 'Datos oficina',
-        habitacion: 'Datos habitacion',
-        graduado: "5",
-        tutor_tg: false,
-        profesor_ucab: false,
-        experiencia: "8",
-        cargo: "Gerente de operaciones",
-        fecha_entrega: new Date()
-    },
-
-
-}
-*/
 const tam_cuadro_titulo = 280;
 const generar50Celdas = (titulo) => {
     const lista = []
@@ -143,32 +98,43 @@ function convertProxyObjectToPojo(proxyObj) {
     return _.cloneDeep(proxyObj);
 }
   
-const generarDatosAlumnos = (planilla_propuesta_TEG) => {
-            const lista = [];
+const generarDatosAlumno = ( object ) => {
+            console.log(!(Object.entries(object).length === 0));
+            const lista = {};
             console.log("generarDatosAlumnos()");
-            const pt = convertProxyObjectToPojo(planilla_propuesta_TEG)
+            const pt = convertProxyObjectToPojo(object)
             console.log(pt);
-            pt.forEach( (element) => {
-                const resultado = new Paragraph({
-                    style: "aside",
-                    bullet: {
-                        level: 0
-                    },
-                    children: [
-                        new TextRun({
-                            text: element.nombre +", C.I.N. " + element.cedula,
-                            font: "Times New Roman",
-                        })
-                    ],
-                    alignment: AlignmentType.JUSTIFIED,
-                    spacing: {
-                        line: 355,
-                        lineRule: LineRuleType.AUTO,
-                    }
-                })
-                lista.push(resultado);
-            })
-            return lista;
+            console.log("generarDatosAlumnos();");
+
+                if(!(Object.entries(object).length === 0)){
+                    const resultado = new Paragraph({
+                        style: "aside",
+                        bullet: {
+                            level: 0
+                        },
+                        children: [
+                            new TextRun({
+                                text: pt.nombre +", C.I.N. " + pt.cedula,
+                                font: "Times New Roman",
+                            })
+                        ],
+                        alignment: AlignmentType.JUSTIFIED,
+                        spacing: {
+                            line: 355,
+                            lineRule: LineRuleType.AUTO,
+                        }
+                    })
+                    return resultado
+                }else{
+                    const aux = new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: ""
+                            })
+                        ]
+                    })
+                    return aux;
+                }
 }
 
 const encabezadoTablaAlumno = new TableRow({
@@ -257,17 +223,13 @@ const encabezadoTablaAlumno = new TableRow({
 })
 const generarNombresAlumno = (planilla_propuesta_TEG) => {
 
-    const pt = convertProxyObjectToPojo(planilla_propuesta_TEG)
-    console.log(pt);
-    console.log(pt.alumno);
-    console.log(pt.alumno[0].nombre);
-    console.log(typeof pt.alumno[0].nombre);
-    const lista = []
+    const pt = convertProxyObjectToPojo(planilla_propuesta_TEG);
+    console.log(pt.alumno[0] != null);
+    console.log(pt.alumno[1] != null);
+    const lista = [];
     let alumno2 = null;
     let alumno1 = null;
-    console.log(pt.alumno[0] !== null);
-    console.log(pt.alumno[1] !== null);
-   if (pt.alumno[0] != null){
+    if (pt.alumno[0] != null){
     alumno1 = new TableRow({
         height: {
             value: 500, 
@@ -411,6 +373,7 @@ const generarNombresAlumno = (planilla_propuesta_TEG) => {
         ]
     });
    }
+
    lista.push(alumno1);
    lista.push(alumno2);
 
@@ -752,7 +715,7 @@ const generarTablaDatosAlumno = (object) => {
     return tablaAlumno;
 }
 export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
-    console.log(planilla_propuesta_TEG);
+    //console.log(planilla_propuesta_TEG);
     const doc = new Document({
         creator: "Luis C. Somoza & Wladimir SanVicente",
         title: "Planilla de propuesta de TEG",
@@ -974,7 +937,8 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     }
                 }),
                 //Aqui se imprimen los los alumnos y sus datos
-                generarDatosAlumnos(planilla_propuesta_TEG.alumno)[0],
+                //generarDatosAlumno(planilla_propuesta_TEG.alumno[0]),
+                //generarDatosAlumno(planilla_propuesta_TEG.alumno[1]),
                 new Paragraph({
                     style: "aside",
                     children: [
@@ -5625,16 +5589,18 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
             ]
         }]
     });
-    /*
-    docx.Packer.toBuffer(doc).then((buffer) => {
+    
+    Packer.toBuffer(doc).then((buffer) => {
         writeFileSync("Planilla Propuesta TEG.docx", buffer);
     });
-    */
+    
+   /*
     Packer.toBlob(doc).then(blob => {
-        console.log(blob);
+        //console.log(blob);
         saveAs(blob, "example.docx");
-        console.log("Document created successfully");
+        //console.log("Document created successfully");
     });
+    */
 }
 
 
