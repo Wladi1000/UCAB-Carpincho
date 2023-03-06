@@ -31,8 +31,7 @@ function actionShowPlanillaUpDe() {
 }
 const clickenComponente = async (id) => {
   actionShowPlanillaUpDe();
-  const res = await fetch("http://localhost:3000/SPTG/" + id);
-  const respuesta = await res.json();
+  const respuesta = await api.obtenerSolicitudById(id)
   planilla.id_sptg = respuesta.id_sptg;
   planilla.titulo = respuesta.titulo;
   planilla.modalidad = respuesta.modalidad;
@@ -44,7 +43,7 @@ const clickenComponente = async (id) => {
 
 async function actualizarPlanilla(){
   await api.actualizarPlanilla(planilla, data.value);
-  data.value = await api.obtenerSoliciturdes();
+  data.value = await api.obtenerSolicitudes();
 }
 
 actualizarLista.value = computed( async () =>{
@@ -55,7 +54,7 @@ actualizarLista.value = computed( async () =>{
 });
 
 onMounted(async () => {
-  data.value = await api.obtenerSoliciturdes();
+  data.value = await api.obtenerSolicitudes();
 });
 //------------------------------------------------------>
 </script>

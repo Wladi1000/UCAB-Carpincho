@@ -5,12 +5,13 @@ export class PlanillaCrearSolicitud {
     this.showTituloAlumno = false;
     this.showTutor = false;
     this.showEmpresa = false;
-
+    
+    this.progressValue = 33.3;
     this.progressbarState = 0;
 
     this.trabajoDeGrado = {
       tituloTG: "",
-      modalidad: "",
+      modalidad: "E",
     };
     
     this.alumnos = [
@@ -44,31 +45,31 @@ export class PlanillaCrearSolicitud {
   tituloAlumnoCompletado() {
     this.showTituloAlumno = false;
     this.showTutor = true;
-    this.progressbarState += 33.3;
+    this.progressbarState += this.progressValue;
   };
   volverATituloAlumno() {
     this.showTituloAlumno = true;
     this.showTutor = false;
-    this.progressbarState -= 33.3;
+    this.progressbarState -= this.progressValue;
   };
   tutorCompletado() {
     this.showTutor = false;
     this.showEmpresa = true;
-    this.progressbarState += 33.3;
+    this.progressbarState += this.progressValue;
   };
   volverATutor() {
     this.showTutor = true;
     this.showEmpresa = false;
-    this.progressbarState -= 33.3;
+    this.progressbarState -= this.progressValue
   };
   empresaCompletada(){
     this.showEmpresa = false;
     this.showTutorEmpresarial = true;
-    this.progressbarState += 33;
+    this.progressbarState += this.progressValue;
   };
   volverAEmpresa(){
     this.showEmpresa = true;
     this.showTutorEmpresarial = false;
-    this.progressbarState -= 33;
+    this.progressbarState -= this.progressValue;
   };
 }
