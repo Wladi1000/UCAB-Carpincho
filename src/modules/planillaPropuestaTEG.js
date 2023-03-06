@@ -1,5 +1,5 @@
 import { generarPlanillaPropuestaTEG } from './generadorDOCX/planilla_propuesta_TEG'
-
+import { _ } from 'lodash'
 export class PlanillaPropuestaTEG{
 
   constructor(
@@ -22,6 +22,10 @@ export class PlanillaPropuestaTEG{
       alert('No se pueden añadir mas de 2 alumnos por Trabajo de Grado');
   };
   imprimir(){
-    generarPlanillaPropuestaTEG( this );
+    function convertProxyObjectToPojo(proxyObj) {
+      return _.cloneDeep(proxyObj);
+    }
+    let thisNoReactive = convertProxyObjectToPojo(this);
+    generarPlanillaPropuestaTEG( thisNoReactive );
   }
 }

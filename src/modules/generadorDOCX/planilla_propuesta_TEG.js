@@ -1,6 +1,8 @@
-import * as fs from 'fs';
-import docx from 'docx';
-import { BorderStyle,TableRow,HeightRule, TableCell,WidthType,Paragraph, TextRun, AlignmentType, VerticalAlign } from 'docx'
+
+import { saveAs } from "file-saver";
+// Load the full build.
+import { _ } from 'lodash';
+import { TableRow,BorderStyle, HeightRule, TableCell,WidthType,Paragraph, TextRun, AlignmentType, VerticalAlign, Document, SectionType, Header, Footer, LineRuleType, ImageRun, Table, PageBreak, HeadingLevel,Packer } from 'docx'
 const sin_bordes = {
     top: {
         style: BorderStyle.NONE,
@@ -30,6 +32,7 @@ function is_char(value)
     return value && value.length === 1;
 }
  
+/*
 const planilla_propuesta_TEG = {
     fecha_envio : "Julio 29 del 2023",
     titulo : "Desarrollo de sistema para generacion de planillas",
@@ -78,6 +81,7 @@ const planilla_propuesta_TEG = {
 
 
 }
+*/
 const tam_cuadro_titulo = 280;
 const generar50Celdas = (titulo) => {
     const lista = []
@@ -133,11 +137,18 @@ const generarTituloOneHundred = (titulo) => {
     }
     return rows
 }
-const titulo = "Probando el titulo de trabajo de grado de la tesis/Probando el titulo de trabajo de grado de la tesis/Probando el titulo de trabajo de grado de la tesis";
 //generarTituloOneHundred(titulo)
-const generarDatosAlumnos = () => {
+
+function convertProxyObjectToPojo(proxyObj) {
+    return _.cloneDeep(proxyObj);
+}
+  
+const generarDatosAlumnos = (planilla_propuesta_TEG) => {
             const lista = [];
-            planilla_propuesta_TEG.alumno.forEach( (element) => {
+            console.log("generarDatosAlumnos()");
+            const pt = convertProxyObjectToPojo(planilla_propuesta_TEG)
+            console.log(pt);
+            pt.forEach( (element) => {
                 const resultado = new Paragraph({
                     style: "aside",
                     bullet: {
@@ -152,7 +163,7 @@ const generarDatosAlumnos = () => {
                     alignment: AlignmentType.JUSTIFIED,
                     spacing: {
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 })
                 lista.push(resultado);
@@ -244,14 +255,19 @@ const encabezadoTablaAlumno = new TableRow({
         }),
     ]
 })
-const generarNombresAlumno = () => {
+const generarNombresAlumno = (planilla_propuesta_TEG) => {
 
+    const pt = convertProxyObjectToPojo(planilla_propuesta_TEG)
+    console.log(pt);
+    console.log(pt.alumno);
+    console.log(pt.alumno[0].nombre);
+    console.log(typeof pt.alumno[0].nombre);
     const lista = []
     let alumno2 = null;
     let alumno1 = null;
-    console.log(planilla_propuesta_TEG.alumno[0] !== null);
-    console.log(planilla_propuesta_TEG.alumno[1] !== null);
-   if (planilla_propuesta_TEG.alumno[0] !== null){
+    console.log(pt.alumno[0] !== null);
+    console.log(pt.alumno[1] !== null);
+   if (pt.alumno[0] != null){
     alumno1 = new TableRow({
         height: {
             value: 500, 
@@ -277,17 +293,17 @@ const generarNombresAlumno = () => {
             new TableCell({
                 borders: {
                     top: {
-                        style: docx.BorderStyle.NONE,
+                        style: BorderStyle.NONE,
                         size: 1,
                         color: "ff0000",
                     },
                     left: {
-                        style: docx.BorderStyle.NONE,
+                        style: BorderStyle.NONE,
                         size: 1,
                         color: "ff0000",
                     },
                     right: {
-                        style: docx.BorderStyle.NONE,
+                        style: BorderStyle.NONE,
                         size: 1,
                         color: "ff0000",
                     }
@@ -297,24 +313,24 @@ const generarNombresAlumno = () => {
                         style: "aside",
                         borders: {
                             top: {
-                                style: docx.BorderStyle.NONE,
+                                style: BorderStyle.NONE,
                                 size: 1,
                                 color: "ff0000",
                             },
                             left: {
-                                style: docx.BorderStyle.NONE,
+                                style: BorderStyle.NONE,
                                 size: 1,
                                 color: "ff0000",
                             },
                             right: {
-                                style: docx.BorderStyle.NONE,
+                                style: BorderStyle.NONE,
                                 size: 1,
                                 color: "ff0000",
                             }
                         },
                         children: [
                             new TextRun({
-                                text: planilla_propuesta_TEG.alumno[0].nombre,
+                                text: pt.alumno[0].nombre,
                             })
                         ],
                     })
@@ -323,7 +339,7 @@ const generarNombresAlumno = () => {
         ]
     });
    }
-   if (planilla_propuesta_TEG.alumno[1] !== null){
+   if (pt.alumno[1] != null){
     alumno2 = new TableRow({
         height: {
             value: 500, 
@@ -349,17 +365,17 @@ const generarNombresAlumno = () => {
             new TableCell({
                 borders: {
                     top: {
-                        style: docx.BorderStyle.NONE,
+                        style: BorderStyle.NONE,
                         size: 1,
                         color: "ff0000",
                     },
                     left: {
-                        style: docx.BorderStyle.NONE,
+                        style: BorderStyle.NONE,
                         size: 1,
                         color: "ff0000",
                     },
                     right: {
-                        style: docx.BorderStyle.NONE,
+                        style: BorderStyle.NONE,
                         size: 1,
                         color: "ff0000",
                     }
@@ -369,24 +385,24 @@ const generarNombresAlumno = () => {
                         style: "aside",
                         borders: {
                             top: {
-                                style: docx.BorderStyle.NONE,
+                                style: BorderStyle.NONE,
                                 size: 1,
                                 color: "ff0000",
                             },
                             left: {
-                                style: docx.BorderStyle.NONE,
+                                style: BorderStyle.NONE,
                                 size: 1,
                                 color: "ff0000",
                             },
                             right: {
-                                style: docx.BorderStyle.NONE,
+                                style: BorderStyle.NONE,
                                 size: 1,
                                 color: "ff0000",
                             }
                         },
                         children: [
                             new TextRun({
-                                text: planilla_propuesta_TEG.alumno[1].nombre,
+                                text: "",
                             })
                         ],
                     })
@@ -423,17 +439,17 @@ const generarNombresAlumno = () => {
         new TableCell({
             borders: {
                 top: {
-                    style: docx.BorderStyle.NONE,
+                    style: BorderStyle.NONE,
                     size: 1,
                     color: "ff0000",
                 },
                 left: {
-                    style: docx.BorderStyle.NONE,
+                    style: BorderStyle.NONE,
                     size: 1,
                     color: "ff0000",
                 },
                 right: {
-                    style: docx.BorderStyle.NONE,
+                    style: BorderStyle.NONE,
                     size: 1,
                     color: "ff0000",
                 }
@@ -442,7 +458,7 @@ const generarNombresAlumno = () => {
                 new Paragraph({
                     children: [
                         new TextRun({
-                            text: planilla_propuesta_TEG.titulo,
+                            text: pt.titulo,
                         })
                     ],
                 })
@@ -477,7 +493,7 @@ const organizacion = new TableRow({
                 new Paragraph({
                     children: [
                         new TextRun({
-                            text: planilla_propuesta_TEG.organizacion,
+                            text: pt.organizacion,
                         })
                     ],
                 })
@@ -490,7 +506,7 @@ const organizacion = new TableRow({
     lista.push(organizacion)
     return lista;
 }
-const generarFilaAlumno = () => {
+const generarFilaAlumno = (planilla_propuesta_TEG) => {
     const filas = [];
     filas.push(encabezadoTablaAlumno);
     planilla_propuesta_TEG.alumno.forEach( (element) => {
@@ -736,7 +752,8 @@ const generarTablaDatosAlumno = (object) => {
     return tablaAlumno;
 }
 export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
-    const doc = new docx.Document({
+    console.log(planilla_propuesta_TEG);
+    const doc = new Document({
         creator: "Luis C. Somoza & Wladimir SanVicente",
         title: "Planilla de propuesta de TEG",
         description: "Planilla de propuesta de TEG",
@@ -774,7 +791,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
         },
         sections: [{
             properties: {
-                type: docx.SectionType.CONTINUOUS,
+                type: SectionType.CONTINUOUS,
                 margin: {
                     right: 150,
                     bottom: 150,
@@ -782,34 +799,38 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                 }
             },
             headers: {
-                default: new docx.Header({
+                default: new Header({
                     children: [new Paragraph({
                         children: [
-                            new docx.ImageRun({
-                                data: fs.readFileSync('logo.png'),
+                            /*
+                            new ImageRun({
+                                data: readFileSync('logo.png'),
                                 transformation: {
                                     width: 400,
                                     height: 100,
                                 },
                             }),
+                            */
                         ],
                         alignment: AlignmentType.LEFT
                     })],
                 }),
             },
             footers: {
-                default: new docx.Footer({
+                default: new Footer({
                     children: [
                         new Paragraph({
                             children: [
-                                new docx.ImageRun({
-                                    data: fs.readFileSync('Untitled.png'),
+                                /*
+                                new ImageRun({
+                                    data: readFileSync('Untitled.png'),
                                     transformation: {
                                         width: 600,
                                         height: 15,
                                     },
                                     alignment: AlignmentType.CENTER
                                 }),
+                                */
                             ],
                             alignment: AlignmentType.CENTER
                         }),
@@ -861,7 +882,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     spacing: {
                         after: 100,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     },
                 }),
                 new Paragraph({
@@ -875,7 +896,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     spacing: {
                         after: 100,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),    
                 new Paragraph({
@@ -889,7 +910,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     spacing: {
                         after: 100,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
                 new Paragraph({
@@ -903,7 +924,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     spacing: {
                         after: 100,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
                 new Paragraph({
@@ -917,7 +938,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     spacing: {
                         after: 100,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
                 new Paragraph({
@@ -931,7 +952,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
                 new Paragraph({
@@ -949,12 +970,11 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     spacing: {
                         after: 100,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
                 //Aqui se imprimen los los alumnos y sus datos
                 generarDatosAlumnos(planilla_propuesta_TEG.alumno)[0],
-                generarDatosAlumnos(planilla_propuesta_TEG.alumno)[1],
                 new Paragraph({
                     style: "aside",
                     children: [
@@ -967,7 +987,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
                 new Paragraph({
@@ -981,11 +1001,11 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     spacing: {
                         after: 25,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
                 //INSERTAMOS TABLA DE DATOS DE TUTOR ACADEMICO AQUI
-                new docx.Table({
+                new Table({
                     columnWidths: [3000, 4500],
                     rows: [
                         new TableRow({
@@ -1006,17 +1026,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1064,17 +1084,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1084,17 +1104,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                             style: "aside",
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -1133,17 +1153,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1169,22 +1189,22 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         bottom: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1205,17 +1225,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1256,17 +1276,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1275,17 +1295,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -1323,17 +1343,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1343,7 +1363,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                             style: "aside",
                                             children: [
                                                 new TextRun({
-                                                    text: planilla_propuesta_TEG.tutor_academico.fecha_entrega.toString(),
+                                                    text: "planilla_propuesta_TEG.tutor_academico.fecha_entrega.toString()",
                                                 })
                                             ],
                                         })
@@ -1367,13 +1387,13 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                         before: 200,
                         after: 100,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
                 ///////////////////////////////////////////////////
                 //////////////INSERTAMOS TABLA PARA FIRMA///////////
                 ///////////////////////////////////////////////////
-                new docx.Table({
+                new Table({
                     columnWidths: [3000, 4500],
                     indent: {
                         size: 5500,
@@ -1399,22 +1419,22 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     ],
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         bottom: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1434,17 +1454,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     ],
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1463,10 +1483,10 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                 ///////////////////////////////////////////////////
                 //Salto de página
                 new Paragraph({
-                    children:[ new docx.PageBreak()]
+                    children:[ new PageBreak()]
                 }),
                 new Paragraph({
-                    heading: docx.HeadingLevel.HEADING_1,
+                    heading: HeadingLevel.HEADING_1,
                     children:[ 
                         new TextRun({
                             text: "PLANILLA RESUMEN DE DATOS DE LA PROPUESTA DE TEG "
@@ -1487,12 +1507,12 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
                 //Aqui se tiene que insertar la tabla 50 x 4 y extraer letra a letra el titulo
-                new docx.Table({
-                    rows: generarTituloOneHundred(titulo)
+                new Table({
+                    rows: generarTituloOneHundred(planilla_propuesta_TEG.titulo)
                 }),
                 //////////////////////////////////////////////////////////////////////////////
                 new Paragraph({
@@ -1507,10 +1527,10 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                         before: 200,
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
-                new docx.Table({
+                new Table({
                     columnWidths: [3000, 4500],
                     rows: [
                         new TableRow({
@@ -1564,12 +1584,12 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
-                new docx.Table({
+                new Table({
                     columnWidths: [3000, 4500],
-                    rows: generarFilaAlumno()
+                    rows: generarFilaAlumno(planilla_propuesta_TEG)
                 }),
                 new Paragraph({
                     style: "aside",
@@ -1594,11 +1614,11 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
                 //Datos de tutor academico
-                new docx.Table({
+                new Table({
                     columnWidths: [3000, 4500],
                     rows: [
                         new TableRow({
@@ -1625,17 +1645,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1645,17 +1665,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                             style: "aside",
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -1694,17 +1714,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1745,17 +1765,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1785,22 +1805,22 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         bottom: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1821,17 +1841,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1840,17 +1860,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -1894,17 +1914,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -1950,17 +1970,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2006,17 +2026,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2042,7 +2062,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                 }),
                 /////////////////////////////////////////////////////////////////////////////////////
                 new Paragraph({
-                    children:[ new docx.PageBreak()]
+                    children:[ new PageBreak()]
                 }),
                 new Paragraph({
                     style: "aside",
@@ -2055,10 +2075,10 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
-                new docx.Table({
+                new Table({
                     columnWidths: [1000, 5000],
                     //Inserte tabla de alumnos aqui
                     rows: generarTablaDatosAlumno(planilla_propuesta_TEG.alumno[0])
@@ -2076,10 +2096,10 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
-                new docx.Table({
+                new Table({
                     columnWidths: [1000, 5000],
                     //Inserte tabla de alumnos aqui
                     rows: generarTablaDatosAlumno(planilla_propuesta_TEG.alumno[1])
@@ -2111,7 +2131,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                         after: 200
                     }
                 }),
-                new docx.Table({
+                new Table({
                     columnWidths: [3000, 4500],
                     rows: [
                         new TableRow({
@@ -2138,17 +2158,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2157,17 +2177,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2188,17 +2208,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2207,17 +2227,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2238,17 +2258,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2257,17 +2277,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2288,17 +2308,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2307,17 +2327,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2338,17 +2358,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2357,17 +2377,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2388,17 +2408,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2407,17 +2427,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2438,17 +2458,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2457,17 +2477,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2488,17 +2508,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2507,17 +2527,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2561,17 +2581,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2580,17 +2600,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2611,17 +2631,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2630,17 +2650,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2661,17 +2681,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2680,17 +2700,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2711,17 +2731,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2730,17 +2750,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2761,17 +2781,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2780,17 +2800,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2811,17 +2831,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2830,17 +2850,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2861,17 +2881,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2880,17 +2900,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2911,17 +2931,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -2930,17 +2950,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -2984,17 +3004,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3003,17 +3023,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3034,17 +3054,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3053,17 +3073,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3084,17 +3104,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3103,17 +3123,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3134,17 +3154,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3153,17 +3173,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3185,17 +3205,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3204,17 +3224,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3235,17 +3255,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3254,17 +3274,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3286,17 +3306,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3305,17 +3325,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3336,17 +3356,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3355,17 +3375,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3394,22 +3414,22 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         bottom: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3430,17 +3450,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3449,17 +3469,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3480,17 +3500,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3499,17 +3519,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3530,17 +3550,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3549,17 +3569,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3580,17 +3600,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3599,17 +3619,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3630,17 +3650,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3649,17 +3669,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3680,17 +3700,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3699,17 +3719,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3730,17 +3750,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3749,17 +3769,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3780,17 +3800,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3799,17 +3819,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3853,17 +3873,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3872,17 +3892,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3903,17 +3923,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3922,17 +3942,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -3953,17 +3973,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -3972,17 +3992,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4003,17 +4023,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4022,17 +4042,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4053,17 +4073,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4072,17 +4092,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4103,17 +4123,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4122,17 +4142,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4153,17 +4173,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4172,17 +4192,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4203,17 +4223,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4222,17 +4242,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4276,17 +4296,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4295,17 +4315,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4326,17 +4346,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4345,17 +4365,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4376,17 +4396,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4395,17 +4415,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4426,17 +4446,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4445,17 +4465,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4477,17 +4497,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4496,17 +4516,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4528,17 +4548,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4547,17 +4567,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4578,17 +4598,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4597,17 +4617,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4629,17 +4649,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4648,17 +4668,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4702,17 +4722,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4721,17 +4741,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4753,17 +4773,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4772,17 +4792,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4803,17 +4823,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4822,17 +4842,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4853,17 +4873,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4872,17 +4892,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4904,17 +4924,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4923,17 +4943,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -4954,17 +4974,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -4973,17 +4993,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -5004,17 +5024,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -5023,17 +5043,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -5055,17 +5075,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -5074,17 +5094,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         new Paragraph({
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -5108,7 +5128,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     ]
                 }),
                 new Paragraph({
-                    children:[ new docx.PageBreak()]
+                    children:[ new PageBreak()]
                 }),
                 new Paragraph({
                     children:[ 
@@ -5124,7 +5144,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     style: "aside",
                     alignment: AlignmentType.CENTER
                 }),
-                new docx.Table({
+                new Table({
                     columnWidths: [3000, 4500],
                     rows: [
                         new TableRow({
@@ -5151,17 +5171,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -5171,17 +5191,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                             style: "aside",
                                             borders: {
                                                 top: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 left: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 },
                                                 right: {
-                                                    style: docx.BorderStyle.NONE,
+                                                    style: BorderStyle.NONE,
                                                     size: 1,
                                                     color: "ff0000",
                                                 }
@@ -5224,17 +5244,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -5275,17 +5295,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                 new TableCell({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
@@ -5334,9 +5354,9 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                         after: 100
                     }
                 }),
-                new docx.Table({
+                new Table({
                     columnWidths: [1000, 2500],
-                    rows: generarNombresAlumno()
+                    rows: []//generarNombresAlumno(planilla_propuesta_TEG)
                 }),
                 new Paragraph({
                     children: [
@@ -5346,7 +5366,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                         after: 200
                     }
                 }),
-                new docx.Table({
+                new Table({
                     columnWidths: [3000, 4500],
                     indent: {
                         size: 50,
@@ -5605,9 +5625,15 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
             ]
         }]
     });
-    
+    /*
     docx.Packer.toBuffer(doc).then((buffer) => {
-        fs.writeFileSync("Planilla Propuesta TEG.docx", buffer);
+        writeFileSync("Planilla Propuesta TEG.docx", buffer);
+    });
+    */
+    Packer.toBlob(doc).then(blob => {
+        console.log(blob);
+        saveAs(blob, "example.docx");
+        console.log("Document created successfully");
     });
 }
 

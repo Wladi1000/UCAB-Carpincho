@@ -15,6 +15,7 @@ let dataEmpresas = reactive([]);
 let dataProfesionalesExternos = reactive([]);
 let idEmpresaSeleccionada = ref(null);
 
+
 async function buscarEstudiante() {
   const resEstudiante = await api.obtenerIdEstudiante(
     crearSolicitudForm.alumnos[0].cedula
@@ -63,7 +64,13 @@ async function insertarPlanilla() {
         crearSolicitudForm.trabajoDeGrado.tituloTG,
         crearSolicitudForm.empresa.nombre,
         crearSolicitudForm.empresa.nombre,
-        `${crearSolicitudForm.tutor.nombres} ${crearSolicitudForm.tutor.apellidos}`
+        {
+          nombre:`${crearSolicitudForm.tutor.nombres} ${crearSolicitudForm.tutor.apellidos}`,
+          cedula: crearSolicitudForm.tutor.cedula,
+          email: 'franklinBelloBellisimo@ucab.edu.ve',
+          telefono: '04121598764',
+          profesion: 'Ingeniero Informatico'
+        }
       )
     );
     planillaGenerada.añadirAlumno({

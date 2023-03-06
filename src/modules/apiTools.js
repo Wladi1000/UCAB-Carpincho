@@ -134,7 +134,7 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
         },
         body: JSON.stringify({
           id_sptg: data.id_sptg,
-          id_administrador: 1
+          id_administrador: 2
         }),
       })
       .then((response) => {
