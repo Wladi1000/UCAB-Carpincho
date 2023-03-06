@@ -1,6 +1,8 @@
 import { generarCartaDesignacionTutorTEG } from './carta_designacion_tutor_teg.js'
 import { generarCartaDesignacionTutorTIG } from './carta_designacion_tutor_tig.js'
-import { generarCartaDesignacionRevisor } from './carta_designacion_revisor.js'
+import { generarCartaDesignacionRevisor } from './carta_designacion_revisor.js';
+import { generarPlanillaPropuestaTEG } from './planilla_propuesta_TEG.js';
+import { generarPlanillaPropuestaTIG } from './planilla_propuesta_TIG.js'
 
 //Modelo de los datos de la carta de designación para inserción de datos
 const Carta_designacion_teg= {
@@ -62,9 +64,104 @@ const Carta_designacion_revisor = {
     modalidad: 'TEG',
     revisor: 'Larez, Jesus'
 }
+const planilla_propuesta_TEG = {
+    fecha_envio : "Julio 29 del 2023",
+    titulo : "Desarrollo de sistema para generacion de planillas",
+    organizacion : "UCAB Guayana",
+    alumno : [{
+        nombre: "Luis C. Somoza",
+        cedula: "27656348",
+        telefono: "4249749230",
+        email: "lcsomoza.19@est.ucab.edu.ve",
+        oficina: '',
+        habitacion: '',
+        fecha_inicio: '',
+        horario_propuesto: ''
+    },
+    {
+        nombre: "Luis C. Somoza 2",
+        cedula: "27656348",
+        telefono: "4249749230",
+        email: "lcsomoza.19@est.ucab.edu.ve",
+        oficina: '',
+        habitacion: '',
+        fecha_inicio: '',
+        horario_propuesto: ''
+    }
+    ],
+    empresa : {
+        nombre: "TIMACA LLC",
+        direccion: "No tiene direccion",
+        telefono: "4249749230"
+    },
+    tutor_academico : {
+        nombre: "Pedro Perez",
+        cedula: "12345678",
+        email: "pperez.19@gmail.com",
+        telefono: "4249749230",
+        profesion: "Ingeniero Civil",
+        oficina: 'Datos oficina',
+        habitacion: 'Datos habitacion',
+        graduado: "5",
+        tutor_tg: false,
+        profesor_ucab: false,
+        experiencia: "8",
+        cargo: "Gerente de operaciones",
+        fecha_entrega: new Date()
+    },
+}
+const planilla_propuesta_TIG = {
+    fecha_envio : "Julio 29 del 2023",
+    titulo : "Desarrollo de sistema para generacion de planillas",
+    alumno : [{
+        nombre: "Luis C. Somoza",
+        cedula: "27656348",
+        telefono: "4249749230",
+        email: "lcsomoza.19@est.ucab.edu.ve",
+        oficina: '',
+        habitacion: '',
+        fecha_inicio: '',
+        horario_propuesto: ''
+    },
+    {
+        nombre: "Luis C. Somoza 2",
+        cedula: "27656348",
+        telefono: "4249749230",
+        email: "lcsomoza.19@est.ucab.edu.ve",
+        oficina: '',
+        habitacion: '',
+        fecha_inicio: '',
+        horario_propuesto: ''
+    }
+    ],
+    empresa : {
+        nombre: "TIMACA LLC",
+        direccion: "No tiene direccion",
+        telefono: "4249749230"
+    },
+    tutor_empresarial : {
+        nombre: "Pedro Perez",
+        cedula: "12345678",
+        email: "pperez.19@gmail.com",
+        telefono: "4249749230",
+        profesion: "Ingeniero Civil",
+        oficina: '',
+        habitacion: '',
+        graduado: 5,
+        tutor_tg: false,
+        profesor_ucab: false,
+        experiencia: 8,
+        cargo: "Gerente de operaciones",
+        fecha_entrega: new Date()
+    }
+
+
+}
 //generarCartaDesignacionTutorTEG(Carta_designacion_teg);
 //generarCartaDesignacionTutorTIG(Carta_designacion_tig);
 //generarCartaDesignacionRevisor(Carta_designacion_revisor);
+//generarPlanillaPropuestaTEG(planilla_propuesta_TEG);
+//generarPlanillaPropuestaTIG(planilla_propuesta_TIG);
 
 
 

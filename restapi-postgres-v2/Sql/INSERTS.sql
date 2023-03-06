@@ -3,20 +3,26 @@ INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES
 INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Luis Carlos', 'Somoza Ledezma', 'lcsomoza.19@est.ucab.edu.ve', '27656348','04249749230','admin');
 INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Luis Noel', 'Somoza Ledezma', 'lnsomoza.19@est.ucab.edu.ve', '27656349','04249749230','admin');
 INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Luis Fernando', 'Somoza Ledezma', 'lfsomoza.19@est.ucab.edu.ve', '27656350','04249749230','admin');
-INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Franklin', 'Bello', 'fbelloc@ucab.edu.ve', '00000000','04249749230','admin');
+INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Franklin', 'Bello', 'fbelloc@ucab.edu.ve', '1','04249749230','admin');
 INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Wladimir', 'San Vicente', 'wjsanvicente.18@est.ucab.edu.ve', '27301846','04249749230','admin');
+INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Pedro', 'Perez', 'pperez.07@est.ucab.edu.ve', '2','04249749230','Leyenda');
 /*Insertando listado de estudiantes*/
 INSERT INTO Estudiantes(id_estudiante) VALUES (1);
 INSERT INTO Estudiantes(id_estudiante) VALUES (4);
 INSERT INTO Estudiantes(id_estudiante) VALUES (3);
+INSERT INTO Estudiantes(id_estudiante) VALUES (6);
+INSERT INTO Estudiantes(id_estudiante) VALUES (7);
 /*Insertando listado de administradores*/
 INSERT INTO Administradores(id_administrador,oficina,cargo,experiencia) VALUES (2, 'Oficina', 'cargo',5);
+INSERT INTO Administradores(id_administrador,oficina,cargo,experiencia) VALUES (7, 'Rector', 'cargo',5);
 /*Insertando listado de Profesores*/
 INSERT INTO Profesores(id_profesor) VALUES (5);
+INSERT INTO Profesores(id_profesor) VALUES (7);
 /*Insertando listado de Empresas*/
 INSERT INTO Empresas(nombre,rif,direccion,telefono) VALUES ('hola','hola','hola','hola');
 /*Insertando listado de ProfesionalesE*/
 INSERT INTO ProfesionalesExternos(id_profesionale,id_empresa,fecha_aceptacion) VALUES (6,1,'2022-02-21');
+INSERT INTO ProfesionalesExternos(id_profesionale,id_empresa,fecha_aceptacion) VALUES (7,1,'2001-01-14');
 /*Insertando listado de SPTG*/
 
 /*Insertando listado de CDE*/
@@ -80,6 +86,7 @@ INSERT INTO EMPRESAS(nombre,rif,direccion,telefono) VALUES ('Venalum','V12345679
 INSERT INTO EMPRESAS(nombre,rif,direccion,telefono) VALUES ('Corpoelec','V123456792','Direccion de empresa','04249749230');
 INSERT INTO EMPRESAS(nombre,rif,direccion,telefono) VALUES ('PDVSA','V1234567893','Direccion de empresa','04249749230');
 INSERT INTO EMPRESAS(nombre,rif,direccion,telefono) VALUES ('UCAB Guayana','V123456794','Direccion de empresa','04249749230');
+INSERT INTO EMPRESAS(nombre,rif,direccion,telefono) VALUES ('WlaLuchoCorp C.A','V1548469','Direccion de empresa','04147723811');
 /*Insertando listado de ESPECIALIDADES*/
 INSERT INTO ESPECIALIDADES(nombre) VALUES ('Inteligencia artificial');
 INSERT INTO ESPECIALIDADES(nombre) VALUES ('Deep Learning');

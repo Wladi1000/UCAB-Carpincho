@@ -2,17 +2,19 @@
 import { ref, reactive, onMounted, computed } from "vue";
 import * as api from "../modules/apiTools.js";
 import { PlanillaCrearSolicitud } from "../modules/planillaCrearSolicitud.js";
+import { PlanillaPropuestaTEG } from "../modules/planillaPropuestaTEG.js";
 
 const props = defineProps({
-  showPlanillaCreate: Boolean
+  showPlanillaCreate: Boolean,
 });
 
-const emit = defineEmits(['actualizarData'])
+const emit = defineEmits(["actualizarData"]);
 const crearSolicitudForm = reactive(new PlanillaCrearSolicitud());
 
 let dataEmpresas = reactive([]);
-let dataProfesionalesExternos = reactive([])
+let dataProfesionalesExternos = reactive([]);
 let idEmpresaSeleccionada = ref(null);
+
 
 async function buscarEstudiante() {
   const resEstudiante = await api.obtenerIdEstudiante(
@@ -24,42 +26,73 @@ async function buscarEstudiante() {
 }
 
 async function buscarTutor() {
-  const resTutor = await api.obtenerIdTutor(crearSolicitudForm.tutor.cedula);
+  const resTutor = await api.obtenerIdTutorAcademico(crearSolicitudForm.tutor.cedula);
   crearSolicitudForm.tutor.apellidos = resTutor.apellidos;
   crearSolicitudForm.tutor.nombres = resTutor.nombres;
   crearSolicitudForm.tutor.cedula = resTutor.cedula;
 }
+
 async function buscarTutorEmpresarial() {
-  const resTutorEmpresarial = await api.obtenerIdTutor(crearSolicitudForm.tutor.cedula);
+  const resTutorEmpresarial = await api.obtenerIdTutor(
+    crearSolicitudForm.tutorEmpresarial.cedula
+  );
   crearSolicitudForm.tutorEmpresarial.nombres = resTutorEmpresarial.nombres;
   crearSolicitudForm.tutorEmpresarial.apellidos = resTutorEmpresarial.apellidos;
   crearSolicitudForm.tutor.cedula = resTutorEmpresarial.cedula;
 }
 
 crearSolicitudForm.empresa.idEmpresa = computed(() => {
-  
-  if( idEmpresaSeleccionada.value != null ){
+  if (idEmpresaSeleccionada.value != null) {
+    let arregloEmpresa = dataEmpresas.filter(
+      (t) => t.id_empresa == idEmpresaSeleccionada.value
+    );
 
-    let arregloEmpresa = dataEmpresas.filter( t => t.id_empresa == idEmpresaSeleccionada.value );
-  
     crearSolicitudForm.empresa.rif = arregloEmpresa[0].rif;
     crearSolicitudForm.empresa.direccion = arregloEmpresa[0].direccion;
     crearSolicitudForm.empresa.telefono = arregloEmpresa[0].telefono;
-  
+
     return arregloEmpresa[0].id_empresa;
   }
-  return '';
+  return "";
 });
 
-async function insertarPlanilla(){
+async function insertarPlanilla() {
   await api.insertarSolicitudTg(crearSolicitudForm);
-  emit('actualizarData');
+  if (crearSolicitudForm.trabajoDeGrado.modalidad == 'E'){
+    const planillaGenerada = reactive(
+      new PlanillaPropuestaTEG(
+        crearSolicitudForm.trabajoDeGrado.tituloTG,
+        crearSolicitudForm.empresa.nombre,
+        crearSolicitudForm.empresa.nombre,
+        {
+          nombre:`${crearSolicitudForm.tutor.nombres} ${crearSolicitudForm.tutor.apellidos}`,
+          cedula: crearSolicitudForm.tutor.cedula,
+          email: 'franklinBelloBellisimo@ucab.edu.ve',
+          telefono: '04121598764',
+          profesion: 'Ingeniero Informatico'
+        }
+      )
+    );
+    planillaGenerada.añadirAlumno({
+      nombre: `${crearSolicitudForm.alumnos[0].nombres} ${crearSolicitudForm.alumnos[0].apellidos}`,
+      cedula: crearSolicitudForm.alumnos[0].cedula,
+      telefono: "04147723811",
+      email: "wladimirSanvicente@wlachoCorp C.A",
+      oficina: "#33",
+      habitacion: "Marte, calle 4, al lado del detective marciano",
+      fecha_inicio: "02/14/2053",
+      horario_propuesto: "2 min al dia",
+    });
+    planillaGenerada.imprimir();
+  }else{ 
+    alert('Tu si eres pajuo, hermano') 
+  }
 }
 
 onMounted(async () => {
   crearSolicitudForm.crearSolicitud();
   dataEmpresas = await api.obtenerEmpresas();
-  dataProfesionalesExternos = await api.obtenerProfesionalesExternos();
+  //dataProfesionalesExternos = await api.obtenerProfesionalesExternos();
 });
 
 //------------------------------------------------------>
@@ -178,7 +211,6 @@ onMounted(async () => {
               @click="buscarTutor()"
             ></button>
             <button
-              type="submit"
               :disabled="crearSolicitudForm.tutor.nombres == '' ? true : false"
               @click="crearSolicitudForm.tutorCompletado()"
             >
@@ -187,7 +219,7 @@ onMounted(async () => {
           </div>
         </form>
       </div>
-      <div class="company" v-show="crearSolicitudForm.showEmpresa" >
+      <div class="company" v-show="crearSolicitudForm.showEmpresa">
         <form
           class="request__container__preview__form"
           @submit.prevent="submit"
@@ -230,15 +262,14 @@ onMounted(async () => {
           </div>
           <div class="actions">
             <button
-              v-if="crearSolicitudForm.trabajoDeGrado.modalidad == 'E'? true: false"
+              v-if=" crearSolicitudForm.trabajoDeGrado.modalidad == 'E'? true: false"
               :disabled="crearSolicitudForm.empresa.idEmpresa == -1 ? true : false"
               @click="insertarPlanilla()"
             >
               Completado!
             </button>
             <button
-            v-else
-              type="submit"
+              v-else
               :disabled="crearSolicitudForm.empresa.idEmpresa == -1 ? true : false"
               @click="crearSolicitudForm.empresaCompletada()"
             >
@@ -247,7 +278,7 @@ onMounted(async () => {
           </div>
         </form>
       </div>
-      <div class="external-ptofesional" v-show="crearSolicitudForm.showTutorEmpresarial">
+      <div class="external-profesional" v-show="crearSolicitudForm.showTutorEmpresarial">
         <form
           class="request__container__preview__form"
           @submit.prevent="submit"
@@ -281,13 +312,14 @@ onMounted(async () => {
             <input disabled type="number" placeholder="4 años" />
           </div>
           <div class="actions">
+<!--
             <button
               style="display: none"
-              type="submit "
+              type="submit"
               @click="buscarTutorEmpresarial()"
             ></button>
+            -->
             <button
-              type="submit"
               :disabled="crearSolicitudForm.tutor.nombres == '' ? true : false"
               @click="insertarPlanilla()"
             >

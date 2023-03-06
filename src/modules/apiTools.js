@@ -28,7 +28,7 @@ export const obtenerIdEstudiante = async (cedulaEstudiante) => {
   return response;
 };
 
-export const obtenerIdTutor = async (cedulaTutor) => {
+export const obtenerIdTutorAcademico = async (cedulaTutor) => {
   const res = await fetch(
     "http://localhost:3000/Profesores/cedula/" + cedulaTutor
   );
@@ -102,8 +102,8 @@ export const eliminarPlanilla = async (idPlanilla) => {
 };
 
 export const insertarSolicitudTg = async (planillaSolicitud, data) => {
-  const profesionalExterno = await obtenerIdTutorEmpresarialByCedula(planillaSolicitud.tutorEmpresarial.cedula);
-  const tutor = await obtenerIdTutor(planillaSolicitud.tutor.cedula);
+  if ( planillaSolicitud.trabajoDeGrado.modalidad == 'I' ){const profesionalExterno = await obtenerIdTutorEmpresarialByCedula(planillaSolicitud.tutorEmpresarial.cedula);}
+  const tutor = await obtenerIdTutorAcademico(planillaSolicitud.tutor.cedula);
   const estudiante = await obtenerIdEstudiante(planillaSolicitud.alumnos[0].cedula);
   console.log(tutor);
   fetch("http://localhost:3000/SPTG/", {
@@ -134,7 +134,7 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
         },
         body: JSON.stringify({
           id_sptg: data.id_sptg,
-          id_administrador: 1
+          id_administrador: 2
         }),
       })
       .then((response) => {
