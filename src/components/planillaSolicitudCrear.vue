@@ -25,14 +25,15 @@ async function buscarEstudiante() {
 }
 
 async function buscarTutor() {
-  const resTutor = await api.obtenerIdTutor(crearSolicitudForm.tutor.cedula);
+  const resTutor = await api.obtenerIdTutorAcademico(crearSolicitudForm.tutor.cedula);
   crearSolicitudForm.tutor.apellidos = resTutor.apellidos;
   crearSolicitudForm.tutor.nombres = resTutor.nombres;
   crearSolicitudForm.tutor.cedula = resTutor.cedula;
 }
+
 async function buscarTutorEmpresarial() {
   const resTutorEmpresarial = await api.obtenerIdTutor(
-    crearSolicitudForm.tutor.cedula
+    crearSolicitudForm.tutorEmpresarial.cedula
   );
   crearSolicitudForm.tutorEmpresarial.nombres = resTutorEmpresarial.nombres;
   crearSolicitudForm.tutorEmpresarial.apellidos = resTutorEmpresarial.apellidos;
@@ -76,13 +77,15 @@ async function insertarPlanilla() {
       horario_propuesto: "2 min al dia",
     });
     planillaGenerada.imprimir();
-  }else{ alert('Tu si eres pajuo, hermano') }
+  }else{ 
+    alert('Tu si eres pajuo, hermano') 
+  }
 }
 
 onMounted(async () => {
   crearSolicitudForm.crearSolicitud();
   dataEmpresas = await api.obtenerEmpresas();
-  dataProfesionalesExternos = await api.obtenerProfesionalesExternos();
+  //dataProfesionalesExternos = await api.obtenerProfesionalesExternos();
 });
 
 //------------------------------------------------------>
@@ -201,7 +204,6 @@ onMounted(async () => {
               @click="buscarTutor()"
             ></button>
             <button
-              type="submit"
               :disabled="crearSolicitudForm.tutor.nombres == '' ? true : false"
               @click="crearSolicitudForm.tutorCompletado()"
             >
@@ -253,24 +255,15 @@ onMounted(async () => {
           </div>
           <div class="actions">
             <button
-              v-if="
-                crearSolicitudForm.trabajoDeGrado.modalidad == 'E'
-                  ? true
-                  : false
-              "
-              :disabled="
-                crearSolicitudForm.empresa.idEmpresa == -1 ? true : false
-              "
+              v-if=" crearSolicitudForm.trabajoDeGrado.modalidad == 'E'? true: false"
+              :disabled="crearSolicitudForm.empresa.idEmpresa == -1 ? true : false"
               @click="insertarPlanilla()"
             >
               Completado!
             </button>
             <button
               v-else
-              type="submit"
-              :disabled="
-                crearSolicitudForm.empresa.idEmpresa == -1 ? true : false
-              "
+              :disabled="crearSolicitudForm.empresa.idEmpresa == -1 ? true : false"
               @click="crearSolicitudForm.empresaCompletada()"
             >
               El else funciona
@@ -278,10 +271,7 @@ onMounted(async () => {
           </div>
         </form>
       </div>
-      <div
-        class="external-ptofesional"
-        v-show="crearSolicitudForm.showTutorEmpresarial"
-      >
+      <div class="external-profesional" v-show="crearSolicitudForm.showTutorEmpresarial">
         <form
           class="request__container__preview__form"
           @submit.prevent="submit"
@@ -315,13 +305,14 @@ onMounted(async () => {
             <input disabled type="number" placeholder="4 años" />
           </div>
           <div class="actions">
+<!--
             <button
               style="display: none"
-              type="submit "
+              type="submit"
               @click="buscarTutorEmpresarial()"
             ></button>
+            -->
             <button
-              type="submit"
               :disabled="crearSolicitudForm.tutor.nombres == '' ? true : false"
               @click="insertarPlanilla()"
             >

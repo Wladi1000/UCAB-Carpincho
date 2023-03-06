@@ -3,12 +3,13 @@ INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES
 INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Luis Carlos', 'Somoza Ledezma', 'lcsomoza.19@est.ucab.edu.ve', '27656348','04249749230','admin');
 INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Luis Noel', 'Somoza Ledezma', 'lnsomoza.19@est.ucab.edu.ve', '27656349','04249749230','admin');
 INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Luis Fernando', 'Somoza Ledezma', 'lfsomoza.19@est.ucab.edu.ve', '27656350','04249749230','admin');
-INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Franklin', 'Bello', 'fbelloc@ucab.edu.ve', '00000000','04249749230','admin');
+INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Franklin', 'Bello', 'fbelloc@ucab.edu.ve', '1','04249749230','admin');
 INSERT INTO Usuarios(nombres,apellidos,correo,cedula,telefono,contrasena) VALUES ('Wladimir', 'San Vicente', 'wjsanvicente.18@est.ucab.edu.ve', '27301846','04249749230','admin');
 /*Insertando listado de estudiantes*/
 INSERT INTO Estudiantes(id_estudiante) VALUES (1);
 INSERT INTO Estudiantes(id_estudiante) VALUES (4);
 INSERT INTO Estudiantes(id_estudiante) VALUES (3);
+INSERT INTO Estudiantes(id_estudiante) VALUES (6);
 /*Insertando listado de administradores*/
 INSERT INTO Administradores(id_administrador,oficina,cargo,experiencia) VALUES (2, 'Oficina', 'cargo',5);
 /*Insertando listado de Profesores*/
@@ -80,6 +81,7 @@ INSERT INTO EMPRESAS(nombre,rif,direccion,telefono) VALUES ('Venalum','V12345679
 INSERT INTO EMPRESAS(nombre,rif,direccion,telefono) VALUES ('Corpoelec','V123456792','Direccion de empresa','04249749230');
 INSERT INTO EMPRESAS(nombre,rif,direccion,telefono) VALUES ('PDVSA','V1234567893','Direccion de empresa','04249749230');
 INSERT INTO EMPRESAS(nombre,rif,direccion,telefono) VALUES ('UCAB Guayana','V123456794','Direccion de empresa','04249749230');
+INSERT INTO EMPRESAS(nombre,rif,direccion,telefono) VALUES ('WlaLuchoCorp C.A','V123456794','Direccion de empresa','04147723811');
 /*Insertando listado de ESPECIALIDADES*/
 INSERT INTO ESPECIALIDADES(nombre) VALUES ('Inteligencia artificial');
 INSERT INTO ESPECIALIDADES(nombre) VALUES ('Deep Learning');
