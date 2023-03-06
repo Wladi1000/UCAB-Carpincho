@@ -29,6 +29,12 @@ async function buscarTutor() {
   crearSolicitudForm.tutor.nombres = resTutor.nombres;
   crearSolicitudForm.tutor.cedula = resTutor.cedula;
 }
+async function buscarTutorEmpresarial() {
+  const resTutorEmpresarial = await api.obtenerIdTutor(crearSolicitudForm.tutor.cedula);
+  crearSolicitudForm.tutorEmpresarial.nombres = resTutorEmpresarial.nombres;
+  crearSolicitudForm.tutorEmpresarial.apellidos = resTutorEmpresarial.apellidos;
+  crearSolicitudForm.tutor.cedula = resTutorEmpresarial.cedula;
+}
 
 crearSolicitudForm.empresa.idEmpresa = computed(() => {
   
@@ -181,7 +187,7 @@ onMounted(async () => {
           </div>
         </form>
       </div>
-      <div class="company" v-show="crearSolicitudForm.showEmpresa">
+      <div class="company" v-show="crearSolicitudForm.showEmpresa" >
         <form
           class="request__container__preview__form"
           @submit.prevent="submit"
@@ -221,20 +227,68 @@ onMounted(async () => {
               v-model="crearSolicitudForm.empresa.telefono"
               placeholder="telefono"
             />
-            <select v-show="crearSolicitudForm.trabajoDeGrado.modalidad != 'I'? false: true" name="ProfesionalExterno" id="">
-              <option
-                v-for="t in dataProfesionalesExternos"
-                :key="t.id_profesionale"
-                :value="t.id_profesionale"
-              >
-                {{ t.id_profesionale }}
-              </option>
-            </select>
           </div>
           <div class="actions">
             <button
+              v-if="crearSolicitudForm.trabajoDeGrado.modalidad == 'E'? true: false"
+              :disabled="crearSolicitudForm.empresa.idEmpresa == -1 ? true : false"
+              @click="insertarPlanilla()"
+            >
+              Completado!
+            </button>
+            <button
+            v-else
               type="submit"
               :disabled="crearSolicitudForm.empresa.idEmpresa == -1 ? true : false"
+              @click="crearSolicitudForm.empresaCompletada()"
+            >
+              El else funciona
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="external-ptofesional" v-show="crearSolicitudForm.showTutorEmpresarial">
+        <form
+          class="request__container__preview__form"
+          @submit.prevent="submit"
+        >
+          <img
+            src="../assets/imgs/arrow-back-circle-outline.svg"
+            alt=""
+            @click="crearSolicitudForm.volverAEmpresa()"
+          />
+          <!-- Tutor Academico -->
+          <div class="request__container__preview__form__inputs">
+            <p>Cédula de Tutor Empresarial</p>
+            <input
+              type="number"
+              placeholder="98765432"
+              v-model="crearSolicitudForm.tutorEmpresarial.cedula"
+            />
+            <p for="">Nombres</p>
+            <input
+              disabled
+              type="text"
+              v-model="crearSolicitudForm.tutorEmpresarial.nombres"
+            />
+            <p for="">Apellidos</p>
+            <input
+              disabled
+              type="text"
+              v-model="crearSolicitudForm.tutorEmpresarial.apellidos"
+            />
+            <p for="">Años de Experienci a</p>
+            <input disabled type="number" placeholder="4 años" />
+          </div>
+          <div class="actions">
+            <button
+              style="display: none"
+              type="submit "
+              @click="buscarTutorEmpresarial()"
+            ></button>
+            <button
+              type="submit"
+              :disabled="crearSolicitudForm.tutor.nombres == '' ? true : false"
               @click="insertarPlanilla()"
             >
               Completado!

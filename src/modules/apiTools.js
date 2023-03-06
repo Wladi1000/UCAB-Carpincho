@@ -36,6 +36,23 @@ export const obtenerIdTutor = async (cedulaTutor) => {
   return response;
 };
 
+export const obtenerIdTutorEmpresarial = async (cedulaTutorEmpresarial) => {
+  const res = await fetch(
+    "http://localhost:3000/BuscarProfesional/" + cedulaTutorEmpresarial
+  );
+  const response = await res.json();
+  return response;
+};
+
+export const obtenerIdTutorEmpresarialByCedula = async (cedulaTutorEmpresarial) => {
+  const res = await fetch(
+    "http://localhost:3000/BuscarProfesional/" + cedulaTutorEmpresarial
+  );
+  const response = await res.json();
+  console.log(response);
+  return response;
+};
+
 export const obtenerProfesionalesExternos = async () =>{
   const resProfesionalesExternos = await fetch("http://localhost:3000/Profesionalesexternos/");
   const profesionales = await resProfesionalesExternos.json();
@@ -85,7 +102,7 @@ export const eliminarPlanilla = async (idPlanilla) => {
 };
 
 export const insertarSolicitudTg = async (planillaSolicitud, data) => {
-
+  const profesionalExterno = await obtenerIdTutorEmpresarialByCedula(planillaSolicitud.tutorEmpresarial.cedula);
   const tutor = await obtenerIdTutor(planillaSolicitud.tutor.cedula);
   const estudiante = await obtenerIdEstudiante(planillaSolicitud.alumnos[0].cedula);
   console.log(tutor);
@@ -146,7 +163,7 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
           console.log({mensaje: "Error en la asignación de modalidad", error: error});
         });
       }else if(planillaSolicitud.trabajoDeGrado.modalidad === 'I'){
-        fetch('http://localhost:3000/SPTGI', {
+       fetch('http://localhost:3000/SPTGI', {
           method: "POST",
           mode: "cors",
           headers: {
@@ -154,8 +171,14 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
           },
           body: JSON.stringify({
             id_stig: data.id_sptg,
+            id_empresa: planillaSolicitud.empresa.idEmpresa,
+            id_profesionale: profesionalExterno.id_profesionale
           }),
-        })
+        }).then( (response) => {
+          return response.json()
+        }).then( (data) => {
+          console.log(data)
+        }).catch( (e) => { console.log(e)})
       }
 
       fetch("http://localhost:3000/realiza_SPTG/", {
