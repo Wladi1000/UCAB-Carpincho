@@ -15,6 +15,3 @@ BEGIN
 	RETURN _result;
 END;
 $$;
-
-INSERT INTO SOLICITUDTIG(id_stig,id_empresa,id_profesionale) VALUES (1,1,4);
-SELECT validar_existencia_SPTIG(2);
