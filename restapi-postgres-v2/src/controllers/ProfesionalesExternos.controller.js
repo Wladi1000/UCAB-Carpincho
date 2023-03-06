@@ -1,4 +1,5 @@
-import {ProfesionalesExternos} from '../models/ProfesionalesExternos.js'
+import {ProfesionalesExternos} from '../models/ProfesionalesExternos.js';
+import { Usuarios } from '../models/Usuarios.js'
 export const obtenerProfesionalesExternos = async (req,res) => {
     const obtener = await ProfesionalesExternos.findAll();
     res.json(obtener);
@@ -54,6 +55,23 @@ export const buscarProfesionalesExternos = async (req, res) => {
     const id = req.params.id;
     try {
         const buscar = await ProfesionalesExternos.findByPk(id);
+        return res.json(buscar);
+    } catch (error) {
+        return res.status(404).json("Profesor no encontrado");
+    }
+}
+
+export const buscarProfesionalesExternosByCedula = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const buscar = await ProfesionalesExternos.findOne({
+            include: {
+                model: Usuarios,
+                where: {
+                    cedula: id
+                }
+            }
+        });
         return res.json(buscar);
     } catch (error) {
         return res.status(404).json("Profesor no encontrado");
