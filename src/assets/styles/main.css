@@ -186,9 +186,13 @@ body {
   padding-right: 180px;
   padding-bottom: 20px;
   width: 5%;
+  transition: all 0.2s;
 }
 .create-state .create-carousel img:hover {
   cursor: pointer;
+}
+.create-state .create-carousel img:active {
+  transform: scale(1.1);
 }
 .create-state .create-carousel .students {
   width: 100%;
@@ -202,13 +206,13 @@ body {
   width: 100%;
   height: 100%;
 }
-.create-state .create-carousel .company button:hover {
+.create-state .create-carousel .company button.succes:hover {
   background-color: rgba(77, 235, 90, 0.4666666667);
   border: #44ff53 solid 2px;
   box-shadow: 0px 0 15px rgba(255, 241, 47, 0.568627451);
   transform: scale(1.1);
 }
-.create-state .create-carousel .company button:active {
+.create-state .create-carousel .company button.succes:active {
   transform: scale(1);
 }
 

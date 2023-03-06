@@ -39,9 +39,13 @@
       padding-right: 20*9px;
       padding-bottom: 20px;
       width: 5%;
+      transition: all 0.2s;
 
       &:hover {
         cursor: pointer;
+      }
+      &:active{
+        transform: scale(1.1);
       }
     }
 
@@ -65,7 +69,7 @@
       height: 100%;
       //background-color: #8d141467;
 
-      button {
+      button.succes{
         &:hover {
           background-color: #4deb5a77;
           border: #44ff53 solid 2px;
