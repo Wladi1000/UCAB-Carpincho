@@ -15,7 +15,6 @@ let dataEmpresas = reactive([]);
 let dataProfesionalesExternos = reactive([]);
 let idEmpresaSeleccionada = ref(null);
 
-
 async function buscarEstudiante() {
   const resEstudiante = await api.obtenerIdEstudiante(
     crearSolicitudForm.alumnos[0].cedula
@@ -56,6 +55,8 @@ crearSolicitudForm.empresa.idEmpresa = computed(() => {
   return "";
 });
 
+crearSolicitudForm.progressValue = computed(() => { return crearSolicitudForm.trabajoDeGrado.modalidad == 'E'? 33.3 : 25 });
+
 async function insertarPlanilla() {
   await api.insertarSolicitudTg(crearSolicitudForm);
   if (crearSolicitudForm.trabajoDeGrado.modalidad == 'E'){
@@ -87,6 +88,7 @@ async function insertarPlanilla() {
   }else{ 
     alert('Tu si eres pajuo, hermano') 
   }
+  crearSolicitudForm.progressbarState += crearSolicitudForm.progressValue;
 }
 
 onMounted(async () => {
@@ -100,7 +102,6 @@ onMounted(async () => {
 <template>
   <div class="create-state" v-show="showPlanillaCreate">
     <div class="progressbar">
-      <p>{{ idEmpresaSeleccionada }}</p>
       <div
         class="progressbar--content"
         :style="{ width: crearSolicitudForm.progressbarState + '%' }"
@@ -261,7 +262,7 @@ onMounted(async () => {
             />
           </div>
           <div class="actions">
-            <button
+            <button class="succes"
               v-if=" crearSolicitudForm.trabajoDeGrado.modalidad == 'E'? true: false"
               :disabled="crearSolicitudForm.empresa.idEmpresa == -1 ? true : false"
               @click="insertarPlanilla()"
@@ -273,7 +274,7 @@ onMounted(async () => {
               :disabled="crearSolicitudForm.empresa.idEmpresa == -1 ? true : false"
               @click="crearSolicitudForm.empresaCompletada()"
             >
-              El else funciona
+              Siguiente
             </button>
           </div>
         </form>
@@ -320,6 +321,7 @@ onMounted(async () => {
             ></button>
             -->
             <button
+            class="succes"
               :disabled="crearSolicitudForm.tutor.nombres == '' ? true : false"
               @click="insertarPlanilla()"
             >
