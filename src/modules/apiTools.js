@@ -19,6 +19,11 @@ export const obtenerProfesores = async () => {
   const sptg = await resSolicitudes.json();
   return sptg;
 };
+export const obtenerProfesorById = async (idProfesor) => {
+  const resProfesor = await fetch("http://localhost:3000/Profesores/"+idProfesor);
+  const profesor = await resProfesor.json();
+  return profesor;
+};
 
 export const obtenerEmpresas = async () => {
   const resEmpresas = await fetch("http://localhost:3000/Empresas/");
@@ -86,8 +91,6 @@ export const actualizarPlanilla = async (planilla) => {
   });
   const actualizacion = await res.json();
 
-  data = obtenerSoliciturdes();
-
   planilla.estatus = "";
   planilla.fechaenvio = "";
   planilla.id_admin_evaluador = "";
@@ -110,10 +113,63 @@ export const obtenerPropuestas = async () => {
   return sptg;
 };
 
-export const obtenerPropuestaById = async (idPropuesta, sptg) => {
+export const obtenerPropuestaById = async (idPropuesta) => {
   const resPropuesta = await fetch("http://localhost:3000/PTG/"+idPropuesta);
   const ptg = await resPropuesta.json();
-  return;
+  const resSolicitud = await obtenerSolicitudById(ptg.id_sptg);
+  const resAlumnos = await fetch('http://localhost:3000/buscarAlumnos/'+ ptg.id_ptg);
+  const alumnosSolicitud = await resAlumnos.json();
+  const resTutorAcademico = await obtenerProfesorById(resSolicitud.id_ta);
+  
+  const propuestaFormulario = {
+    id_propuesta: ptg.id_ptg,
+    id_solicitud: ptg.id_sptg,
+    titulo: resSolicitud.titulo,
+    fecha: resSolicitud.fechaenvio,
+    modalidad: resSolicitud.modalidad,
+    alumnos: alumnosSolicitud,
+    tutor_academico: resTutorAcademico,
+    estatus: ptg.estatus
+  }
+  return propuestaFormulario;
+};
+
+export const rechazarPropuesta = ( idPropuesta,idSolicitud ) => {
+
+    fetch("http://localhost:3000/PTG/" + idPropuesta, {
+      method: "PUT",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "fecha_entrega": new Date(),
+        "estatus":"R"
+      }),
+    })
+    .then( (response) => {
+      return response.json()
+    })
+    .then( (data) => {
+      console.log(data)
+    })
+
+    fetch("http://localhost:3000/SPTG/" + idSolicitud, {
+      method: "PUT",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "estatus": "R"
+      }),
+    })
+    .then( (response) => {
+      return response.json()
+    })
+    .then( (data) => {
+      console.log(data)
+    })
 };
 
 export const insertarSolicitudTg = async (planillaSolicitud, data) => {

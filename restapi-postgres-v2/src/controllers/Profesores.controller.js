@@ -41,8 +41,15 @@ export const eliminarProfesores= async (req,res) => {
 export const buscarProfesores = async (req, res) => {
     const id = req.params.id;
     try {
-        const buscar = await Profesores.findByPk(id);
-        return res.json(buscar);
+        const buscar = await Profesores.findOne({
+            include: [{
+                model: Usuarios
+            }],
+            where: {
+                id_profesor: id
+            }
+        });
+        return res.json(buscar.usuario);
     } catch (error) {
         return res.status(404).json("Profesor no encontrado");
     }

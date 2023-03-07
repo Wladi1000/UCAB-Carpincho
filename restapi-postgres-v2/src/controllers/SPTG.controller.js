@@ -25,7 +25,7 @@ export const crearSPTG = async (req,res) => {
     }
 };
 export const actualizarSPTG = async (req,res) => {
-    const {titulo, modalidad,id_ta,id_admin_evaluador, fechaenvio} = req.body;
+    const {titulo, modalidad,id_ta,id_admin_evaluador, estatus, fechaenvio} = req.body;
     const id = req.params.id
     try {
         const buscar = await SPTG.findByPk(id);
@@ -35,6 +35,7 @@ export const actualizarSPTG = async (req,res) => {
         buscar.modalidad = modalidad;
         buscar.id_ta = id_ta;
         buscar.id_admin_evaluador = id_admin_evaluador;
+        buscar.estatus = estatus;
 
         const actualizar = await buscar.save();
         
