@@ -113,10 +113,6 @@ export const obtenerPropuestas = async () => {
 export const obtenerPropuestaById = async (idPropuesta, sptg) => {
   const resPropuesta = await fetch("http://localhost:3000/PTG/"+idPropuesta);
   const ptg = await resPropuesta.json();
-  const alumno = await frc;
-  const tutorAcademico;
-  const tutorEmpresarial;
-  const empresa;
   return;
 };
 

@@ -1,20 +1,33 @@
-const fs = require("fs");
-const docx = require("docx");
-
+import * as docx from 'docx';
+import file_saver from 'file-saver'
+const { saveAs } = file_saver
+// Load the full build.
+import lodash from 'lodash';
+const { _ } =  lodash;
+const { TableRow,BorderStyle } = docx;
+const { WidthType,Paragraph } = docx;
+const { VerticalAlign, Document } = docx;
+const { TextRun, AlignmentType } = docx;
+const { SectionType, Header } = docx;
+const { HeightRule,TableCell } = docx;
+const { Footer, LineRuleType } = docx;
+const { Table, PageBreak } = docx;
+const { HeadingLevel,Packer } = docx;
+//const { TableRow,BorderStyle } = docx;
 const tam_cuadro_titulo = 280;
 
 const generarCriterio = (text) => {
-    return (new docx.TableRow({
+    return (new TableRow({
                     height: {
                         value: 300,
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children: [
-                        new docx.TableCell({
+                        new TableCell({
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: text
                                         })
                                     ],
@@ -22,14 +35,14 @@ const generarCriterio = (text) => {
                             ],
                             width: {
                                 size: 5000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             }
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: text
                                         })
                                     ],
@@ -37,14 +50,14 @@ const generarCriterio = (text) => {
                             ],
                             width: {
                                 size: 1000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             }
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: text
                                         })
                                     ],
@@ -52,7 +65,7 @@ const generarCriterio = (text) => {
                             ],
                             width: {
                                 size: 1000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             }
                         }),
 
@@ -65,11 +78,11 @@ const generarCelda = (text, width, after, before) => {
     console.log(width);
     console.log(after);
     console.log(before);
-    return (new docx.TableCell({
+    return (new TableCell({
         children: [
-            new docx.Paragraph({
+            new Paragraph({
                 children: [
-                    new docx.TextRun({
+                    new TextRun({
                         text: text
                     })
                 ],
@@ -81,11 +94,11 @@ const generarCelda = (text, width, after, before) => {
         ],
         width: {
             value: width,
-            type: docx.WidthType.DXA
+            type: WidthType.DXA
         }
     }));
 }
-const doc = new docx.Document({
+const doc = new Document({
     creator: "Luis C. Somoza",
     title: "Planilla de evaluaciòn de revisor de TEG",
     description: "Planilla de evaluaciòn de revisor de TEG",
@@ -100,7 +113,7 @@ const doc = new docx.Document({
                     spacing: {
                         after: 200,
                     },
-                    alignment: docx.AlignmentType.CENTER,
+                    alignment: AlignmentType.CENTER,
                 },
             },
         },
@@ -123,7 +136,7 @@ const doc = new docx.Document({
     },
     sections: [{
         properties: {
-            type: docx.SectionType.CONTINUOUS,
+            type: SectionType.CONTINUOUS,
             margin: {
                 right: 150,
                 bottom: 150,
@@ -131,10 +144,10 @@ const doc = new docx.Document({
             }
         },
         headers: {
-            default: new docx.Header({
-                children: [new docx.Paragraph({
+            default: new Header({
+                children: [new Paragraph({
                     children: [
-                        new docx.ImageRun({
+                        new ImageRun({
                             data: fs.readFileSync('logo.png'),
                             transformation: {
                                 width: 400,
@@ -142,79 +155,79 @@ const doc = new docx.Document({
                             },
                         }),
                     ],
-                    alignment: docx.AlignmentType.LEFT
+                    alignment: AlignmentType.LEFT
                 })],
             }),
         },
         footers: {
-            default: new docx.Footer({
+            default: new Footer({
                 children: [
-                    new docx.Paragraph({
+                    new Paragraph({
                         children: [
-                            new docx.ImageRun({
+                            new ImageRun({
                                 data: fs.readFileSync('Untitled.png'),
                                 transformation: {
                                     width: 600,
                                     height: 15,
                                 },
-                                alignment: docx.AlignmentType.CENTER
+                                alignment: AlignmentType.CENTER
                             }),
                         ],
-                        alignment: docx.AlignmentType.CENTER
+                        alignment: AlignmentType.CENTER
                     }),
-                    new docx.Paragraph({
+                    new Paragraph({
                         children: [
-                            new docx.TextRun({
+                            new TextRun({
                                 text: "UNIVERSIDAD CATÓLICA ANDRÉS BELLO – Extensión Guayana",
                             })
                         ],
-                        alignment: docx.AlignmentType.CENTER
+                        alignment: AlignmentType.CENTER
                     }),
-                    new docx.Paragraph({
+                    new Paragraph({
                         children: [
-                            new docx.TextRun({
+                            new TextRun({
                                 text: "Avenida Atlántico, Ciudad Guayana 8050",
                             })
                         ],
-                        alignment: docx.AlignmentType.CENTER
+                        alignment: AlignmentType.CENTER
                     }),
-                    new docx.Paragraph({
+                    new Paragraph({
                         children: [
-                            new docx.TextRun({
+                            new TextRun({
                                 text: "Bolívar, Venezuela. Teléfono: +58-286-6000111"
                             })
                         ],
-                        alignment: docx.AlignmentType.CENTER
+                        alignment: AlignmentType.CENTER
                     }),
-                    new docx.Paragraph({
+                    new Paragraph({
                         children: [
-                            new docx.TextRun({
+                            new TextRun({
                                 text: "URL: http://www.guayanaweb.ucab.edu.ve/escuela-de-ingenieria-informatica.html"
                             })
                         ],
-                        alignment: docx.AlignmentType.CENTER
+                        alignment: AlignmentType.CENTER
                     })
                 ],
             }),
         },
         children: [
-           new docx.Paragraph({
+           new Paragraph({
             style: "aside",
             children: [
-                new docx.TextRun({
+                new TextRun({
                     text: "Evaluación Propuesta Trabajo Experimental de Grado (TEG)",
                     bold: true
                 })
             ],
-            alignment: docx.AlignmentType.CENTER,
+            alignment: AlignmentType.CENTER,
             spacing: {
                 after: 200
             }
            }),
-           new docx.Paragraph({
+           new Paragraph({
             style: "aside",
             children: [
-                new docx.TextRun({
+                new TextRun({
                     text: "Tema propuesto: ",
                     bold: true
                 })
@@ -223,19 +236,19 @@ const doc = new docx.Document({
                 after: 100
             }
            }),
-        new docx.Table({
+        new Table({
             rows: [
-                new docx.TableRow({
+                new TableRow({
                     height: {
                         value: 500,
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children: [
-                        new docx.TableCell({
+                        new TableCell({
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Probando"
                                         })
                                     ],
@@ -243,7 +256,7 @@ const doc = new docx.Document({
                             ],
                             width: {
                                 size: 10000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             }
                         })
                     ]
@@ -251,9 +264,9 @@ const doc = new docx.Document({
             ]
         }),
         //FIN DE TABLA
-        new docx.Paragraph({
+        new Paragraph({
             children: [
-                new docx.TextRun({
+                new TextRun({
                     text: "Organización donde desarrollará el TEG: ",
                     bold: true
                 })
@@ -262,19 +275,19 @@ const doc = new docx.Document({
                 after: 200
             }
         }),
-        new docx.Table({
+        new Table({
             rows: [
-                new docx.TableRow({
+                new TableRow({
                     height: {
                         value: 500,
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children: [
-                        new docx.TableCell({
+                        new TableCell({
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Probando"
                                         })
                                     ],
@@ -282,16 +295,16 @@ const doc = new docx.Document({
                             ],
                             width: {
                                 size: 10000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             }
                         })
                     ]
                 })
             ]
         }),
-        new docx.Paragraph({
+        new Paragraph({
             children: [
-                new docx.TextRun({
+                new TextRun({
                     text: "Criterios de evaluación: ",
                     bold: true
                 })
@@ -301,70 +314,70 @@ const doc = new docx.Document({
             }
         }),
         //Tabla de criterios
-        new docx.Table({
+        new Table({
             indent: {
                 size: 500,
-                type: docx.WidthType.DXA
+                type: WidthType.DXA
             },
             rows: [
-                new docx.TableRow({
+                new TableRow({
                     height: {
                         value: 300,
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children: [
-                        new docx.TableCell({
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                        new TableCell({
+                            verticalAlign: VerticalAlign.CENTER,
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Criterios",
                                             bold: true
                                         })
                                     ],
-                                    alignment: docx.AlignmentType.CENTER
+                                    alignment: AlignmentType.CENTER
                                 })
                             ],
                             width: {
                                 size: 5000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             }
                         }),
-                        new docx.TableCell({
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                        new TableCell({
+                            verticalAlign: VerticalAlign.CENTER,
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Aprobado",
                                             bold: true
                                         })
                                     ],
-                                    alignment: docx.AlignmentType.CENTER
+                                    alignment: AlignmentType.CENTER
                                 })
                             ],
                             width: {
                                 size: 1500,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             }
                         }),
-                        new docx.TableCell({
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                        new TableCell({
+                            verticalAlign: VerticalAlign.CENTER,
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Reprobado",
                                             bold: true
                                         })
                                     ],
-                                    alignment: docx.AlignmentType.CENTER
+                                    alignment: AlignmentType.CENTER
                                 })
                             ],
                             width: {
                                 size: 1500,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             }
                         }),
                     ]
@@ -377,13 +390,13 @@ const doc = new docx.Document({
                 generarCriterio(),
             ]
         }),
-        new docx.Paragraph({
+        new Paragraph({
             children: [
-                new docx.TextRun({
+                new TextRun({
                     text: "Observación:",
                     bold: true
                 }),
-                new docx.TextRun({
+                new TextRun({
                     text: "En caso de reprobar algún criterio, la propuesta estaría rechazada. Indicar al final la razón de rechazo."
                 }),
             ],
@@ -391,9 +404,9 @@ const doc = new docx.Document({
                 after: 100
             }
         }),
-        new docx.Paragraph({
+        new Paragraph({
             children: [
-                new docx.TextRun({
+                new TextRun({
                     text: "Datos del Estudiante:",
                     bold: true
                 }),
@@ -403,175 +416,175 @@ const doc = new docx.Document({
                 before: 100
             }
         }),
-        new docx.Table({
+        new Table({
             columnWidths: [3000, 4500],
             rows: [
-                new docx.TableRow({
+                new TableRow({
                     height: {
                         value: 300, 
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children: [
-                        new docx.TableCell({
+                        new TableCell({
                             width: {
                                 size: 2700,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Nombre",
                                             bold: true
                                         }),
                                     ],
-                                    alignment: docx.AlignmentType.CENTER,
+                                    alignment: AlignmentType.CENTER,
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             width: {
                                 size: 2000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "C.I.N",
                                             bold: true
                                         }),
                                     ],
-                                    alignment: docx.AlignmentType.CENTER,
+                                    alignment: AlignmentType.CENTER,
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             width: {
                                 size: 2400,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Telefono",
                                             bold: true
                                         }),
                                     ],
-                                    alignment: docx.AlignmentType.CENTER,
+                                    alignment: AlignmentType.CENTER,
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             width: {
                                 size: 2700,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Email",
                                             bold: true
                                         }),
                                     ],
-                                    alignment: docx.AlignmentType.CENTER,
+                                    alignment: AlignmentType.CENTER,
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
                     ]
                 }),
-                new docx.TableRow({
+                new TableRow({
                     height: {
                         value: 300, 
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children: [
-                        new docx.TableCell({
+                        new TableCell({
                             width: {
                                 size: 500,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: ""
                                         }),
                                     ]
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             width: {
                                 size: 500,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: ""
                                         }),
                                     ]
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             width: {
                                 size: 500,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: ""
                                         }),
                                     ]
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             width: {
                                 size: 500,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: ""
                                         }),
                                     ]
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         })
                     ]
                 }),
             
             ],
         }),
-        new docx.Paragraph({
+        new Paragraph({
             children: [
-                new docx.TextRun({
+                new TextRun({
                     text: "Datos del Tutor Académico:",
                     bold: true
                 })
@@ -582,91 +595,91 @@ const doc = new docx.Document({
             }
         }),
         //Datos del tutor academico
-        new docx.Table({
+        new Table({
             columnWidths: [3000, 4500],
             rows: [
-                new docx.TableRow({
+                new TableRow({
                     height: {
                         value: 400, 
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children : [
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 bottom: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 left: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 right: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Nombre",
                                         })
                                     ],
-                                    alignment: docx.AlignmentType.CENTER
+                                    alignment: AlignmentType.CENTER
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 left: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 right: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
                                     },
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "",
                                         })
                                     ],
@@ -675,70 +688,70 @@ const doc = new docx.Document({
                         })
                     ]
                 }),
-                new docx.TableRow({
+                new TableRow({
                     height: {
                         value: 400, 
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children : [
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 bottom: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 left: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 right: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "C.I.N",
                                         })
                                     ],
-                                    alignment: docx.AlignmentType.CENTER
+                                    alignment: AlignmentType.CENTER
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 left: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 right: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "",
                                         })
                                     ],
@@ -747,70 +760,70 @@ const doc = new docx.Document({
                         })
                     ]
                 }),
-                new docx.TableRow({
+                new TableRow({
                     height: {
                         value: 400, 
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children : [
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 bottom: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 left: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 right: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Profesion",
                                         })
                                     ],
-                                    alignment: docx.AlignmentType.CENTER
+                                    alignment: AlignmentType.CENTER
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 left: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 right: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "",
                                         })
                                     ],
@@ -818,92 +831,92 @@ const doc = new docx.Document({
                             ],
                             width: {
                                 size: 10000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                         })
                     ]
                 }),
-                new docx.TableRow({
+                new TableRow({
                     height: {
                         value: 400, 
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children : [
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 bottom: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 left: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 right: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Años de experiencia",
                                         })
                                     ],
-                                    alignment: docx.AlignmentType.CENTER
+                                    alignment: AlignmentType.CENTER
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 left: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 right: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     borders: {
                                         top: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         left: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         },
                                         right: {
-                                            style: docx.BorderStyle.NONE,
+                                            style: BorderStyle.NONE,
                                             size: 1,
                                             color: "ff0000",
                                         }
                                     },
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "",
                                         })
                                     ],
@@ -912,76 +925,76 @@ const doc = new docx.Document({
                             ],
                             width: {
                                 size: 10000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                         }),
                     ]
                 }),
-                new docx.TableRow({
+                new TableRow({
                     height: {
                         value: 400, 
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children : [
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 bottom: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 left: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 right: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Cargo Actual",
                                         })
                                     ],
-                                    alignment: docx.AlignmentType.CENTER
+                                    alignment: AlignmentType.CENTER
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 left: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 right: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "",
                                         })
                                     ],
@@ -989,76 +1002,76 @@ const doc = new docx.Document({
                             ],
                             width: {
                                 size: 10000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                         })
                     ]
                 }),
-                new docx.TableRow({
+                new TableRow({
                     height: {
                         value: 400, 
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children : [
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 bottom: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 left: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 right: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Email",
                                         })
                                     ],
-                                    alignment: docx.AlignmentType.CENTER
+                                    alignment: AlignmentType.CENTER
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 left: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 right: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "",
                                         })
                                     ],
@@ -1066,76 +1079,76 @@ const doc = new docx.Document({
                             ],
                             width: {
                                 size: 10000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                         })
                     ]
                 }),
-                new docx.TableRow({
+                new TableRow({
                     height: {
                         value: 400, 
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children : [
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 bottom: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 left: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 right: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Telefono",
                                         })
                                     ],
-                                    alignment: docx.AlignmentType.CENTER
+                                    alignment: AlignmentType.CENTER
                                 })
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 left: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 },
                                 right: {
-                                    style: docx.BorderStyle.NONE,
+                                    style: BorderStyle.NONE,
                                     size: 1,
                                     color: "ff0000",
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     style: "aside",
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "",
                                         })
                                     ],
@@ -1143,16 +1156,16 @@ const doc = new docx.Document({
                             ],
                             width: {
                                 size: 10000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                         })
                     ]
                 }),
             ]
         }),
-        new docx.Paragraph({
+        new Paragraph({
             children: [
-                new docx.TextRun({
+                new TextRun({
                     text: "Para ser llenado por el revisor:",
                     bold: true
                 })
@@ -1162,121 +1175,121 @@ const doc = new docx.Document({
                 after: 100
             }
         }),
-        new docx.Table({
+        new Table({
             width: {
                 size: 9000,
-                type: docx.WidthType.DXA
+                type: WidthType.DXA
             },
             rows: [
-                new docx.TableRow({
+                new TableRow({
                     children: [
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 bottom: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 right:{
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 left: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Apellidos, Nombres: "
                                         })
                                     ],
-                                    alignment: docx.AlignmentType.LEFT
+                                    alignment: AlignmentType.LEFT
                                 })
                             ],
                             width: {
                                 size: 2000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 bottom: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 right:{
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 left: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Lárez Mata, Jesús José"
                                         })
                                     ],
-                                    alignment: docx.AlignmentType.LEFT
+                                    alignment: AlignmentType.LEFT
                                 })
                             ],
                             width: {
                                 size: 2000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 bottom: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 right:{
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 left: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: ""
                                         })
                                     ],
-                                    alignment: docx.AlignmentType.LEFT
+                                    alignment: AlignmentType.LEFT
                                 })
                             ],
                             
@@ -1284,68 +1297,68 @@ const doc = new docx.Document({
                         
                     ]
                 }),
-                new docx.TableRow({
+                new TableRow({
                     children: [
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 bottom: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 right:{
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 left: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Decisión Final: "
                                         })
                                     ]
                                 })
                             ]
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 bottom: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 right:{
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 left: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Aprobado: "
                                         })
                                     ]
@@ -1353,36 +1366,36 @@ const doc = new docx.Document({
                             ],
                             width: {
                                 size: 1500,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 bottom: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 right:{
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 left: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Reprobada:"
                                         })
                                     ]
@@ -1390,74 +1403,74 @@ const doc = new docx.Document({
                             ],
                             width: {
                                 size: 1500,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 bottom: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 right:{
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 left: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: "Fecha: "
                                         })
                                     ],
-                                    alignment: docx.AlignmentType.RIGHT
+                                    alignment: AlignmentType.RIGHT
                                 })
                             ],
                             width: {
                                 size: 2000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             },
                         }),
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 bottom: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 right:{
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 left: {
                                     size: 1,
                                     color: "#ffffff",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun({
+                                        new TextRun({
                                             text: " "
                                         })
                                     ]
@@ -1468,9 +1481,9 @@ const doc = new docx.Document({
                 }),
             ]
         }),
-        new docx.Paragraph({
+        new Paragraph({
             children: [
-                new docx.TextRun({
+                new TextRun({
                     text: "Observaciones (solo en caso de ser rechazado el documento):"
                 })
             ],
@@ -1479,86 +1492,86 @@ const doc = new docx.Document({
                 after: 10
             }
         }),
-        new docx.Table({
+        new Table({
             indent: {
                 size: 3000,
-                type: docx.WidthType.DXA
+                type: WidthType.DXA
             },
             rows: [
-                new docx.TableRow({
+                new TableRow({
                     height: {
                         value: 700,
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children: [
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 top: {
                                     size: 1,
                                     color: "#FFFFFF",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 left: {
                                     size: 1,
                                     color: "#FFFFFF",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 right: {
                                     size: 1,
                                     color: "#FFFFFF",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun("")
+                                        new TextRun("")
                                     ]
                                 })
                             ],
                             width: {
                                 size: 3000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             }
                         }),
                     ],
                 }),
-                new docx.TableRow({
+                new TableRow({
                     height: {
                         value: 700,
-                        rule: docx.HeightRule.EXACT
+                        rule: HeightRule.EXACT
                     },
                     children: [
-                        new docx.TableCell({
+                        new TableCell({
                             borders: {
                                 left: {
                                     size: 1,
                                     color: "#FFFFFF",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 right: {
                                     size: 1,
                                     color: "#FFFFFF",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 },
                                 bottom: {
                                     size: 1,
                                     color: "#FFFFFF",
-                                    style: docx.BorderStyle.NONE
+                                    style: BorderStyle.NONE
                                 }
                             },
                             children: [
-                                new docx.Paragraph({
+                                new Paragraph({
                                     children: [
-                                        new docx.TextRun("Firma Revisor")
+                                        new TextRun("Firma Revisor")
                                     ],
-                                    alignment: docx.AlignmentType.CENTER
+                                    alignment: AlignmentType.CENTER
                                 }),
                             ],
-                            verticalAlign: docx.VerticalAlign.CENTER,
+                            verticalAlign: VerticalAlign.CENTER,
                             width: {
                                 size: 3000,
-                                type: docx.WidthType.DXA
+                                type: WidthType.DXA
                             }
                         }),
                     ],
@@ -1571,7 +1584,7 @@ const doc = new docx.Document({
     }],
 });
 
-docx.Packer.toBuffer(doc).then((buffer) => {
+Packer.toBuffer(doc).then((buffer) => {
     fs.writeFileSync("Evaluaciòn Propuesta TEG - Revisor.docx", buffer);
 });
 
