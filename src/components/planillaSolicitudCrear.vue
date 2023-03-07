@@ -46,6 +46,7 @@ crearSolicitudForm.empresa.idEmpresa = computed(() => {
       (t) => t.id_empresa == idEmpresaSeleccionada.value
     );
 
+    crearSolicitudForm.empresa.nombre = arregloEmpresa[0].nombre;
     crearSolicitudForm.empresa.rif = arregloEmpresa[0].rif;
     crearSolicitudForm.empresa.direccion = arregloEmpresa[0].direccion;
     crearSolicitudForm.empresa.telefono = arregloEmpresa[0].telefono;
@@ -64,13 +65,14 @@ async function insertarPlanilla() {
       new PlanillaPropuestaTEG(
         crearSolicitudForm.trabajoDeGrado.tituloTG,
         crearSolicitudForm.empresa.nombre,
-        crearSolicitudForm.empresa.nombre,
+        crearSolicitudForm.empresa,
         {
           nombre:`${crearSolicitudForm.tutor.nombres} ${crearSolicitudForm.tutor.apellidos}`,
           cedula: crearSolicitudForm.tutor.cedula,
           email: 'franklinBelloBellisimo@ucab.edu.ve',
           telefono: '04121598764',
-          profesion: 'Ingeniero Informatico'
+          profesion: 'Ingeniero Informatico',
+          fecha_entrega: new Date()
         }
       )
     );
