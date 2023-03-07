@@ -78,6 +78,8 @@ const planilla_propuesta_TEG = {
         fecha_inicio: '',
         horario_propuesto: ''
     },
+    {}
+    /*
     {
         nombre: "Luis C. Somoza 2",
         cedula: "27656348",
@@ -88,6 +90,7 @@ const planilla_propuesta_TEG = {
         fecha_inicio: '',
         horario_propuesto: ''
     }
+    */
     ],
     empresa : {
         nombre: "TIMACA LLC",
@@ -160,8 +163,9 @@ const planilla_propuesta_TIG = {
 //generarCartaDesignacionTutorTEG(Carta_designacion_teg);
 //generarCartaDesignacionTutorTIG(Carta_designacion_tig);
 //generarCartaDesignacionRevisor(Carta_designacion_revisor);
-//generarPlanillaPropuestaTEG(planilla_propuesta_TEG);
+generarPlanillaPropuestaTEG(planilla_propuesta_TEG);
 //generarPlanillaPropuestaTIG(planilla_propuesta_TIG);
+
 
 
 

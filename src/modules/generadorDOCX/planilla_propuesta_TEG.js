@@ -1,8 +1,14 @@
-
-import { saveAs } from "file-saver";
+import file_saver from 'file-saver'
+const { saveAs } = file_saver
 // Load the full build.
-import { _ } from 'lodash';
-import { TableRow,BorderStyle, HeightRule, TableCell,WidthType,Paragraph, TextRun, AlignmentType, VerticalAlign, Document, SectionType, Header, Footer, LineRuleType, ImageRun, Table, PageBreak, HeadingLevel,Packer } from 'docx'
+import lodash from 'lodash';
+const { _ } =  lodash;
+import docx from 'docx';
+const { TableRow,BorderStyle, HeightRule, TableCell,WidthType,Paragraph, TextRun, AlignmentType, VerticalAlign, Document, SectionType, Header, Footer, LineRuleType, ImageRun, Table, PageBreak, HeadingLevel,Packer } = docx;
+
+import fs from 'fs'
+const { writeFileSync } = fs;
+
 const sin_bordes = {
     top: {
         style: BorderStyle.NONE,
@@ -25,63 +31,42 @@ const sin_bordes = {
         color: "ff0000",
     }
 }
+const linea = {
+    top: {
+        style: BorderStyle.NONE,
+        size: 1,
+        color: "ff0000",
+    },
+    left: {
+        style: BorderStyle.NONE,
+        size: 1,
+        color: "ff0000",
+    },
+    right: {
+        style: BorderStyle.NONE,
+        size: 1,
+        color: "ff0000",
+    }
+}
+const celda_vacia = new TableCell({
+                        borders: linea,
+                        children: [
+                            new Paragraph({
+                                text: " ",
+                                style: "aside",
+                            })
+                        ],
+                        width: {
+                            size: 1000,
+                            type: WidthType.DXA
+                        }
+                    });
 function is_char(value)
 {
     if (Object.prototype.toString.call(value) !== '[object String]')
      return false;
     return value && value.length === 1;
 }
- 
-/*
-const planilla_propuesta_TEG = {
-    fecha_envio : "Julio 29 del 2023",
-    titulo : "Desarrollo de sistema para generacion de planillas",
-    organizacion : "UCAB Guayana",
-    alumno : [{
-        nombre: "Luis C. Somoza",
-        cedula: "27656348",
-        telefono: "4249749230",
-        email: "lcsomoza.19@est.ucab.edu.ve",
-        oficina: '',
-        habitacion: '',
-        fecha_inicio: '',
-        horario_propuesto: ''
-    },
-    {
-        nombre: "Luis C. Somoza 2",
-        cedula: "27656348",
-        telefono: "4249749230",
-        email: "lcsomoza.19@est.ucab.edu.ve",
-        oficina: '',
-        habitacion: '',
-        fecha_inicio: '',
-        horario_propuesto: ''
-    }
-    ],
-    empresa : {
-        nombre: "TIMACA LLC",
-        direccion: "No tiene direccion",
-        telefono: "4249749230"
-    },
-    tutor_academico : {
-        nombre: "Pedro Perez",
-        cedula: "12345678",
-        email: "pperez.19@gmail.com",
-        telefono: "4249749230",
-        profesion: "Ingeniero Civil",
-        oficina: 'Datos oficina',
-        habitacion: 'Datos habitacion',
-        graduado: "5",
-        tutor_tg: false,
-        profesor_ucab: false,
-        experiencia: "8",
-        cargo: "Gerente de operaciones",
-        fecha_entrega: new Date()
-    },
-
-
-}
-*/
 const tam_cuadro_titulo = 280;
 const generar50Celdas = (titulo) => {
     const lista = []
@@ -143,32 +128,38 @@ function convertProxyObjectToPojo(proxyObj) {
     return _.cloneDeep(proxyObj);
 }
   
-const generarDatosAlumnos = (planilla_propuesta_TEG) => {
-            const lista = [];
-            console.log("generarDatosAlumnos()");
-            const pt = convertProxyObjectToPojo(planilla_propuesta_TEG)
-            console.log(pt);
-            pt.forEach( (element) => {
-                const resultado = new Paragraph({
-                    style: "aside",
-                    bullet: {
-                        level: 0
-                    },
-                    children: [
-                        new TextRun({
-                            text: element.nombre +", C.I.N. " + element.cedula,
-                            font: "Times New Roman",
-                        })
-                    ],
-                    alignment: AlignmentType.JUSTIFIED,
-                    spacing: {
-                        line: 355,
-                        lineRule: LineRuleType.AUTO,
-                    }
-                })
-                lista.push(resultado);
-            })
-            return lista;
+const generarDatosAlumno = ( object ) => {
+                if(object !== undefined && !(Object.keys(object).length === 0)){
+                    const pt = convertProxyObjectToPojo(object)
+                    const resultado = new Paragraph({
+                        style: "aside",
+                        bullet: {
+                            level: 0
+                        },
+                        children: [
+                            new TextRun({
+                                text: pt.nombre +", C.I.N. " + pt.cedula,
+                                font: "Times New Roman",
+                            })
+                        ],
+                        alignment: AlignmentType.JUSTIFIED,
+                        spacing: {
+                            line: 355,
+                            lineRule: LineRuleType.AUTO,
+                        }
+                    })
+                    return resultado
+                }else{
+                    const aux = new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: ""
+                            })
+                        ]
+                    })
+                    return aux;
+                }
+                
 }
 
 const encabezadoTablaAlumno = new TableRow({
@@ -255,504 +246,526 @@ const encabezadoTablaAlumno = new TableRow({
         }),
     ]
 })
-const generarNombresAlumno = (planilla_propuesta_TEG) => {
+const generarNombresAlumno = ( object ) => {
 
-    const pt = convertProxyObjectToPojo(planilla_propuesta_TEG)
-    console.log(pt);
-    console.log(pt.alumno);
-    console.log(pt.alumno[0].nombre);
-    console.log(typeof pt.alumno[0].nombre);
-    const lista = []
-    let alumno2 = null;
-    let alumno1 = null;
-    console.log(pt.alumno[0] !== null);
-    console.log(pt.alumno[1] !== null);
-   if (pt.alumno[0] != null){
-    alumno1 = new TableRow({
-        height: {
-            value: 500, 
-            rule: HeightRule.EXACT
-        },
-        children : [
-            new TableCell({
-                borders: sin_bordes,
-                children: [
-                    new Paragraph({
-                        style: "aside",
-                        children: [
-                            new TextRun({
-                                text: "Nombre de alumno 1",
-                                bold: true
-                            })
-                        ],
-                        alignment: AlignmentType.LEFT
-                    })
-                ],
-                verticalAlign: VerticalAlign.CENTER,
-            }),
-            new TableCell({
-                borders: {
-                    top: {
-                        style: BorderStyle.NONE,
-                        size: 1,
-                        color: "ff0000",
-                    },
-                    left: {
-                        style: BorderStyle.NONE,
-                        size: 1,
-                        color: "ff0000",
-                    },
-                    right: {
-                        style: BorderStyle.NONE,
-                        size: 1,
-                        color: "ff0000",
-                    }
-                },
-                children: [
-                    new Paragraph({
-                        style: "aside",
-                        borders: {
-                            top: {
-                                style: BorderStyle.NONE,
-                                size: 1,
-                                color: "ff0000",
-                            },
-                            left: {
-                                style: BorderStyle.NONE,
-                                size: 1,
-                                color: "ff0000",
-                            },
-                            right: {
-                                style: BorderStyle.NONE,
-                                size: 1,
-                                color: "ff0000",
-                            }
+    if(object !== undefined && !(Object.keys(object).length === 0)){
+        const pt = convertProxyObjectToPojo(object);
+        const fila = new TableRow({
+                        height: {
+                            value: 500, 
+                            rule: HeightRule.EXACT
                         },
-                        children: [
-                            new TextRun({
-                                text: pt.alumno[0].nombre,
+                        children : [
+                            new TableCell({
+                                borders: sin_bordes,
+                                children: [
+                                    new Paragraph({
+                                        style: "aside",
+                                        children: [
+                                            new TextRun({
+                                                text: "Nombre de alumno",
+                                                bold: true
+                                            })
+                                        ],
+                                        alignment: AlignmentType.LEFT
+                                    })
+                                ],
+                                verticalAlign: VerticalAlign.CENTER,
+                            }),
+                            new TableCell({
+                                borders: sin_bordes,
+                                children: [
+                                    new Paragraph({
+                                        style: "aside",
+                                        children: [
+                                            new TextRun({
+                                                text: pt.nombre,
+                                            })
+                                        ],
+                                        alignment: AlignmentType.LEFT
+                                    })
+                                ],
+                                verticalAlign: VerticalAlign.CENTER
                             })
-                        ],
-                    })
-                ],
-            })
-        ]
-    });
-   }
-   if (pt.alumno[1] != null){
-    alumno2 = new TableRow({
-        height: {
-            value: 500, 
-            rule: HeightRule.EXACT
-        },
-        children : [
-            new TableCell({
-                borders: sin_bordes,
-                children: [
-                    new Paragraph({
-                        style: "aside",
-                        children: [
-                            new TextRun({
-                                text: "Nombre de alumno 2",
-                                bold: true
-                            })
-                        ],
-                        alignment: AlignmentType.LEFT
-                    })
-                ],
-                verticalAlign: VerticalAlign.CENTER,
-            }),
-            new TableCell({
-                borders: {
-                    top: {
-                        style: BorderStyle.NONE,
-                        size: 1,
-                        color: "ff0000",
-                    },
-                    left: {
-                        style: BorderStyle.NONE,
-                        size: 1,
-                        color: "ff0000",
-                    },
-                    right: {
-                        style: BorderStyle.NONE,
-                        size: 1,
-                        color: "ff0000",
-                    }
-                },
-                children: [
-                    new Paragraph({
-                        style: "aside",
-                        borders: {
-                            top: {
-                                style: BorderStyle.NONE,
-                                size: 1,
-                                color: "ff0000",
-                            },
-                            left: {
-                                style: BorderStyle.NONE,
-                                size: 1,
-                                color: "ff0000",
-                            },
-                            right: {
-                                style: BorderStyle.NONE,
-                                size: 1,
-                                color: "ff0000",
-                            }
-                        },
-                        children: [
-                            new TextRun({
-                                text: "",
-                            })
-                        ],
-                    })
-                ],
-            })
-        ]
-    });
-   }
-   lista.push(alumno1);
-   lista.push(alumno2);
+                        ]
+                    });
+                    return fila;
 
-   const titulo = new TableRow({
-    height: {
-        value: 500, 
-        rule: HeightRule.EXACT
-    },
-    children : [
-        new TableCell({
-            borders: sin_bordes,
-            children: [
-                new Paragraph({
-                    style: "aside",
-                    children: [
-                        new TextRun({
-                            text: "Titulo del trabajo experimental de grado",
-                            bold: true
-                        })
-                    ],
-                    alignment: AlignmentType.LEFT
-                })
-            ],
-            verticalAlign: VerticalAlign.CENTER,
-        }),
-        new TableCell({
-            borders: {
-                top: {
-                    style: BorderStyle.NONE,
-                    size: 1,
-                    color: "ff0000",
-                },
-                left: {
-                    style: BorderStyle.NONE,
-                    size: 1,
-                    color: "ff0000",
-                },
-                right: {
-                    style: BorderStyle.NONE,
-                    size: 1,
-                    color: "ff0000",
-                }
-            },
-            children: [
-                new Paragraph({
-                    children: [
-                        new TextRun({
-                            text: pt.titulo,
-                        })
-                    ],
-                })
-            ],
-        })
-    ]
-});
-const organizacion = new TableRow({
-    height: {
-        value: 500, 
-        rule: HeightRule.EXACT
-    },
-    children : [
-        new TableCell({
-            borders: sin_bordes,
-            children: [
-                new Paragraph({
-                    style: "aside",
-                    children: [
-                        new TextRun({
-                            text: "Organización donde se organizará el TEG",
-                            bold: true
-                        })
-                    ],
-                    alignment: AlignmentType.LEFT
-                })
-            ],
-            verticalAlign: VerticalAlign.CENTER,
-        }),
-        new TableCell({
-            children: [
-                new Paragraph({
-                    children: [
-                        new TextRun({
-                            text: pt.organizacion,
-                        })
-                    ],
-                })
-            ],
-            borders: sin_bordes,
-        })
-    ]
-});
-    lista.push(titulo)
-    lista.push(organizacion)
-    return lista;
+    }else{
+        
+        const fila = new TableRow({
+                        children: [
+                            new TableCell({
+                                borders: sin_bordes,
+                                children: [
+                                    new Paragraph({
+                                        children: [
+                                            new TextRun({
+                                                text: ""
+                                            })
+                                        ]
+                                    })
+                                ]
+                            }),
+                            new TableCell({
+                                borders: sin_bordes,
+                                children: [
+                                    new Paragraph({
+                                        children: [
+                                            new TextRun({
+                                                text: ""
+                                            })
+                                        ]
+                                    })
+                                ]
+                            })
+                        ]
+                    })
+        return fila;
+
+    }
+
 }
 const generarFilaAlumno = (planilla_propuesta_TEG) => {
     const filas = [];
     filas.push(encabezadoTablaAlumno);
     planilla_propuesta_TEG.alumno.forEach( (element) => {
-        const fila = new TableRow({
-            height: {
-                value: 500, 
-                rule: HeightRule.EXACT
-            },
-            children: [
-                new TableCell({
-                    width: {
-                        size: 500,
-                        type: WidthType.DXA
-                    },
-                    children: [
-                        new Paragraph({
-                            style: "aside",
-                            children: [
-                                new TextRun({
-                                    text: element.nombre
-                                }),
-                            ]
-                        })
-                    ],
-                    verticalAlign: VerticalAlign.CENTER,
-                }),
-                new TableCell({
-                    width: {
-                        size: 500,
-                        type: WidthType.DXA
-                    },
-                    children: [
-                        new Paragraph({
-                            style: "aside",
-                            children: [
-                                new TextRun({
-                                    text: element.cedula
-                                }),
-                            ]
-                        })
-                    ],
-                    verticalAlign: VerticalAlign.CENTER,
-                }),
-                new TableCell({
-                    width: {
-                        size: 500,
-                        type: WidthType.DXA
-                    },
-                    children: [
-                        new Paragraph({
-                            style: "aside",
-                            children: [
-                                new TextRun({
-                                    text: element.telefono
-                                }),
-                            ]
-                        })
-                    ],
-                    verticalAlign: VerticalAlign.CENTER,
-                }),
-                new TableCell({
-                    width: {
-                        size: 500,
-                        type: WidthType.DXA
-                    },
-                    children: [
-                        new Paragraph({
-                            style: "aside",
-                            children: [
-                                new TextRun({
-                                    text: element.email
-                                }),
-                            ]
-                        })
-                    ],
-                    verticalAlign: VerticalAlign.CENTER,
-                })
-            ]
-        });
-        filas.push(fila);
+        if(element !== undefined && !(Object.keys(element).length === 0)){
+            const fila = new TableRow({
+                height: {
+                    value: 500, 
+                    rule: HeightRule.EXACT
+                },
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 500,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                style: "aside",
+                                children: [
+                                    new TextRun({
+                                        text: element.nombre
+                                    }),
+                                ],
+                                alignment: AlignmentType.CENTER
+                            })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER,
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 500,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                style: "aside",
+                                children: [
+                                    new TextRun({
+                                        text: element.cedula
+                                    }),
+                                ],
+                                alignment: AlignmentType.CENTER
+                            })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER,
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 500,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                style: "aside",
+                                children: [
+                                    new TextRun({
+                                        text: element.telefono
+                                    }),
+                                ],
+                                alignment: AlignmentType.CENTER
+                            })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER,
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 500,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                style: "aside",
+                                children: [
+                                    new TextRun({
+                                        text: element.email
+                                    }),
+                                ]
+                            })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER,
+                    })
+                ]
+            });
+            filas.push(fila);
+        }else{
+            const fila =
+            new TableRow({
+                height: {
+                    value: 500, 
+                    rule: HeightRule.EXACT
+                },
+                children: [
+                    new TableCell({
+                        borders: sin_bordes,
+                        width: {
+                            size: 500,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                style: "aside",
+                                children: [],
+                                alignment: AlignmentType.CENTER
+                            })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER,
+                    }),
+                    new TableCell({
+                        borders: sin_bordes,
+                        width: {
+                            size: 500,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                style: "aside",
+                                children: [],
+                                alignment: AlignmentType.CENTER
+                            })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER,
+                    }),
+                    new TableCell({
+                        borders: sin_bordes,
+                        width: {
+                            size: 500,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                style: "aside",
+                                children: [],
+                                alignment: AlignmentType.CENTER
+                            })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER,
+                    }),
+                    new TableCell({
+                        borders: sin_bordes,
+                        width: {
+                            size: 500,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                style: "aside",
+                                children: []
+                            })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER,
+                    })
+                ]
+            });
+            filas.push(fila)
+        }
     })
     return filas;
 }
+const generarDatosAlumno2 = (object) => {
+    if(object !== undefined && !(Object.keys(object).length === 0)){
+        const parrafo = new Paragraph({
+                                style: "aside",
+                                children:[ 
+                                    new TextRun({
+                                        text: "Datos Alumno 2",
+                                        bold: true
+                                    })
+                                ],
+                                spacing: {
+                                    after: 200,
+                                    before: 200,
+                                    line: 355,
+                                    lineRule: LineRuleType.AUTO,
+                                }
+                        });
+        return parrafo
+    }
+    const parrafo = new Paragraph({
+                    style: "aside",
+                    children:[ 
+                        new TextRun({
+                            text: ""
+                        })
+                    ],
+                    spacing: {
+                        after: 200,
+                        before: 200,
+                        line: 355,
+                        lineRule: LineRuleType.AUTO,
+                    }
+                });
+    return parrafo;
+}
 const generarTablaDatosAlumno = (object) => {
-            let alumno = {...object};
-            let tablaAlumno = [];
-            
-            tablaAlumno = [
-                new TableRow({
-                    children: [
-                        new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        text: "Nombre"
-                                    })
-                                ],
-                                width: {
-                                    size: 1000,
-                                    type: WidthType.DXA
-                                }
-                            }),
-                        new TableCell({
-                                children: [
-                                    new Paragraph({
-                                        text: alumno.nombre
-                                    })
-                                ],
-                                width: {
-                                    size: 3000,
-                                    type: WidthType.DXA
-                                }
-                        }),
-                    ]
-                }),
-                new TableRow({
-                    children: [
-                        new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        text: "C.I.N"
-                                    })
-                                ],
-                                width: {
-                                    size: 1000,
-                                    type: WidthType.DXA
-                                }
-                            }),
-                        new TableCell({
-                                children: [
-                                    new Paragraph({
-                                        text: alumno.cedula
-                                    })
-                                ],
-                                width: {
-                                    size: 1000,
-                                    type: WidthType.DXA
-                                }
-                        }),
-                    ]
-                }),
-                new TableRow({
-                    children: [
-                        new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        text: "E-mail"
-                                    })
-                                ],
-                                width: {
-                                    size: 1000,
-                                    type: WidthType.DXA
-                                }
-                            }),
-                        new TableCell({
-                                children: [
-                                    new Paragraph({
-                                        text: alumno.email
-                                    })
-                                ],
-                                width: {
-                                    size: 1000,
-                                    type: WidthType.DXA
-                                }
-                        }),
-                    ]
-                }),
-                new TableRow({
-                    children: [
-                        new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        text: "Telefonos"
-                                    })
-                                ],
-                                width: {
-                                    size: 1000,
-                                    type: WidthType.DXA
-                                }
-                            }),
-                        new TableCell({
-                                children: [
-                                    new Paragraph({
-                                        text: alumno.telefono
-                                    })
-                                ],
-                                width: {
-                                    size: 1000,
-                                    type: WidthType.DXA
-                                }
-                        }),
-                        new TableCell({
-                            children: [
-                                new Paragraph({
-                                    text: "Oficina"
-                                })
-                            ],
-                            width: {
-                                size: 1000,
-                                type: WidthType.DXA
-                            }
-                        }),
-                        new TableCell({
-                            children: [
-                                new Paragraph({
-                                    text: alumno.oficina
-                                })
-                            ],
-                            width: {
-                                size: 1000,
-                                type: WidthType.DXA
-                            }
-                        }),
-                        new TableCell({
-                            children: [
-                                new Paragraph({
-                                    text: "Habitacion"
-                                })
-                            ],
-                            width: {
-                                size: 1000,
-                                type: WidthType.DXA
-                            }
-                        }),
-                        new TableCell({
-                            children: [
-                                new Paragraph({
-                                    text: alumno.habitacion
-                                })
-                            ],
-                            width: {
-                                size: 1000,
-                                type: WidthType.DXA
-                            }
-                        }),
-                    ]
-                }),
-        ]
 
+    if(object !== undefined && !(Object.keys(object).length === 0)){
+        const tablaAlumno = [
+            new TableRow({
+                height: {
+                    value: 500, 
+                    rule: HeightRule.EXACT
+                },
+                children: [
+                    new TableCell({
+                            borders: sin_bordes,
+                            children: [
+                                new Paragraph({
+                                    text: "Nombre",
+                                    style: "aside",
+                                    alignment: AlignmentType.CENTER
+                                })
+                            ],
+                            width: {
+                                size: 1000,
+                                type: WidthType.DXA
+                            },
+                            verticalAlign: VerticalAlign.CENTER
+                    }),
+                    new TableCell({
+                            borders: linea,
+                            children: [
+                                new Paragraph({
+                                    style: "aside",
+                                    text: object.nombre,
+                                    alignment: AlignmentType.LEFT
+                                })
+                            ],
+                            width: {
+                                size: 1000,
+                                type: WidthType.DXA
+                            },
+                            verticalAlign: VerticalAlign.CENTER
+                    }),
+                    celda_vacia,
+                    celda_vacia,
+                    celda_vacia,
+                    celda_vacia
+                ]
+            }),
+            new TableRow({
+                height: {
+                    value: 500, 
+                    rule: HeightRule.EXACT
+                },
+                children: [
+                    new TableCell({
+                            borders: sin_bordes,
+                            children: [
+                                new Paragraph({
+                                    style: "aside",
+                                    text: "C.I.N",
+                                    alignment: AlignmentType.CENTER
+                                })
+                            ],
+                            width: {
+                                size: 1000,
+                                type: WidthType.DXA
+                            },
+                            verticalAlign: VerticalAlign.CENTER
+                        }),
+                    new TableCell({
+                            borders: linea,
+                            children: [
+                                new Paragraph({
+                                    style: "aside",
+                                    text: object.cedula,
+                                    alignment: AlignmentType.LEFT
+                                })
+                            ],
+                            width: {
+                                size: 1000,
+                                type: WidthType.DXA
+                            },
+                            verticalAlign: VerticalAlign.CENTER
+                    }),
+                    celda_vacia,
+                    celda_vacia,
+                    celda_vacia,
+                    celda_vacia
+                ]
+            }),
+            new TableRow({
+                height: {
+                    value: 500, 
+                    rule: HeightRule.EXACT
+                },
+                children: [
+                    new TableCell({
+                            borders: sin_bordes,
+                            children: [
+                                new Paragraph({
+                                    style: "aside",
+                                    text: "E-mail",
+                                    alignment: AlignmentType.CENTER
+                                })
+                            ],
+                            width: {
+                                size: 1000,
+                                type: WidthType.DXA
+                            },
+                            verticalAlign: VerticalAlign.CENTER
+                        }),
+                    new TableCell({
+                            borders: linea,
+                            children: [
+                                new Paragraph({
+                                    text: object.email,
+                                    style: "aside",
+                                    alignment: AlignmentType.LEFT
+                                })
+                            ],
+                            width: {
+                                size: 1000,
+                                type: WidthType.DXA
+                            },
+                            verticalAlign: VerticalAlign.CENTER
+                    }),
+                    celda_vacia,
+                    celda_vacia,
+                    celda_vacia,
+                    celda_vacia
+                ]
+            }),
+            new TableRow({
+                height: {
+                    value: 500, 
+                    rule: HeightRule.EXACT
+                },
+                children: [
+                    new TableCell({
+                            borders: sin_bordes,
+                            children: [
+                                new Paragraph({
+                                    style: "aside",
+                                    text: "Telefonos",
+                                    alignment: AlignmentType.CENTER
+                                })
+                            ],
+                            width: {
+                                size: 1000,
+                                type: WidthType.DXA
+                            },
+                            verticalAlign: VerticalAlign.CENTER
+                    }),
+                    new TableCell({
+                            borders: linea,
+                            children: [
+                                new Paragraph({
+                                    text: object.telefono,
+                                    style: "aside",
+                                    alignment: AlignmentType.LEFT
+                                })
+                            ],
+                            width: {
+                                size: 500,
+                                type: WidthType.DXA
+                            },
+                            verticalAlign: VerticalAlign.CENTER
+                    }),
+                    new TableCell({
+                        borders: linea,
+                        children: [
+                            new Paragraph({
+                                text: "Oficina",
+                                style: "aside",
+                                alignment: AlignmentType.CENTER
+                            })
+                        ],
+                        width: {
+                            size: 1000,
+                            type: WidthType.DXA
+                        },
+                        verticalAlign: VerticalAlign.CENTER
+                    }),
+                    new TableCell({
+                        borders: linea,
+                        children: [
+                            new Paragraph({
+                                text: object.oficina,
+                                style: "aside",
+                                alignment: AlignmentType.LEFT
+                            })
+                        ],
+                        width: {
+                            size: 2000,
+                            type: WidthType.DXA
+                        },
+                        verticalAlign: VerticalAlign.CENTER
+                    }),
+                    new TableCell({
+                        borders: linea,
+                        children: [
+                            new Paragraph({
+                                text: "Habitacion",
+                                style: "aside",
+                                alignment: AlignmentType.CENTER
+                            })
+                        ],
+                        width: {
+                            size: 1000,
+                            type: WidthType.DXA
+                        },
+                        verticalAlign: VerticalAlign.CENTER
+                    }),
+                    new TableCell({
+                        borders: linea,
+                        children: [
+                            new Paragraph({
+                                text: object.habitacion,
+                                style: "aside",
+                                alignment: AlignmentType.LEFT
+                            })
+                        ],
+                        width: {
+                            size: 2000,
+                            type: WidthType.DXA
+                        },
+                        verticalAlign: VerticalAlign.CENTER
+                    }),
+                ]
+            }),
+        ]
+        return tablaAlumno;
+    }
+    const tablaAlumno = [ 
+                            new TableRow({
+                                children: [
+                                    new TableCell({
+                                        borders: sin_bordes,
+                                        children: []
+                                    })
+                                ]
+                            })
+                        ]
     return tablaAlumno;
+            
+
 }
 export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
-    console.log(planilla_propuesta_TEG);
     const doc = new Document({
         creator: "Luis C. Somoza & Wladimir SanVicente",
         title: "Planilla de propuesta de TEG",
@@ -974,7 +987,8 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     }
                 }),
                 //Aqui se imprimen los los alumnos y sus datos
-                generarDatosAlumnos(planilla_propuesta_TEG.alumno)[0],
+                generarDatosAlumno(planilla_propuesta_TEG.alumno[0]),
+                generarDatosAlumno(planilla_propuesta_TEG.alumno[1]),
                 new Paragraph({
                     style: "aside",
                     children: [
@@ -1124,8 +1138,10 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                                     text: planilla_propuesta_TEG.tutor_academico.nombre,
                                                 })
                                             ],
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
+                                    verticalAlign: VerticalAlign.CENTER,
                                 })
                             ]
                         }),
@@ -1170,14 +1186,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     },
                                     children: [
                                         new Paragraph({
+                                            style: "aside",
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.tutor_academico.cedula,
                                                 })
                                             ],
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
-                                })
+                                    verticalAlign: VerticalAlign.CENTER
+                                }),
                             ]
                         }),
                         new TableRow({
@@ -1187,28 +1206,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                             },
                             children : [
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        bottom: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: sin_bordes,
                                     children: [
                                         new Paragraph({
                                             style: "aside",
@@ -1242,13 +1240,16 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     },
                                     children: [
                                         new Paragraph({
+                                            style: "aside",
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.tutor_academico.email,
                                                 })
                                             ],
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
+                                    verticalAlign: VerticalAlign.CENTER
                                 })
                             ]
                         }),
@@ -1293,6 +1294,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     },
                                     children: [
                                         new Paragraph({
+                                            style: "aside",
                                             borders: {
                                                 top: {
                                                     style: BorderStyle.NONE,
@@ -1315,8 +1317,10 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                                     text: planilla_propuesta_TEG.tutor_academico.telefono,
                                                 })
                                             ],
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
+                                    verticalAlign: VerticalAlign.CENTER
                                 })
                             ]
                         }),
@@ -1330,6 +1334,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     borders: sin_bordes,
                                     children: [
                                         new Paragraph({
+                                            style: "aside",
                                             children: [
                                                 new TextRun({
                                                     text: "Fecha",
@@ -1363,11 +1368,13 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                             style: "aside",
                                             children: [
                                                 new TextRun({
-                                                    text: "planilla_propuesta_TEG.tutor_academico.fecha_entrega.toString()",
+                                                    text: planilla_propuesta_TEG.tutor_academico.fecha_entrega.toString(),
                                                 })
                                             ],
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
+                                    verticalAlign: VerticalAlign.CENTER
                                 })
                             ]
                         }),
@@ -1663,30 +1670,15 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     children: [
                                         new Paragraph({
                                             style: "aside",
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.tutor_academico.nombre,
                                                 })
                                             ],
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
+                                    verticalAlign: VerticalAlign.CENTER
                                 })
                             ]
                         }),
@@ -1731,13 +1723,16 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     },
                                     children: [
                                         new Paragraph({
+                                            style: "aside",
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.tutor_academico.cedula,
                                                 })
                                             ],
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
+                                    verticalAlign: VerticalAlign.CENTER
                                 })
                             ]
                         }),
@@ -1782,17 +1777,20 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     },
                                     children: [
                                         new Paragraph({
+                                            style: "aside",
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.tutor_academico.profesion,
                                                 })
                                             ],
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
                                     width: {
                                         size: 10000,
                                         type: WidthType.DXA
                                     },
+                                    verticalAlign: VerticalAlign.CENTER
                                 })
                             ]
                         }),
@@ -1803,28 +1801,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                             },
                             children : [
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        bottom: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: sin_bordes,
                                     children: [
                                         new Paragraph({
                                             style: "aside",
@@ -1858,31 +1835,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     },
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
+                                            style: "aside",
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.tutor_academico.experiencia,
                                                 })
                                             ],
+                                            alignment: AlignmentType.LEFT
                                             
                                         })
                                     ],
+                                    verticalAlign: VerticalAlign.CENTER,
                                     width: {
                                         size: 10000,
                                         type: WidthType.DXA
@@ -1937,8 +1900,10 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                                     text: planilla_propuesta_TEG.tutor_academico.cargo,
                                                 })
                                             ],
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
+                                    verticalAlign: VerticalAlign.CENTER,
                                     width: {
                                         size: 10000,
                                         type: WidthType.DXA
@@ -1993,8 +1958,10 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                                     text: planilla_propuesta_TEG.tutor_academico.email,
                                                 })
                                             ],
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
+                                    verticalAlign: VerticalAlign.CENTER,
                                     width: {
                                         size: 10000,
                                         type: WidthType.DXA
@@ -2049,8 +2016,10 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                                     text: planilla_propuesta_TEG.tutor_academico.telefono,
                                                 })
                                             ],
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
+                                    verticalAlign: VerticalAlign.CENTER,
                                     width: {
                                         size: 10000,
                                         type: WidthType.DXA
@@ -2079,28 +2048,21 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     }
                 }),
                 new Table({
-                    columnWidths: [1000, 5000],
+                    width: {
+                        size: 9000,
+                        type: WidthType.DXA,
+                    },
                     //Inserte tabla de alumnos aqui
                     rows: generarTablaDatosAlumno(planilla_propuesta_TEG.alumno[0])
                                       
                   
                 }),
-                new Paragraph({
-                    style: "aside",
-                    children:[ 
-                        new TextRun({
-                            text: "Datos Alumno 2",
-                            bold: true
-                        })
-                    ],
-                    spacing: {
-                        after: 200,
-                        line: 355,
-                        lineRule: LineRuleType.AUTO,
-                    }
-                }),
+                generarDatosAlumno2(planilla_propuesta_TEG.alumno[1]),
                 new Table({
-                    columnWidths: [1000, 5000],
+                    width: {
+                        size: 9000,
+                        type: WidthType.DXA,
+                    },
                     //Inserte tabla de alumnos aqui
                     rows: generarTablaDatosAlumno(planilla_propuesta_TEG.alumno[1])
                                       
@@ -2150,53 +2112,22 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                                     text: "Nombre",
                                                 })
                                             ],
-                                            alignment: AlignmentType.LEFT
+                                            alignment: AlignmentType.CENTER
                                         })
                                     ],
                                     verticalAlign: VerticalAlign.CENTER,
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.tutor_academico.nombre,
                                                 })
                                             ],
+                                            style: "aside",
+                                            alignment: AlignmentType.LEFT
                                             
                                         }),
                                     ],
@@ -2204,357 +2135,8 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         size: 10000,
                                         type: WidthType.DXA
                                     },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
+                                    verticalAlign: VerticalAlign.CENTER
+                                }),                       
                             ]
                         }),
                         new TableRow({
@@ -2573,53 +2155,22 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                                     text: "C.I.N",
                                                 })
                                             ],
-                                            alignment: AlignmentType.LEFT
+                                            alignment: AlignmentType.CENTER
                                         })
                                     ],
                                     verticalAlign: VerticalAlign.CENTER,
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.tutor_academico.cedula,
                                                 })
                                             ],
+                                            style: "aside",
+                                            alignment: AlignmentType.LEFT
                                             
                                         }),
                                     ],
@@ -2627,357 +2178,8 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                         size: 10000,
                                         type: WidthType.DXA
                                     },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
+                                    verticalAlign: VerticalAlign.CENTER
+                                })
                             ]
                         }),
                         new TableRow({
@@ -3002,406 +2204,83 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     verticalAlign: VerticalAlign.CENTER,
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.tutor_academico.telefono,
                                                 })
                                             ],
-                                            
+                                            style: "aside",
+                                            alignment: AlignmentType.LEFT
                                         }),
                                     ],
                                     width: {
                                         size: 10000,
                                         type: WidthType.DXA
                                     },
+                                    verticalAlign: VerticalAlign.CENTER
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        })
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        })
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: "Oficina",
                                                 })
                                             ],
+                                            style: "aside",
                                             alignment: AlignmentType.LEFT   
                                         }),
                                     ],
-                                    verticalAlign: VerticalAlign.CENTER,
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
+                                    verticalAlign: VerticalAlign.CENTER
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.tutor_academico.oficina,
                                                 })
                                             ],
-                                            
+                                            style: "aside",
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
+                                    verticalAlign: VerticalAlign.CENTER
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: "Habitación",
                                                 })
                                             ],
+                                            style: "aside",
                                             alignment: AlignmentType.LEFT
                                         })
                                     ],
                                     verticalAlign: VerticalAlign.CENTER,
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.tutor_academico.habitacion,
                                                 })
                                             ],
-                                            
+                                            alignment: AlignmentType.LEFT,
+                                            style: "aside"
                                         }),
                                     ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        })
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
+                                    verticalAlign: VerticalAlign.CENTER
                                 }),
                             ]
                         }),
@@ -3412,28 +2291,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                             },
                             children : [
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        bottom: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: sin_bordes,
                                     children: [
                                         new Paragraph({
                                             style: "aside",
@@ -3442,398 +2300,34 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                                     text: "Email",
                                                 })
                                             ],
-                                            alignment: AlignmentType.LEFT
+                                            alignment: AlignmentType.CENTER
                                         })
                                     ],
                                     verticalAlign: VerticalAlign.CENTER,
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.tutor_academico.email,
                                                 })
                                             ],
-                                            
+                                            alignment: AlignmentType.LEFT,
+                                            style: "aside"
                                         }),
                                     ],
                                     width: {
                                         size: 10000,
                                         type: WidthType.DXA
                                     },
+                                    verticalAlign: VerticalAlign.CENTER
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: "",
@@ -3865,98 +2359,30 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                                     text: "Cargo",
                                                 })
                                             ],
-                                            alignment: AlignmentType.LEFT
+                                            alignment: AlignmentType.CENTER
                                         })
                                     ],
                                     verticalAlign: VerticalAlign.CENTER,
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.tutor_academico.cargo,
                                                 })
                                             ],
-                                            
+                                            style: "aside",
+                                            alignment: AlignmentType.LEFT
                                         }),
                                     ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
+                                    verticalAlign: VerticalAlign.CENTER
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: "",
@@ -3964,312 +2390,8 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                             ],
                                             
                                         }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
+                                    ]
+                                })
                             ]
                         }),
                         new TableRow({
@@ -4294,92 +2416,24 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     verticalAlign: VerticalAlign.CENTER,
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.tutor_academico.graduado,
                                                 })
                                             ],
-                                            
+                                            style: "aside",
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
+                                    verticalAlign: VerticalAlign.CENTER
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: "",
@@ -4387,99 +2441,12 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                             ],
                                             
                                         })
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
+                                    ]
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        })
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: "Tutor TG",
@@ -4495,206 +2462,20 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     },
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: "SI",
                                                     bold: true
                                                 })
                                             ],
-                                            
+                                            style: "aside",
+                                            alignment: AlignmentType.LEFT
                                         }),
                                     ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        })
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            alignment: AlignmentType.LEFT
-                                        })
-                                    ],
-                                    verticalAlign: VerticalAlign.CENTER,
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        })
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
+                                    verticalAlign: VerticalAlign.CENTER
                                 }),
                             ]
                         }),
@@ -4720,407 +2501,21 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     verticalAlign: VerticalAlign.CENTER,
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: "SI",
                                                     bold: true
                                                 })
                                             ],
-                                            
-                                        })
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        })
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        })
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "Escuela:",
-                                                })
-                                            ],
-                                            alignment: AlignmentType.LEFT   
-                                        }),
-                                    ],
-                                    verticalAlign: VerticalAlign.CENTER,
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: " Ingenieria Informática",
-                                                })
-                                            ],
-                                            
-                                        })
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
-                                            
-                                        }),
-                                    ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
                                             alignment: AlignmentType.LEFT
-                                        })
-                                    ],
-                                    verticalAlign: VerticalAlign.CENTER,
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
-                                }),
-                                new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
-                                    children: [
-                                        new Paragraph({
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
-                                            children: [
-                                                new TextRun({
-                                                    text: "",
-                                                })
-                                            ],
                                             
                                         })
                                     ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    },
+                                    verticalAlign: VerticalAlign.CENTER
+
                                 }),
                             ]
                         }),
@@ -5145,7 +2540,6 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     alignment: AlignmentType.CENTER
                 }),
                 new Table({
-                    columnWidths: [3000, 4500],
                     rows: [
                         new TableRow({
                             height: {
@@ -5169,54 +2563,19 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     verticalAlign: VerticalAlign.CENTER,
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
                                             style: "aside",
-                                            borders: {
-                                                top: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                left: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                },
-                                                right: {
-                                                    style: BorderStyle.NONE,
-                                                    size: 1,
-                                                    color: "ff0000",
-                                                }
-                                            },
                                             children: [
                                                 new TextRun({
                                                     text: planilla_propuesta_TEG.empresa.nombre,
                                                 })
                                             ],
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
-                                    width: {
-                                        size: 10000,
-                                        type: WidthType.DXA
-                                    }
+                                    verticalAlign: VerticalAlign.CENTER
                                 })
                             ]
                         }),
@@ -5242,23 +2601,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     verticalAlign: VerticalAlign.CENTER,
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
                                             children: [
@@ -5266,8 +2609,11 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                                     text: planilla_propuesta_TEG.empresa.direccion,
                                                 })
                                             ],
+                                            style: "aside",
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
+                                    verticalAlign: VerticalAlign.CENTER
                                 })
                             ]
                         }),
@@ -5293,23 +2639,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                     verticalAlign: VerticalAlign.CENTER,
                                 }),
                                 new TableCell({
-                                    borders: {
-                                        top: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        left: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        },
-                                        right: {
-                                            style: BorderStyle.NONE,
-                                            size: 1,
-                                            color: "ff0000",
-                                        }
-                                    },
+                                    borders: linea,
                                     children: [
                                         new Paragraph({
                                             children: [
@@ -5317,12 +2647,11 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                                     text: planilla_propuesta_TEG.empresa.telefono,
                                                 })
                                             ],
+                                            style: "aside",
+                                            alignment: AlignmentType.LEFT
                                         })
                                     ],
-                                    width: {
-                                        size: 5000,
-                                        type: WidthType.DXA
-                                    },
+                                    verticalAlign: VerticalAlign.CENTER
                                 })
                             ]
                         }),
@@ -5355,8 +2684,89 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                     }
                 }),
                 new Table({
-                    columnWidths: [1000, 2500],
-                    rows: []//generarNombresAlumno(planilla_propuesta_TEG)
+                    rows: [
+                        generarNombresAlumno(planilla_propuesta_TEG.alumno[0]),
+                        generarNombresAlumno(planilla_propuesta_TEG.alumno[1]),
+                        new TableRow({
+                            height: {
+                                value: 500, 
+                                rule: HeightRule.EXACT
+                            },
+                            children : [
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "Titulo del trabajo experimental de grado",
+                                                    bold: true
+                                                })
+                                            ],
+                                            alignment: AlignmentType.LEFT
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun({
+                                                    text: planilla_propuesta_TEG.titulo,
+                                                })
+                                            ],
+                                            style: "aside",
+                                            alignment: AlignmentType.LEFT
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER
+                                })
+                            ]
+                        }),
+                        new TableRow({
+                            height: {
+                                value: 500, 
+                                rule: HeightRule.EXACT
+                            },
+                            children : [
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "Organización donde se organizará el TEG",
+                                                    bold: true
+                                                })
+                                            ],
+                                            alignment: AlignmentType.LEFT
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun({
+                                                    text: planilla_propuesta_TEG.organizacion,
+                                                })
+                                            ],
+                                            style: "aside",
+                                            alignment: AlignmentType.LEFT
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                    borders: sin_bordes,
+                                })
+                            ]
+                        })
+                    ]
                 }),
                 new Paragraph({
                     children: [
@@ -5625,16 +3035,17 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
             ]
         }]
     });
-    /*
-    docx.Packer.toBuffer(doc).then((buffer) => {
+    
+    Packer.toBuffer(doc).then((buffer) => {
         writeFileSync("Planilla Propuesta TEG.docx", buffer);
     });
-    */
+    
+   /*
     Packer.toBlob(doc).then(blob => {
-        console.log(blob);
         saveAs(blob, "example.docx");
-        console.log("Document created successfully");
+        //console.log("Documento creado de forma exitosa en el navegador");
     });
+    */
 }
 
 
