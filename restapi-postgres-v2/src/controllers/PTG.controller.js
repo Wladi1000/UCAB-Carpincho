@@ -69,6 +69,7 @@ export const buscarPTG = async (req, res) => {
 
 export const buscarAlumnos = async (req,res) => {
     const id = req.params.id;
+    console.log("id")
     console.log(id)
     const alumnos = await PTG.findAll({
         include: [{
@@ -89,15 +90,17 @@ export const buscarAlumnos = async (req,res) => {
         ],
         right: true,
         where: {
-            id_sptg: id
+            id_ptg: id
         }
     })
+    console.log(JSON.stringify(alumnos))
     let lista = []
-    if(alumnos[0].sptg.realiza_sptg.estudiante !== null){
-        lista.push(alumnos[0].sptg.realiza_sptg.estudiante)
+    
+    if(alumnos[0] !== undefined){
+        lista.push(alumnos[0].dataValues.sptg.dataValues.realiza_sptg.dataValues.estudiante.dataValues.usuario.dataValues)
     }
-    if(alumnos[1].sptg.realiza_sptg.estudiante !== null){
-        lista.push(alumnos[1].sptg.realiza_sptg.estudiante)
+    if(alumnos[1] !== undefined){
+        lista.push(alumnos[0].dataValues.sptg.dataValues.realiza_sptg.dataValues.estudiante.dataValues.usuario.dataValues)
     }
     res.json(lista);
 }

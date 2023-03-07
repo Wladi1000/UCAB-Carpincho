@@ -1,12 +1,15 @@
 export class PropuestaTg{
   constructor(){
-    this.titulo;
-    this.fecha;
-    this.alumnos;
+    this.id_propuesta='';
+    this.id_solicitud='';
+    this.titulo='';
+    this.fecha='';
+    this.modalidad='';
+    this.alumnos='';
     this.revisor = null;
-    this.tutor_academico;
+    this.tutor_academico='';
     this.tutor_empresarial = null;
-    this.status;
+    this.estatus='';
   }
   setPropuestaPendienteRevisor(){
     this.status = 'PR'
