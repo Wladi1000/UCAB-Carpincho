@@ -11,7 +11,7 @@ const formularioPropuesta = reactive( new PropuestaTg() )
 
 const clickenComponente = async (id) => {
   actionShowPlanillaUpDe();
-  const respuesta = await api.obtenerSolicitudById(id)
+  const respuesta = await api.obtenerPropuestaById(id)
   
 };
 
@@ -56,6 +56,17 @@ onMounted(async () =>{
           </div>
           <div class="create-carousel">
             <!-- aqui van los formularios necesarios para el proceso de crear una asignacion de revisor a la propuesta -->
+            <button
+            class="cancel"
+            >
+              Rechazar
+            </button>
+            <button
+              type="submit"
+              class="login__form__btn succes"
+            >
+              Aceptar
+            </button>
           </div>
         </div>
       </div>

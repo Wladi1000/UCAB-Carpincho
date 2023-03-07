@@ -110,13 +110,13 @@ export const obtenerPropuestas = async () => {
   return sptg;
 };
 
-export const obtenerPropuestaById = async (idPropuesta, sptg) => {
+export const obtenerPropuestaById = async (idPropuesta, idSptg, idTutorAcademico) => {
   const resPropuesta = await fetch("http://localhost:3000/PTG/"+idPropuesta);
   const ptg = await resPropuesta.json();
-  const alumno = await frc;
-  const tutorAcademico;
-  const tutorEmpresarial;
-  const empresa;
+  const alumno = await fetch("http://localhost:3000/realiza_SPTG/"+idSptg);
+  const tutorAcademico = await fetch("http://localhost:3000/realiza_SPTG/"+idSpetg);
+  const tutorEmpresarial = await fetch("http://localhost:3000/realiza_SPTG/"+idTutorAcademico);
+  const empresa =  await fetch("http://localhost:3000/realiza_SPTG/"+idSptg);
   return;
 };
 

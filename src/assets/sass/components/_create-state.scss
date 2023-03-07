@@ -69,17 +69,29 @@
       height: 100%;
       //background-color: #8d141467;
 
-      button.succes{
-        &:hover {
-          background-color: #4deb5a77;
-          border: #44ff53 solid 2px;
-          box-shadow: 0px 0 15px #fff12f91;
-          transform: scale(1.1);
-        }
+    }
+    button.succes{
+      &:hover {
+        background-color: #4deb5a77;
+        border: #44ff53 solid 2px;
+        box-shadow: 0px 0 15px #fff12f91;
+        transform: scale(1.1);
+      }
 
-        &:active {
-          transform: scale(1);
-        }
+      &:active {
+        transform: scale(1);
+      }
+    }
+    button.cancel{
+      &:hover {
+        background-color: #e62a2a77;
+        border: #fd4a4a solid 2px;
+        box-shadow: 0px 0 15px #ff4c4c91;
+        transform: scale(1.1);
+      }
+
+      &:active {
+        transform: scale(1);
       }
     }
   }
