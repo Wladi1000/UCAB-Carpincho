@@ -1,19 +1,19 @@
-import { generarPlanillaPropuestaTEG } from './generadorDOCX/planilla_propuesta_TEG'
+import { generarPlanillaPropuestaTIG } from './generadorDOCX/planilla_propuesta_TIG'
 import { _ } from 'lodash'
-export class PlanillaPropuestaTEG{
+export class PlanillaPropuestaTIG{
 
   constructor(
     titulo,
     organizacion,
     empresa,
-    tutor_academico
+    tutor_empresarial
   ){
     this.fecha_envio = new Date();
     this.titulo = titulo;
     this.organizacion = organizacion;
     this.alumno = [];
     this.empresa = empresa;
-    this.tutor_academico = tutor_academico;
+    this.tutor_empresarial= tutor_empresarial;
   };
   añadirAlumno ( alumno ){
     if (this.alumno.length < 2)
@@ -27,6 +27,6 @@ export class PlanillaPropuestaTEG{
     }*/
     //let thisNoReactive = convertProxyObjectToPojo(this);
     //generarPlanillaPropuestaTEG( thisNoReactive );
-    generarPlanillaPropuestaTEG( this );
+    generarPlanillaPropuestaTIG( this );
   }
 }

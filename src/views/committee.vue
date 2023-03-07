@@ -1,15 +1,23 @@
 <script setup>
-import PlanillaRevisor from "../components/planillaRevisor.vue";
 import { reactive, onMounted } from 'vue';
 import * as api from "../modules/apiTools.js";
+import { PropuestaTg } from '../modules/planillaPropuesta.js'
 
 let dataPropuestas = reactive([]);
 let dataPorRevisores = reactive([]);
 let dataProfesores = reactive ([]);
 
+const formularioPropuesta = reactive( new PropuestaTg() )
+
+const clickenComponente = async (id) => {
+  actionShowPlanillaUpDe();
+  const respuesta = await api.obtenerSolicitudById(id)
+  
+};
+
 onMounted(async () =>{
   
-  dataPropuestas = await api.obtenerPropuestas();
+  dataPropuestas.value = await api.obtenerPropuestas();
   console.log(dataPropuestas);
 
 });
@@ -24,20 +32,12 @@ onMounted(async () =>{
             <img src="../assets/imgs/search-circle-outline.svg" />Buscar
             Solicitud
           </button>
-          <button>
-            <img src="../assets/imgs/cloud-upload-outline.svg" />Cargar
-            Solicitud
-          </button>
-          <button>
-            <img src="../assets/imgs/add-circle-outline.svg" alt="" />Crear
-            Planilla
-          </button>
         </div>
         <div class="committe__container__display__list">
           <!-- Aqui va el registro para las propuestas de trabajo de grado -->
           <div
           class="request__container__display__list__record"
-          v-for="t in dataPropuestas" :key="t.id_ptg"
+          v-for="t in dataPropuestas.value" :key="t.id_ptg"
           >
             <p>{{ t.id_ptg }}</p>
             <p>{{ t.fecha_entrega }}</p>

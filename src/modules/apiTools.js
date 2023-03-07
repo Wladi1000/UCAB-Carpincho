@@ -8,12 +8,6 @@ export const obtenerSolicitudes = async () => {
   return sptg;
 };
 
-export const obtenerPropuestas = async () => {
-  const resSolicitudes = await fetch("http://localhost:3000/PTG");
-  const sptg = await resSolicitudes.json();
-  return sptg;
-};
-
 export const obtenerSolicitudById = async (solicitudId) => {
   const resSolicitud = await fetch("http://localhost:3000/SPTG/" + solicitudId);
   const solicitud = await resSolicitud.json();
@@ -49,14 +43,6 @@ export const obtenerIdEstudiante = async (cedulaEstudiante) => {
 export const obtenerIdTutorAcademico = async (cedulaTutor) => {
   const res = await fetch(
     "http://localhost:3000/Profesores/cedula/" + cedulaTutor
-  );
-  const response = await res.json();
-  return response;
-};
-
-export const obtenerIdTutorEmpresarial = async (cedulaTutorEmpresarial) => {
-  const res = await fetch(
-    "http://localhost:3000/BuscarProfesional/" + cedulaTutorEmpresarial
   );
   const response = await res.json();
   return response;
@@ -118,11 +104,27 @@ export const eliminarPlanilla = async (idPlanilla) => {
   });
 };
 
+export const obtenerPropuestas = async () => {
+  const resSolicitudes = await fetch("http://localhost:3000/PTG");
+  const sptg = await resSolicitudes.json();
+  return sptg;
+};
+
+export const obtenerPropuestaById = async (idPropuesta, sptg) => {
+  const resPropuesta = await fetch("http://localhost:3000/PTG/"+idPropuesta);
+  const ptg = await resPropuesta.json();
+  const alumno = await frc;
+  const tutorAcademico;
+  const tutorEmpresarial;
+  const empresa;
+  return;
+};
+
 export const insertarSolicitudTg = async (planillaSolicitud, data) => {
-  if (planillaSolicitud.trabajoDeGrado.modalidad == 'I') { const profesionalExterno = await obtenerIdTutorEmpresarialByCedula(planillaSolicitud.tutorEmpresarial.cedula); }
   const tutor = await obtenerIdTutorAcademico(planillaSolicitud.tutor.cedula);
   const estudiante = await obtenerIdEstudiante(planillaSolicitud.alumnos[0].cedula);
   console.log(tutor);
+  console.log(estudiante);
   fetch("http://localhost:3000/SPTG/", {
     method: "POST",
     mode: "cors",
@@ -162,22 +164,28 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
           console.log({ mensaje: "Error en la asignación de modalidad", error: error });
         });
       } else if (planillaSolicitud.trabajoDeGrado.modalidad === 'I') {
-        fetch('http://localhost:3000/SPTGI', {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id_stig: data.id_sptg,
-            id_empresa: planillaSolicitud.empresa.idEmpresa,
-            id_profesionale: profesionalExterno.id_profesionale
-          }),
-        }).then((response) => {
-          return response.json()
-        }).then((data) => {
-          console.log(data)
-        }).catch((e) => { console.log(e) })
+        let profesionalExterno;
+        obtenerIdTutorEmpresarialByCedula(planillaSolicitud.tutorEmpresarial.cedula)
+        .then( (response) => {
+            fetch('http://localhost:3000/SPTGI', {
+                  method: "POST",
+                  mode: "cors",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    id_stig: data.id_sptg,
+                    id_empresa: planillaSolicitud.empresa.idEmpresa,
+                    id_profesionale: response.id_profesionale
+                  }),
+              }).then((response) => {
+                return response.json()
+              }).then((data) => {
+                console.log(data)
+              }).catch((e) => { console.log(e) })
+        })
+
+
       }
 
       fetch("http://localhost:3000/realiza_SPTG/", {
@@ -196,6 +204,9 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
         })
         .then((data) => {
           console.log(data);
+        }).catch( (e) => {
+
+          console.log(e)
         });
 
 
@@ -249,13 +260,15 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
               })
               .then((data) => {
                 console.log(data)
-              })
+              }).catch( (e) => {
+                console.log(e)
+              } )
           }
         });
 
     })
     .catch((e) => {
-      console.log("Error en la inserción de realiza_SPTG");
+      console.log(e);
     });
   const resSolicitudes = await fetch(
     "http://localhost:3000/datosEstudiantes"
