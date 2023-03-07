@@ -3,15 +3,14 @@ import PlanillaRevisor from "../components/planillaRevisor.vue";
 import { reactive, onMounted } from 'vue';
 import * as api from "../modules/apiTools.js";
 
-let data = reactive([]);
+let dataPropuestas = reactive([]);
+let dataPorRevisores = reactive([]);
 let dataProfesores = reactive ([]);
 
-
 onMounted(async () =>{
-
-  //data = 
-
-  dataProfesores
+  
+  dataPropuestas = await api.obtenerPropuestas();
+  console.log(dataPropuestas);
 
 });
 </script>
@@ -36,8 +35,14 @@ onMounted(async () =>{
         </div>
         <div class="committe__container__display__list">
           <!-- Aqui va el registro para las propuestas de trabajo de grado -->
-          <h3>hdkjshdkhajksdh</h3>
-          <h3>eñlwñelñwelñwelñwl</h3>
+          <div
+          class="request__container__display__list__record"
+          v-for="t in dataPropuestas" :key="t.id_ptg"
+          >
+            <p>{{ t.id_ptg }}</p>
+            <p>{{ t.fecha_entrega }}</p>
+            <p>{{ t.estatus }}</p>
+          </div>  
         </div>
       </div>
       <div class="committe__container__preview">
