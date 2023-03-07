@@ -1,19 +1,33 @@
+import * as docx from 'docx';
+import file_saver from 'file-saver'
+const { saveAs } = file_saver
+// Load the full build.
+import lodash from 'lodash';
+const { _ } =  lodash;
+const { TableRow,BorderStyle } = docx;
+const { WidthType,Paragraph } = docx;
+const { VerticalAlign, Document } = docx;
+const { TextRun, AlignmentType } = docx;
+const { SectionType, Header } = docx;
+const { HeightRule,TableCell } = docx;
+const { Footer, LineRuleType } = docx;
+const { Table, PageBreak } = docx;
+const { HeadingLevel,Packer } = docx;
+//const { TableRow,BorderStyle } = docx;
 
-import * as fs from 'fs';
-import docx from 'docx';
+import * as fs from 'fs'
+const { writeFileSync } = fs;
 
 const nombre_profesor = 'Franklin Bello';
 const modalidad = 'TEG';
 const alumno= 'Luis C Somoza';
-const propuesta = "Creacion de robots para el mantenimiento de la biblioteca";
 const tutor = 'Jannelly Bello';
 const correo_administrador = 'lmedinac@ucab.edu.ve';
 const administrador = "Luz E. Medina";
 const fecha = "";
 const Carta_designacion = {
     propuesta: {
-        titulo: '',
-        modalidad: '',
+        titulo: "Creacion de robots para el mantenimiento de la biblioteca",
         alumno: [{
             cedula: '',
             nombres: '',
@@ -22,14 +36,13 @@ const Carta_designacion = {
         tutor: ''
     },
     fecha_designacion: '',
-    CDE: '',
-    administrador: '',
+    administrador: "Luz E. Medina",
     correo_administrador: '',
     modalidad: '',
     revisor: ''
 }
 export const generarCartaDesignacionRevisor = (Carta_designacion) => {
-    const doc = new docx.Document({
+    const doc = new Document({
         creator: "Luis C. Somoza & Wladimir SanVicente ",
         title: "Carta de designación - Revisor de propuesta de trabajo de grado",
         description: "Carta de designación - Revisor de propuesta de trabajo de grado",
@@ -82,7 +95,7 @@ export const generarCartaDesignacionRevisor = (Carta_designacion) => {
         },
         sections: [{
             properties: {
-                type: docx.SectionType.CONTINUOUS,
+                type: SectionType.CONTINUOUS,
                 margin: {
                     top: 200,
                     right: 200,
@@ -91,97 +104,101 @@ export const generarCartaDesignacionRevisor = (Carta_designacion) => {
                 }
             },
             headers: {
-                default: new docx.Header({
-                    children: [new docx.Paragraph({
+                default: new Header({
+                    children: [new Paragraph({
                         children: [
-                            new docx.ImageRun({
+                            /*
+                            new ImageRun({
                                 data: fs.readFileSync('logo.png'),
                                 transformation: {
                                     width: 400,
                                     height: 100,
                                 },
                             }),
+                            */
                         ],
-                        alignment: docx.AlignmentType.LEFT
+                        alignment: AlignmentType.LEFT
                     })],
                 }),
             },
             footers: {
-                default: new docx.Footer({
+                default: new Footer({
                     children: [
-                        new docx.Paragraph({
+                        new Paragraph({
                             children: [
-                                new docx.ImageRun({
+                                /*
+                                new ImageRun({
                                     data: fs.readFileSync('Untitled.png'),
                                     transformation: {
                                         width: 600,
                                         height: 15,
                                     },
-                                    alignment: docx.AlignmentType.CENTER
+                                    alignment: AlignmentType.CENTER
                                 }),
+                                */
                             ],
-                            alignment: docx.AlignmentType.CENTER
+                            alignment: AlignmentType.CENTER
                         }),
-                        new docx.Paragraph({
+                        new Paragraph({
                             children: [
-                                new docx.TextRun({
+                                new TextRun({
                                     text: "UNIVERSIDAD CATÓLICA ANDRÉS BELLO – Extensión Guayana",
                                 })
                             ],
-                            alignment: docx.AlignmentType.CENTER
+                            alignment: AlignmentType.CENTER
                         }),
-                        new docx.Paragraph({
+                        new Paragraph({
                             children: [
-                                new docx.TextRun({
+                                new TextRun({
                                     text: "Avenida Atlántico, Ciudad Guayana 8050",
                                 })
                             ],
-                            alignment: docx.AlignmentType.CENTER
+                            alignment: AlignmentType.CENTER
                         }),
-                        new docx.Paragraph({
+                        new Paragraph({
                             children: [
-                                new docx.TextRun({
+                                new TextRun({
                                     text: "Bolívar, Venezuela. Teléfono: +58-286-6000111"
                                 })
                             ],
-                            alignment: docx.AlignmentType.CENTER
+                            alignment: AlignmentType.CENTER
                         }),
-                        new docx.Paragraph({
+                        new Paragraph({
                             children: [
-                                new docx.TextRun({
+                                new TextRun({
                                     text: "URL: http://www.guayanaweb.ucab.edu.ve/escuela-de-ingenieria-informatica.html"
                                 })
                             ],
-                            alignment: docx.AlignmentType.CENTER
+                            alignment: AlignmentType.CENTER
                         })
                     ],
                 }),
             },
             children: [
-                new docx.Paragraph({
+                new Paragraph({
                     style: "aside",
                     children: [
-                        new docx.TextRun({
+                        new TextRun({
                             text: 'Puerto Ordaz, ' + Carta_designacion.fecha_designacion,
                             font: "Trebuchet MS",
                         })
                     ],
-                    alignment: docx.AlignmentType.RIGHT,
+                    alignment: AlignmentType.RIGHT,
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     },
                 }),
-                new docx.Paragraph({
+                new Paragraph({
                     style: "aside",
                     children: [
-                        new docx.TextRun({
+                        new TextRun({
                             text: 'Asunto:',
                             bold: true,
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: ' Designación de Profesor Revisor',
                             font: "Trebuchet MS"
                         }),
@@ -189,18 +206,18 @@ export const generarCartaDesignacionRevisor = (Carta_designacion) => {
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
-                new docx.Paragraph({
+                new Paragraph({
                     style: "aside",
                     children: [
-                        new docx.TextRun({
+                        new TextRun({
                             text: 'Estimado(a) Profesor(a):',
                             bold: true,
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: ' ' + Carta_designacion.revisor,
                             bold: true,
                             font: "Trebuchet MS"
@@ -209,13 +226,13 @@ export const generarCartaDesignacionRevisor = (Carta_designacion) => {
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
-                new docx.Paragraph({
+                new Paragraph({
                     style: "aside",
                     children: [
-                        new docx.TextRun({
+                        new TextRun({
                             text: 'Saludándole cordialmente ',
                             font: "Trebuchet MS"
                         })
@@ -223,125 +240,125 @@ export const generarCartaDesignacionRevisor = (Carta_designacion) => {
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
                 
-                new docx.Paragraph({
+                new Paragraph({
                     style: "aside",
                     children: [
-                        new docx.TextRun({
+                        new TextRun({
                             text: 'Mediante la presente, la Escuela de Ingeniería Informática desea darle un especial agradecimiento por su colaboración como profesor(a) experto(a), en el tema, en la revisión de la propuesta de Trabajo de Grado, modalidad ',
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: Carta_designacion.modalidad,
                             bold: true,
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: ' titulada: ',
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: `"${Carta_designacion.propuesta.titulo}". `,
                             bold: true,
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: 'Elaborada por el(la) estudiante: ',
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: Carta_designacion.propuesta.alumno[0].apellidos + ', ' +Carta_designacion.propuesta.alumno[0].nombres,
                             bold: true,
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: ' bajo la tutoría de ',
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: tutor +'.',
                             bold: true,
                             font: "Trebuchet MS"
                         })
                     ],
-                    alignment: docx.AlignmentType.JUSTIFIED,
+                    alignment: AlignmentType.JUSTIFIED,
                     indent: {
                         firstLine: 400
                     },
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
-                new docx.Paragraph({
+                new Paragraph({
                     style: "aside",
                     children: [
-                        new docx.TextRun({
+                        new TextRun({
                             text: "Adjunto la propuesta y la planilla de evaluación personalizada con los puntos a evaluar, esta debe ser completada en todos sus ítems y luego enviada al correo electronico ",
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: Carta_designacion.correo_administrador + ' ',
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: "lo más pronto le sea posible.",
                             font: "Trebuchet MS"
                         })
                     ],
-                    alignment: docx.AlignmentType.JUSTIFIED,
+                    alignment: AlignmentType.JUSTIFIED,
                     indent: {
                         firstLine: 400
                     },
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
-                new docx.Paragraph({
+                new Paragraph({
                     style: "aside",
                     children: [
-                        new docx.TextRun({
+                        new TextRun({
                             text: "En caso que tenga a bien realizar alguna observación o sugerencia a la propuesta, le agradecemos realizar contacto con el(la) estudiante: ",
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: Carta_designacion.propuesta.alumno[0].apellidos + ', ' + Carta_designacion.propuesta.alumno[0].nombres,
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: "el(los) cuales estará(n) al pendiente para incorporar sus observaciones, antes de la evaluación definitiva en Consejo de Escuela de Ingeniería Informatica. ",
                             font: "Trebuchet MS"
                         })
                     ],
-                    alignment: docx.AlignmentType.JUSTIFIED,
+                    alignment: AlignmentType.JUSTIFIED,
                     indent: {
                         firstLine: 400
                     },
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
-                new docx.Paragraph({
+                new Paragraph({
                     style: "aside",
                     children: [
-                        new docx.TextRun({
+                        new TextRun({
                             text: "El tema presentado por el estudiante ya ha sido considerado como tema válido de Trabajo de Grado por el Comité de Trabajos de Grado de la Escuela de Ingeniería Informática. En caso que usted, como ",
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: "revisor(a) experto(a), ",
                             bold: true,
                             font: "Trebuchet MS"
                         }),
-                        new docx.TextRun({
+                        new TextRun({
                             text: "considere que el mismo debe ser rechazado, agradecemos detallar sus razones por escrito, previa reunión con  los  estudiantes.",
                             font: "Trebuchet MS"
                         })
@@ -352,13 +369,13 @@ export const generarCartaDesignacionRevisor = (Carta_designacion) => {
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 }),
-                new docx.Paragraph({
+                new Paragraph({
                     style: "despedida",
                     children: [
-                        new docx.TextRun({
+                        new TextRun({
                             text: Carta_designacion.administrador,
                             italics: true,
                             bold: true,
@@ -368,16 +385,16 @@ export const generarCartaDesignacionRevisor = (Carta_designacion) => {
                     spacing: {
                         after: 200,
                         line: 355,
-                        lineRule: docx.LineRuleType.AUTO,
+                        lineRule: LineRuleType.AUTO,
                     }
                 })
             ],
         }]
     });
     
-    docx.Packer.toBuffer(doc).then((buffer) => {
-        fs.writeFileSync("Carta Modelo Designacion Revisor.docx", buffer);
+    Packer.toBuffer(doc).then((buffer) => {
+        fs.writeFileSync("Carta Modelo Designacion Revisor - " + Carta_designacion.revisor + ".docx", buffer);
     });
     
 }
-
+generarCartaDesignacionRevisor(Carta_designacion)
