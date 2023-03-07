@@ -3044,21 +3044,22 @@ export const generarPlanillaPropuestaTIG = (planilla_propuesta_TIG) => {
             ]
         }]
     });
-    
+    /*
     Packer.toBuffer(doc).then((buffer) => {
         writeFileSync("Planilla Propuesta TIG.docx", buffer);
     });
+    */
     
    let nombre_archivo = '' 
    if(planilla_propuesta_TIG.alumno[0].nombre !== undefined){
          nombre_archivo = planilla_propuesta_TIG.alumno[0].nombre;
    }
-   /*
+   
     Packer.toBlob(doc).then(blob => {
         saveAs(blob, nombre_archivo+" Planilla propuesta TIG.docx");
         //console.log("Documento creado de forma exitosa en el navegador");
     });
-    */
+    
 }
 const planilla_propuesta_TIG = {
     fecha_envio : "Julio 29 del 2023",
@@ -3107,5 +3108,5 @@ const planilla_propuesta_TIG = {
 
 
 }
-generarPlanillaPropuestaTIG(planilla_propuesta_TIG);
+//generarPlanillaPropuestaTIG(planilla_propuesta_TIG);
 
