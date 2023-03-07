@@ -3049,9 +3049,13 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
         writeFileSync("Planilla Propuesta TEG.docx", buffer);
     });
     */
+   let nombre_archivo = '' 
+   if(planilla_propuesta_TEG.alumno[0].nombre !== undefined){
+         nombre_archivo = planilla_propuesta_TEG.alumno[0].nombre;
+   }
    
     Packer.toBlob(doc).then(blob => {
-        saveAs(blob, "example.docx");
+        saveAs(blob, nombre_archivo+" Planilla propuesta TEG.docx");
         //console.log("Documento creado de forma exitosa en el navegador");
     });
 }

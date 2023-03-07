@@ -1,7 +1,7 @@
 import { generarCartaDesignacionTutorTEG } from './carta_designacion_tutor_teg.js'
 import { generarCartaDesignacionTutorTIG } from './carta_designacion_tutor_tig.js'
 import { generarCartaDesignacionRevisor } from './carta_designacion_revisor.js';
-import { generarPlanillaPropuestaTEG } from './planilla_propuesta_TEG.js';
+//import { generarPlanillaPropuestaTEG } from './planilla_propuesta_TEG.js';
 import { generarPlanillaPropuestaTIG } from './planilla_propuesta_TIG.js'
 
 //Modelo de los datos de la carta de designación para inserción de datos
@@ -163,7 +163,8 @@ const planilla_propuesta_TIG = {
 //generarCartaDesignacionTutorTEG(Carta_designacion_teg);
 //generarCartaDesignacionTutorTIG(Carta_designacion_tig);
 //generarCartaDesignacionRevisor(Carta_designacion_revisor);
-generarPlanillaPropuestaTEG(planilla_propuesta_TEG);
+//generarPlanillaPropuestaTEG(planilla_propuesta_TEG);
+console.log('HALOOO');
 //generarPlanillaPropuestaTIG(planilla_propuesta_TIG);
 
 
