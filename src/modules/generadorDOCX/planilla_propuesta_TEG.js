@@ -1,12 +1,21 @@
+import * as docx from 'docx';
 import file_saver from 'file-saver'
 const { saveAs } = file_saver
 // Load the full build.
 import lodash from 'lodash';
 const { _ } =  lodash;
-import docx from 'docx';
-const { TableRow,BorderStyle, HeightRule, TableCell,WidthType,Paragraph, TextRun, AlignmentType, VerticalAlign, Document, SectionType, Header, Footer, LineRuleType, ImageRun, Table, PageBreak, HeadingLevel,Packer } = docx;
+const { TableRow,BorderStyle } = docx;
+const { WidthType,Paragraph } = docx;
+const { VerticalAlign, Document } = docx;
+const { TextRun, AlignmentType } = docx;
+const { SectionType, Header } = docx;
+const { HeightRule,TableCell } = docx;
+const { Footer, LineRuleType } = docx;
+const { Table, PageBreak } = docx;
+const { HeadingLevel,Packer } = docx;
+//const { TableRow,BorderStyle } = docx;
 
-import fs from 'fs'
+import * as fs from 'fs'
 const { writeFileSync } = fs;
 
 const sin_bordes = {
@@ -1368,7 +1377,7 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
                                             style: "aside",
                                             children: [
                                                 new TextRun({
-                                                    text: planilla_propuesta_TEG.tutor_academico.fecha_entrega.toString(),
+                                                    text: planilla_propuesta_TEG.tutor_academico.fecha_entrega,
                                                 })
                                             ],
                                             alignment: AlignmentType.LEFT
@@ -3035,17 +3044,16 @@ export const generarPlanillaPropuestaTEG = (planilla_propuesta_TEG) => {
             ]
         }]
     });
-    
+    /*
     Packer.toBuffer(doc).then((buffer) => {
         writeFileSync("Planilla Propuesta TEG.docx", buffer);
     });
-    
-   /*
+    */
+   
     Packer.toBlob(doc).then(blob => {
         saveAs(blob, "example.docx");
         //console.log("Documento creado de forma exitosa en el navegador");
     });
-    */
 }
 
 

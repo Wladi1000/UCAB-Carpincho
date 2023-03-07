@@ -116,8 +116,6 @@ export const eliminarPlanilla = async (idPlanilla) => {
   const res = await fetch("http://localhost:3000/SPTG/" + idPlanilla, {
     method: "DELETE",
   });
-  const respuesta = await res.json();
-  return;
 };
 
 export const insertarSolicitudTg = async (planillaSolicitud, data) => {
@@ -145,25 +143,7 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
       console.log(data);
       console.log(data.id_sptg);
       console.log(planillaSolicitud.trabajoDeGrado.modalidad)
-      fetch("http://localhost:3000/evalua_SPTG/", {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id_sptg: data.id_sptg,
-          id_administrador: 2
-        }),
-      })
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data);
-        }).catch((error) => {
-          console.log(error)
-        });
+
       if (planillaSolicitud.trabajoDeGrado.modalidad === 'E') {
         fetch('http://localhost:3000/SPTGE', {
           method: "POST",
@@ -279,6 +259,5 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
     });
   const resSolicitudes = await fetch(
     "http://localhost:3000/datosEstudiantes"
-  );
-  data = obtenerSoliciturdes();
+  ); 
 };
