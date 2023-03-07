@@ -77,7 +77,8 @@ const planilla_propuesta_TEG = {
         habitacion: '',
         fecha_inicio: '',
         horario_propuesto: ''
-    }
+    },
+    {}
     /*
     {
         nombre: "Luis C. Somoza 2",
