@@ -74,10 +74,12 @@ export const buscarProfesoresPorCedula = async (req, res) => {
 }
 
 export const datosProfesores = async (req, res) => {
-    const respuesta = await Profesores.findOne({
+    const respuesta = await Profesores.findAll({
         include: {
             model: Usuarios
         },
     });
-    return res.json(respuesta.dataValues)
+    console.log("respuesta")
+    console.log(respuesta)
+    res.json(respuesta)
 }

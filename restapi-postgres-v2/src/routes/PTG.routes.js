@@ -39,8 +39,8 @@ router.get('/aprobarCDEPTG/:id',aprobarCDEPTG);
 
 router.get('/PTG/estatus/PR',obtenerPTGPR);
 router.get('/PTG/estatus/PE',obtenerPTGPE);
-router.get('/PTG/asignarRevisor/:id',asignarRevisor);
-router.get('/PTG/aprobarRevisor/:id',aprobarRevisorPTG);
-router.get('/PTG/rechazarRevisor/:id',rechazarRevisorPTG);
+router.put('/asignarRevisor/:id',asignarRevisor);
+router.put('/PTG/aprobarRevisor/:id',aprobarRevisorPTG);
+router.put('/PTG/rechazarRevisor/:id',rechazarRevisorPTG);
 
 export default router;

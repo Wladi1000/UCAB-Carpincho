@@ -15,7 +15,7 @@ export const obtenerSolicitudById = async (solicitudId) => {
 };
 
 export const obtenerProfesores = async () => {
-  const resSolicitudes = await fetch("http://localhost:3000/Profesores");
+  const resSolicitudes = await fetch("http://localhost:3000/datosprofesores");
   const sptg = await resSolicitudes.json();
   return sptg;
 };
@@ -139,7 +139,7 @@ export const obtenerPropuestaById = async (idPropuesta) => {
   return propuestaFormulario;
 };
 
-export const aprobarPropuesta = async ( idPropuesta, idComite ) => {
+export const aprobarPropuestaComite = async ( idPropuesta, idComite ) => {
   const resAprobarPropuesta = await fetch( "http://localhost:3000/aprobarComitePTG/" + idPropuesta );
   const aprobarPropuesta = await resAprobarPropuesta.json();
 
@@ -157,9 +157,42 @@ export const aprobarPropuesta = async ( idPropuesta, idComite ) => {
   });
 
   const respuesta_aprobado = await aprobado.json();
-  console.log(respuesta_aprobado)
+
+  return;
+};
+
+export const designarRevisor = async ( idPropuesta, idRevisor ) => {
+  const resDesignarRevisor = await fetch('http://localhost:3000/asignarRevisor/'+idPropuesta,{
+    method: 'PUT',
+    mode: 'cors',
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id_profesor_revisor: idRevisor
+    })
+  });
+  const designarRevisor = await resDesignarRevisor.json();
+  console.log(designarRevisor);
+  return alert('Tutor designado desde la api');
+};
+
+export const aprobarPropuestaRevisor = async (idPropuesta ) => {
+  const resAprobarPropuesta = await fetch( "http://localhost:3000/aprobarRevisor/" + idPropuesta );
+  const aprobarPropuesta = await resAprobarPropuesta.json();
+  
+  console.log(aprobarPropuesta);
 
   return alert(aprobarPropuesta);
+};
+
+export const rechazarPropuestaRevisor = async ( idComite, idPropuesta ) => {
+  const resReprobarPropuesta = await fetch( "http://localhost:3000/rechazarRevisor/" + idPropuesta );
+  const reprobarPropuesta = await resReprobarPropuesta.json();
+
+  console.log(reprobarPropuesta);
+
+  return alert(reprobarPropuesta);
 };
 
 export const rechazarPropuesta = async ( idPropuesta, idComite ) => {
@@ -193,8 +226,14 @@ export const obtenerComites = async () => {
 
 export const obtenerComiteById = async ( idComite ) => {
   const resComite = await fetch( "http://localhost:3000/CTG/" + idComite );
-  const Comite = await resRechazoPropuesta.json();
-  return Comite
+  const comite = await resComite.json();
+  return comite;
+};
+
+export const obtenerPropuestaSinRevisor = async () => {
+  const resPropuestasSinRevisor = await fetch( "http://localhost:3000/PTG/estatus/PR" );
+  const propuestasSinRevisor = await resPropuestasSinRevisor.json();
+  return propuestasSinRevisor;
 };
 
 export const insertarSolicitudTg = async (planillaSolicitud, data) => {

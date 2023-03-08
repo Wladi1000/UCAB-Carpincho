@@ -18,7 +18,7 @@ const clickenComponente = async (id) => {
   console.log(formularioPropuesta.value);
 };
 
-const rechazarPropuesta = async() =>{
+const rechazarPropuestaComite = async() =>{
   api.rechazarPropuesta( formularioPropuesta.value.id_propuesta, formularioPropuesta.value.comite_evaluador.id );
   console.log(formularioPropuesta.value);
   //console.log(formularioPropuesta.value.setPropuestaRechazada());
@@ -27,8 +27,8 @@ const rechazarPropuesta = async() =>{
   dataPropuestas.value = await api.obtenerPropuestas();
 };
 
-const aprobarPropuesta = async () =>{
-  api.aprobarPropuesta( formularioPropuesta.value.id_propuesta, formularioPropuesta.value.comite_evaluador.id )
+const aprobarPropuestaComite = async () =>{
+  api.aprobarPropuestaComite( formularioPropuesta.value.id_propuesta, formularioPropuesta.value.comite_evaluador.id )
   console.log(formularioPropuesta.value);
   alert('Propusta aprobada con exito por comite: ' + formularioPropuesta.value.comite_evaluador.id);
   dataPropuestas.value = await api.obtenerPropuestas();
@@ -42,7 +42,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="request">
-    <h1>Designacion de tutor revisor</h1>
+    <h1>Comite de escuela</h1>
     <div class="committe__container">
       <div class="committe__container__display">
         <div class="committe__container__display__controllers">
@@ -101,10 +101,10 @@ onMounted(async () => {
               </div>
               <div class="actions">
                 <button class="cancel"
-                @click="rechazarPropuesta()"
+                @click="rechazarPropuestaComite()"
                 >Rechazar</button>
                 <button class="login__form__btn succes"
-                @click="aprobarPropuesta()"
+                @click="aprobarPropuestaComite()"
                 >
                   Aceptar
                 </button>
