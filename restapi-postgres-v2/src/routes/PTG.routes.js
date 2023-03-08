@@ -43,4 +43,6 @@ router.put('/asignarRevisor/:id',asignarRevisor);
 router.put('/PTG/aprobarRevisor/:id',aprobarRevisorPTG);
 router.put('/PTG/rechazarRevisor/:id',rechazarRevisorPTG);
 
+
+
 export default router;
