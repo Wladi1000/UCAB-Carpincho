@@ -1,4 +1,5 @@
 import { generarCartaDesignacionRevisor } from './generadorDOCX/carta_designacion_revisor';
+import { generarPE_revisor_teg } from './generadorDOCX/pe_revisor_teg.js';
 import { _ } from 'lodash';
 export class PlanillaDesignacionRevisor {
   constructor(
@@ -27,7 +28,10 @@ export class PlanillaDesignacionRevisor {
     alert('No se pueden añadir mas de 2 alumnos por Trabajo de Grado');
   }
   imprimir() {
+    /*
     generarCartaDesignacionRevisor( this )
     alert('Generado con exito! UwU');
+    */
+   generarPE_revisor_teg(this);
   };
 }

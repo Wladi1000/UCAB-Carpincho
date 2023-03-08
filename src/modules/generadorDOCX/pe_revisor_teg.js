@@ -16,6 +16,45 @@ const { HeadingLevel,Packer } = docx;
 //const { TableRow,BorderStyle } = docx;
 const tam_cuadro_titulo = 280;
 
+const sin_bordes = {
+    top: {
+        style: BorderStyle.NONE,
+        size: 1,
+        color: "ff0000",
+    },
+    bottom: {
+        style: BorderStyle.NONE,
+        size: 1,
+        color: "ff0000",
+    },
+    left: {
+        style: BorderStyle.NONE,
+        size: 1,
+        color: "ff0000",
+    },
+    right: {
+        style: BorderStyle.NONE,
+        size: 1,
+        color: "ff0000",
+    }
+}
+const linea = {
+    top: {
+        style: BorderStyle.NONE,
+        size: 1,
+        color: "ff0000",
+    },
+    left: {
+        style: BorderStyle.NONE,
+        size: 1,
+        color: "ff0000",
+    },
+    right: {
+        style: BorderStyle.NONE,
+        size: 1,
+        color: "ff0000",
+    }
+}
 const generarCriterio = (text) => {
     return (new TableRow({
                     height: {
@@ -98,7 +137,46 @@ const generarCelda = (text, width, after, before) => {
         }
     }));
 }
-export const generarPE_revisor_teg = () => {
+/*
+
+const PE_REVISOR_TEG = {
+    propuesta: {
+        titulo: '',
+        organizacion: ''
+    },
+    tutor_academico: {
+        nombres: '',
+        apellidos: '',
+        cedula: '',
+        profesion: '',
+        experiencia: '',
+        cargo: '',
+        correo: '',
+        telefono: ''
+    },
+    revisor: {
+        nombres: '',
+        apellidos: '',
+        desicion_final: '',
+        fecha_revisado: '',
+        observaciones: ''
+    },
+    alumnos: [
+        {
+            apellidos: '',
+            nombres: '',
+            cedula: '',
+            telefono: '',
+            email: ''
+        }
+    ]
+
+}
+
+
+*/
+
+export const generarPE_revisor_teg = (PE_REVISOR_TEG) => {
     const doc = new Document({
         creator: "Luis C. Somoza",
         title: "Planilla de evaluaciòn de revisor de TEG",
@@ -148,6 +226,7 @@ export const generarPE_revisor_teg = () => {
                 default: new Header({
                     children: [new Paragraph({
                         children: [
+                            /*
                             new ImageRun({
                                 data: fs.readFileSync('logo.png'),
                                 transformation: {
@@ -155,6 +234,7 @@ export const generarPE_revisor_teg = () => {
                                     height: 100,
                                 },
                             }),
+                            */
                         ],
                         alignment: AlignmentType.LEFT
                     })],
@@ -165,6 +245,7 @@ export const generarPE_revisor_teg = () => {
                     children: [
                         new Paragraph({
                             children: [
+                                /*
                                 new ImageRun({
                                     data: fs.readFileSync('Untitled.png'),
                                     transformation: {
@@ -173,6 +254,7 @@ export const generarPE_revisor_teg = () => {
                                     },
                                     alignment: AlignmentType.CENTER
                                 }),
+                                */
                             ],
                             alignment: AlignmentType.CENTER
                         }),
@@ -250,7 +332,7 @@ export const generarPE_revisor_teg = () => {
                                     new Paragraph({
                                         children: [
                                             new TextRun({
-                                                text: "Probando"
+                                                text: PE_REVISOR_TEG.propuesta.titulo
                                             })
                                         ],
                                     })
@@ -289,7 +371,7 @@ export const generarPE_revisor_teg = () => {
                                     new Paragraph({
                                         children: [
                                             new TextRun({
-                                                text: "Probando"
+                                                text: "PE_REVISOR_TEG.propuesta.organizacion"
                                             })
                                         ],
                                     })
@@ -383,12 +465,12 @@ export const generarPE_revisor_teg = () => {
                             }),
                         ]
                     }),
-                    generarCriterio(),
-                    generarCriterio(),
-                    generarCriterio(),
-                    generarCriterio(),
-                    generarCriterio(),
-                    generarCriterio(),
+                    generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
+                    generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
+                    generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
+                    generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
+                    generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
+                    generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
                 ]
             }),
             new Paragraph({
@@ -520,7 +602,7 @@ export const generarPE_revisor_teg = () => {
                                         style: "aside",
                                         children: [
                                             new TextRun({
-                                                text: ""
+                                                text: "Luis Carlos Somoza"
                                             }),
                                         ]
                                     })
@@ -537,7 +619,7 @@ export const generarPE_revisor_teg = () => {
                                         style: "aside",
                                         children: [
                                             new TextRun({
-                                                text: ""
+                                                text: "27656348"
                                             }),
                                         ]
                                     })
@@ -554,7 +636,7 @@ export const generarPE_revisor_teg = () => {
                                         style: "aside",
                                         children: [
                                             new TextRun({
-                                                text: ""
+                                                text: "04122155879"
                                             }),
                                         ]
                                     })
@@ -571,7 +653,7 @@ export const generarPE_revisor_teg = () => {
                                         style: "aside",
                                         children: [
                                             new TextRun({
-                                                text: ""
+                                                text: "luiscarlossomoza@gmail.com"
                                             }),
                                         ]
                                     })
@@ -606,28 +688,7 @@ export const generarPE_revisor_teg = () => {
                         },
                         children : [
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    bottom: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    left: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    right: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         style: "aside",
@@ -642,46 +703,13 @@ export const generarPE_revisor_teg = () => {
                                 verticalAlign: VerticalAlign.CENTER,
                             }),
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    left: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    right: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    }
-                                },
+                                borders: linea,
                                 children: [
                                     new Paragraph({
                                         style: "aside",
-                                        borders: {
-                                            top: {
-                                                style: BorderStyle.NONE,
-                                                size: 1,
-                                                color: "ff0000",
-                                            },
-                                            left: {
-                                                style: BorderStyle.NONE,
-                                                size: 1,
-                                                color: "ff0000",
-                                            },
-                                            right: {
-                                                style: BorderStyle.NONE,
-                                                size: 1,
-                                                color: "ff0000",
-                                            }
-                                        },
                                         children: [
                                             new TextRun({
-                                                text: "",
+                                                text: 'PE_REVISOR_TEG.tutor_academico.apellidos + PE_REVISOR_TEG.tutor_academico.nombres',
                                             })
                                         ],
                                     })
@@ -696,28 +724,7 @@ export const generarPE_revisor_teg = () => {
                         },
                         children : [
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    bottom: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    left: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    right: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         style: "aside",
@@ -732,28 +739,12 @@ export const generarPE_revisor_teg = () => {
                                 verticalAlign: VerticalAlign.CENTER,
                             }),
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    left: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    right: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    }
-                                },
+                                borders: linea,
                                 children: [
                                     new Paragraph({
                                         children: [
                                             new TextRun({
-                                                text: "",
+                                                text: "PE_REVISOR_TEG.tutor_academico.cedula",
                                             })
                                         ],
                                     })
@@ -768,28 +759,7 @@ export const generarPE_revisor_teg = () => {
                         },
                         children : [
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    bottom: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    left: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    right: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         style: "aside",
@@ -804,28 +774,12 @@ export const generarPE_revisor_teg = () => {
                                 verticalAlign: VerticalAlign.CENTER,
                             }),
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    left: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    right: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    }
-                                },
+                                borders: linea,
                                 children: [
                                     new Paragraph({
                                         children: [
                                             new TextRun({
-                                                text: "",
+                                                text: "PE_REVISOR_TEG.tutor_academico.profesion",
                                             })
                                         ],
                                     })
@@ -844,28 +798,7 @@ export const generarPE_revisor_teg = () => {
                         },
                         children : [
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    bottom: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    left: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    right: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         style: "aside",
@@ -880,45 +813,12 @@ export const generarPE_revisor_teg = () => {
                                 verticalAlign: VerticalAlign.CENTER,
                             }),
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    left: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    right: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    }
-                                },
+                                borders: linea,
                                 children: [
                                     new Paragraph({
-                                        borders: {
-                                            top: {
-                                                style: BorderStyle.NONE,
-                                                size: 1,
-                                                color: "ff0000",
-                                            },
-                                            left: {
-                                                style: BorderStyle.NONE,
-                                                size: 1,
-                                                color: "ff0000",
-                                            },
-                                            right: {
-                                                style: BorderStyle.NONE,
-                                                size: 1,
-                                                color: "ff0000",
-                                            }
-                                        },
                                         children: [
                                             new TextRun({
-                                                text: "",
+                                                text: "PE_REVISOR_TEG.tutor_academico.experiencia",
                                             })
                                         ],
                                         
@@ -938,28 +838,7 @@ export const generarPE_revisor_teg = () => {
                         },
                         children : [
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    bottom: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    left: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    right: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         style: "aside",
@@ -974,29 +853,13 @@ export const generarPE_revisor_teg = () => {
                                 verticalAlign: VerticalAlign.CENTER,
                             }),
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    left: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    right: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    }
-                                },
+                                borders: linea,
                                 children: [
                                     new Paragraph({
                                         style: "aside",
                                         children: [
                                             new TextRun({
-                                                text: "",
+                                                text: "PE_REVISOR_TEG.tutor_academico.cargo",
                                             })
                                         ],
                                     })
@@ -1015,28 +878,7 @@ export const generarPE_revisor_teg = () => {
                         },
                         children : [
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    bottom: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    left: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    right: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         style: "aside",
@@ -1051,29 +893,13 @@ export const generarPE_revisor_teg = () => {
                                 verticalAlign: VerticalAlign.CENTER,
                             }),
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    left: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    right: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    }
-                                },
+                                borders: linea,
                                 children: [
                                     new Paragraph({
                                         style: "aside",
                                         children: [
                                             new TextRun({
-                                                text: "",
+                                                text: "PE_REVISOR_TEG.tutor_academico.email",
                                             })
                                         ],
                                     })
@@ -1092,28 +918,7 @@ export const generarPE_revisor_teg = () => {
                         },
                         children : [
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    bottom: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    left: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    right: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         style: "aside",
@@ -1128,29 +933,13 @@ export const generarPE_revisor_teg = () => {
                                 verticalAlign: VerticalAlign.CENTER,
                             }),
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    left: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    },
-                                    right: {
-                                        style: BorderStyle.NONE,
-                                        size: 1,
-                                        color: "ff0000",
-                                    }
-                                },
+                                borders: linea,
                                 children: [
                                     new Paragraph({
                                         style: "aside",
                                         children: [
                                             new TextRun({
-                                                text: "",
+                                                text: "PE_REVISOR_TEG.tutor_academico.telefono",
                                             })
                                         ],
                                     })
@@ -1185,28 +974,7 @@ export const generarPE_revisor_teg = () => {
                     new TableRow({
                         children: [
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    bottom: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    right:{
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    left: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         children: [
@@ -1223,28 +991,7 @@ export const generarPE_revisor_teg = () => {
                                 },
                             }),
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    bottom: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    right:{
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    left: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         children: [
@@ -1261,28 +1008,7 @@ export const generarPE_revisor_teg = () => {
                                 },
                             }),
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    bottom: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    right:{
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    left: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         children: [
@@ -1301,28 +1027,7 @@ export const generarPE_revisor_teg = () => {
                     new TableRow({
                         children: [
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    bottom: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    right:{
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    left: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         children: [
@@ -1334,28 +1039,7 @@ export const generarPE_revisor_teg = () => {
                                 ]
                             }),
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    bottom: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    right:{
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    left: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         children: [
@@ -1371,28 +1055,7 @@ export const generarPE_revisor_teg = () => {
                                 },
                             }),
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    bottom: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    right:{
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    left: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         children: [
@@ -1408,28 +1071,7 @@ export const generarPE_revisor_teg = () => {
                                 },
                             }),
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    bottom: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    right:{
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    left: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         children: [
@@ -1446,33 +1088,12 @@ export const generarPE_revisor_teg = () => {
                                 },
                             }),
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    bottom: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    right:{
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    },
-                                    left: {
-                                        size: 1,
-                                        color: "#ffffff",
-                                        style: BorderStyle.NONE
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         children: [
                                             new TextRun({
-                                                text: " "
+                                                text: "PE_REVISOR_TEG.revisor.fecha_revisado"
                                             })
                                         ]
                                     })
@@ -1506,23 +1127,7 @@ export const generarPE_revisor_teg = () => {
                         },
                         children: [
                             new TableCell({
-                                borders: {
-                                    top: {
-                                        size: 1,
-                                        color: "#FFFFFF",
-                                        style: BorderStyle.NONE
-                                    },
-                                    left: {
-                                        size: 1,
-                                        color: "#FFFFFF",
-                                        style: BorderStyle.NONE
-                                    },
-                                    right: {
-                                        size: 1,
-                                        color: "#FFFFFF",
-                                        style: BorderStyle.NONE
-                                    }
-                                },
+                                borders: linea,
                                 children: [
                                     new Paragraph({
                                         children: [
@@ -1544,23 +1149,7 @@ export const generarPE_revisor_teg = () => {
                         },
                         children: [
                             new TableCell({
-                                borders: {
-                                    left: {
-                                        size: 1,
-                                        color: "#FFFFFF",
-                                        style: BorderStyle.NONE
-                                    },
-                                    right: {
-                                        size: 1,
-                                        color: "#FFFFFF",
-                                        style: BorderStyle.NONE
-                                    },
-                                    bottom: {
-                                        size: 1,
-                                        color: "#FFFFFF",
-                                        style: BorderStyle.NONE
-                                    }
-                                },
+                                borders: sin_bordes,
                                 children: [
                                     new Paragraph({
                                         children: [
