@@ -94,3 +94,7 @@ INSERT INTO ESPECIALIDADES(nombre) VALUES ('Bases de datos distribuidas');
 INSERT INTO ESPECIALIDADES(nombre) VALUES ('Bases de datos no relacionales');
 INSERT INTO ESPECIALIDADES(nombre) VALUES ('Arquitectura de software');
 INSERT INTO ESPECIALIDADES(nombre) VALUES ('Estandares de codigo');
+/*Insertando listado de COMITES DE TRABAJO DE GRADO*/
+INSERT INTO CTG(id_ctg) VALUES ('005-2022-2023');
+INSERT INTO CTG(id_ctg) VALUES ('006-2022-2023');
+INSERT INTO CTG(id_ctg) VALUES ('007-2022-2023');

@@ -25,6 +25,7 @@ const tutor = 'Jannelly Bello';
 const correo_administrador = 'lmedinac@ucab.edu.ve';
 const administrador = "Luz E. Medina";
 const fecha = "";
+/*
 const Carta_designacion = {
     propuesta: {
         titulo: "Creacion de robots para el mantenimiento de la biblioteca",
@@ -41,7 +42,9 @@ const Carta_designacion = {
     modalidad: '',
     revisor: ''
 }
+*/
 export const generarCartaDesignacionRevisor = (Carta_designacion) => {
+    console.log(Carta_designacion);
     const doc = new Document({
         creator: "Luis C. Somoza & Wladimir SanVicente ",
         title: "Carta de designación - Revisor de propuesta de trabajo de grado",
@@ -332,7 +335,7 @@ export const generarCartaDesignacionRevisor = (Carta_designacion) => {
                             font: "Trebuchet MS"
                         }),
                         new TextRun({
-                            text: "el(los) cuales estará(n) al pendiente para incorporar sus observaciones, antes de la evaluación definitiva en Consejo de Escuela de Ingeniería Informatica. ",
+                            text: " el(los) cuales estará(n) al pendiente para incorporar sus observaciones, antes de la evaluación definitiva en Consejo de Escuela de Ingeniería Informatica. ",
                             font: "Trebuchet MS"
                         })
                     ],
@@ -391,10 +394,15 @@ export const generarCartaDesignacionRevisor = (Carta_designacion) => {
             ],
         }]
     });
-    
+    const nombre_archivo = "Carta Designacion Revisor"
+    Packer.toBlob(doc).then(blob => {
+        saveAs(blob, nombre_archivo+" Planilla propuesta TEG.docx");
+        //console.log("Documento creado de forma exitosa en el navegador");
+    });
+    /*
     Packer.toBuffer(doc).then((buffer) => {
         fs.writeFileSync("Carta Modelo Designacion Revisor - " + Carta_designacion.revisor + ".docx", buffer);
     });
+    */
     
 }
-generarCartaDesignacionRevisor(Carta_designacion)

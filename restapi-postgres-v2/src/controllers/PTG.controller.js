@@ -7,6 +7,7 @@ import { Profesores} from '../models/Profesores.js'
 import { SPTGI } from '../models/SPTGI.js';
 import { Empresas} from '../models/Empresas.js'
 import { ProfesionalesExternos } from '../models/ProfesionalesExternos.js';
+import {Op} from 'sequelize'
 export const obtenerPTG = async (req,res) => {
     const obtener = await PTG.findAll();
     res.json(obtener);
@@ -209,7 +210,10 @@ export const obtenerPTGPR = async (req,res) => {
     try {
         const buscar = await PTG.findAll({
             where: {
-                estatus: "PR"
+                estatus: "PR",
+                id_profesor_revisor: {
+                    [Op.eq]: null
+                }
             }
         });
         res.json( buscar );
@@ -259,13 +263,16 @@ export const rechazarRevisorPTG = async (req,res) => {
 export const asignarRevisor = async (req,res) => {
     const id = req.params.id;
     const { id_profesor_revisor } = req.body
+
     try {
+        console.log("id,id_profesor_revisor");
+        console.log(id);
         const buscar = await PTG.findByPk(id);
         buscar.id_profesor_revisor = id_profesor_revisor;
         buscar.fecha_designacion_revisor = new Date();
         const actualizar = await buscar.save();
 
-        res.json( { mensaje: "Revisor asignado correctamente", usuario: buscar });
+        res.json( { mensaje: "Revisor asignado correctamente", usuario: "Hola" });
     } catch (error) {
         res.status(500).json({ mensaje: "Error en asignacion de revisor", error: error.message});
     }

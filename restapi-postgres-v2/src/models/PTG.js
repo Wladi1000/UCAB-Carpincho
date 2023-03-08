@@ -19,6 +19,15 @@ export const PTG = sequelize.define("ptg", {
         type: DataTypes.STRING(2),
         allowNull: false,
         defaultValue: 'PC'
+    },
+    id_profesor_revisor: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    fecha_designacion_revisor: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: new Date()
     }
 },
 {
