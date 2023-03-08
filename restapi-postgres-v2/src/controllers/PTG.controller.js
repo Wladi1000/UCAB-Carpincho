@@ -164,3 +164,79 @@ export const buscarEmpresaSPTG = async (req,res) => {
     });
     res.json(empresa.solicitudtig.empresa);
 }
+
+export const rechazarComitePTG = async (req,res) => {
+
+    const id = req.params.id;
+
+    try {
+        const buscar = await PTG.findByPk(id);
+        buscar.estatus = "R";
+        const actualizar = await buscar.save();
+
+        const sptg = await SPTG.findByPk(buscar.id_sptg)
+        sptg.estatus = "R";
+        const actualizarSPTG = await sptg.save();
+        
+        res.json( { mensaje: "PTG rechazado correctamente", usuario: buscar });
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error al rechazar PTG", error: error.message});
+    }
+
+}
+
+export const rechazarCDEPTG = async (req,res) => {
+
+    const id = req.params.id;
+
+    try {
+        const buscar = await PTG.findByPk(id);
+        buscar.estatus = "R";
+        const actualizar = await buscar.save();
+
+        const sptg = await SPTG.findByPk(buscar.id_sptg)
+        sptg.estatus = "R";
+        const actualizarSPTG = await sptg.save();
+        
+        res.json( { mensaje: "PTG rechazado correctamente", usuario: buscar });
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error al rechazar PTG", error: error.message});
+    }
+
+}
+
+export const aprobarComitePTG = async (req,res) => {
+
+    const id = req.params.id;
+
+    try {
+        const buscar = await PTG.findByPk(id);
+        buscar.estatus = "PE";
+        const actualizar = await buscar.save();
+
+        const sptg = await SPTG.findByPk(buscar.id_sptg)
+        sptg.estatus = "A";
+        const actualizarSPTG = await sptg.save();
+        
+        res.json( { mensaje: "PTG aprobada correctamente", usuario: buscar });
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error al aprobada PTG", error: error.message});
+    }
+
+}
+
+export const aprobarCDEPTG = async (req,res) => {
+
+    const id = req.params.id;
+
+    try {
+        const buscar = await PTG.findByPk(id);
+        buscar.estatus = "A";
+        const actualizar = await buscar.save();
+        
+        res.json( { mensaje: "PTG aprobada correctamente", usuario: buscar });
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error al aprobada PTG", error: error.message});
+    }
+
+}
