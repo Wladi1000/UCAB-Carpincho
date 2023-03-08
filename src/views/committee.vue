@@ -7,7 +7,10 @@ let dataPropuestas = reactive([]);
 let dataPorRevisores = reactive([]);
 let dataProfesores = reactive([]);
 
-let formularioPropuesta = ref( new PropuestaTg );
+//Lista de comites en bdd
+let comites;
+
+let formularioPropuesta = ref( new PropuestaTg() );
 console.log(formularioPropuesta);
 
 const clickenComponente = async (id) => {
@@ -15,14 +18,26 @@ const clickenComponente = async (id) => {
   console.log(formularioPropuesta.value);
 };
 
-const rechazarPropuesta = () =>{
-  api.rechazarPropuesta( formularioPropuesta.value.id_propuesta, formularioPropuesta.value.id_solicitud );
-  formularioPropuesta.value.setPropuestaRechazada();
+const rechazarPropuesta = async() =>{
+  api.rechazarPropuesta( formularioPropuesta.value.id_propuesta, formularioPropuesta.value.comite_evaluador.id );
+  console.log(formularioPropuesta.value);
+  //console.log(formularioPropuesta.value.setPropuestaRechazada());
+  //formularioPropuesta.value.setPropuestaRechazada();
   alert('Rechazado con tristeza');
+  dataPropuestas.value = await api.obtenerPropuestas();
+};
+
+const aprobarPropuesta = async () =>{
+  api.aprobarPropuesta( formularioPropuesta.value.id_propuesta, formularioPropuesta.value.comite_evaluador.id )
+  console.log(formularioPropuesta.value);
+  alert('Propusta aprobada con exito por comite: ' + formularioPropuesta.value.comite_evaluador.id);
+  dataPropuestas.value = await api.obtenerPropuestas();
 };
 
 onMounted(async () => {
   dataPropuestas.value = await api.obtenerPropuestas();
+  comites = await api.obtenerComites();
+  console.log(comites);
 });
 </script>
 <template>
@@ -74,12 +89,23 @@ onMounted(async () => {
                 <p>tutor</p>
                 <input disabled type="text" v-model="formularioPropuesta.tutor_academico.nombres"/>
                 <input disabled type="text" v-model="formularioPropuesta.tutor_academico.apellidos"/>
+                <select name="comites" id="" v-model="formularioPropuesta.comite_evaluador.id">
+                  <option
+                  v-for="c in comites"
+                  :key="c.id_ctg" 
+                  :value="c.id_ctg"
+                >
+                {{ c.id_ctg }}
+                </option>
+                </select>
               </div>
               <div class="actions">
                 <button class="cancel"
                 @click="rechazarPropuesta()"
                 >Rechazar</button>
-                <button type="submit" class="login__form__btn succes">
+                <button class="login__form__btn succes"
+                @click="aprobarPropuesta()"
+                >
                   Aceptar
                 </button>
               </div>

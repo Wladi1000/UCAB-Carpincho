@@ -172,6 +172,7 @@ export const rechazarComitePTG = async (req,res) => {
     try {
         const buscar = await PTG.findByPk(id);
         buscar.estatus = "R";
+        buscar.fecha_entrega = new Date();
         const actualizar = await buscar.save();
 
         const sptg = await SPTG.findByPk(buscar.id_sptg)
@@ -211,7 +212,7 @@ export const aprobarComitePTG = async (req,res) => {
 
     try {
         const buscar = await PTG.findByPk(id);
-        buscar.estatus = "PE";
+        buscar.estatus = "PR";
         const actualizar = await buscar.save();
 
         const sptg = await SPTG.findByPk(buscar.id_sptg)
