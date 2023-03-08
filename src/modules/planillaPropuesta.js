@@ -10,23 +10,33 @@ export class PropuestaTg{
     this.tutor_academico='';
     this.tutor_empresarial = null;
     this.estatus='';
-  }
+    this.comite_evaluador={
+      id: '',
+      descripcion_evaluacion: ''
+    };
+  };
   setPropuestaPendienteRevisor(){
-    this.status = 'PR'
-  }
+    this.status = 'PR';
+    return;
+  };
   setPropuestaPendienteEscuela(){
-    this.status = 'PE'
-  }
+    this.status = 'PE';
+    return;
+  };
   setPropuestaAprobada(){
-    this.status = 'A'
-  }
+    this.status = 'A';
+    return;
+  };
   setPropuestaRechazada(){
-    this.status = 'R'
+    this.estatus = 'R';
+    return;
   }
   setRevidor(idRevisor){
-    this.revisor = idRevisor
-  }
+    this.revisor = idRevisor;
+    return;
+  };
   setTutorAcademico(idTutorAcademico){
-    this.tutor_academico = idTutorAcademico
-  }
-}
+    this.tutor_academico = idTutorAcademico;
+    return;
+  };
+};

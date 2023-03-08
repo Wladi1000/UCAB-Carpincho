@@ -19,6 +19,7 @@ export const obtenerProfesores = async () => {
   const sptg = await resSolicitudes.json();
   return sptg;
 };
+
 export const obtenerProfesorById = async (idProfesor) => {
   const resProfesor = await fetch("http://localhost:3000/Profesores/"+idProfesor);
   const profesor = await resProfesor.json();
@@ -129,47 +130,71 @@ export const obtenerPropuestaById = async (idPropuesta) => {
     modalidad: resSolicitud.modalidad,
     alumnos: alumnosSolicitud,
     tutor_academico: resTutorAcademico,
-    estatus: ptg.estatus
+    estatus: ptg.estatus,
+    comite_evaluador:{
+      id: '',
+      descripcion_evaluacion: ''
+    }
   }
   return propuestaFormulario;
 };
 
-export const rechazarPropuesta = ( idPropuesta,idSolicitud ) => {
+export const aprobarPropuesta = async ( idPropuesta, idComite ) => {
+  const resAprobarPropuesta = await fetch( "http://localhost:3000/aprobarComitePTG/" + idPropuesta );
+  const aprobarPropuesta = await resAprobarPropuesta.json();
 
-    fetch("http://localhost:3000/PTG/" + idPropuesta, {
-      method: "PUT",
-      mode: "cors",
+  const aprobado = await fetch( "http://localhost:3000/Aprueba_Comite/",{
+      method: 'POST',
+      mode: 'cors',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        "fecha_entrega": new Date(),
-        "estatus":"R"
-      }),
-    })
-    .then( (response) => {
-      return response.json()
-    })
-    .then( (data) => {
-      console.log(data)
-    })
+        id_ctg: idComite,
+        id_ptg: idPropuesta,
+        estatus: "A"
+      })
+  });
 
-    fetch("http://localhost:3000/SPTG/" + idSolicitud, {
-      method: "PUT",
-      mode: "cors",
+  const respuesta_aprobado = await aprobado.json();
+  console.log(respuesta_aprobado)
+
+  return alert(aprobarPropuesta);
+};
+
+export const rechazarPropuesta = async ( idPropuesta, idComite ) => {
+  const resRechazoPropuesta = await fetch( "http://localhost:3000/rechazarComitePTG/" + idPropuesta );
+  const rechazoPropuesta = await resRechazoPropuesta.json();
+
+  const rechazo = await fetch( "http://localhost:3000/Aprueba_Comite/",{
+      method: 'POST',
+      mode: 'cors',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        "estatus": "R"
-      }),
-    })
-    .then( (response) => {
-      return response.json()
-    })
-    .then( (data) => {
-      console.log(data)
-    })
+        id_ctg: idComite,
+        id_ptg: idPropuesta,
+        estatus: "R"
+      })
+  });
+
+  const respuesta_rechazo = await rechazo.json();
+  console.log(respuesta_rechazo)
+
+  return alert(rechazoPropuesta);
+};
+
+export const obtenerComites = async () => {
+  const resComite = await fetch( "http://localhost:3000/CTG/");
+  const Comite = await resComite.json();
+  return Comite
+};
+
+export const obtenerComiteById = async ( idComite ) => {
+  const resComite = await fetch( "http://localhost:3000/CTG/" + idComite );
+  const Comite = await resRechazoPropuesta.json();
+  return Comite
 };
 
 export const insertarSolicitudTg = async (planillaSolicitud, data) => {
