@@ -396,3 +396,34 @@ export const insertarSolicitudTg = async (planillaSolicitud, data) => {
     "http://localhost:3000/datosEstudiantes"
   ); 
 };
+
+export const crearPlanillaEvaluacionRevisorTEG  = async ( ) => {
+  const resCargar = await fetch('localhost:3000/cargarPlaniilaEvaluacion/' +  idPE_revisor_PTEG, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      documento: documento
+    })
+  });
+  const cargar = await resCargar.json();
+  console.log(cargar)
+  return cargar; 
+}
+export const cargarPlanillaEvaluacionRevisorTEG = async ( idPE_revisor_PTEG, documento) => {
+  const resCargar = await fetch('localhost:3000/cargarPlaniilaEvaluacion/' +  idPE_revisor_PTEG, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      documento: documento
+    })
+  });
+  const cargar = await resCargar.json();
+  console.log(cargar)
+  return cargar; 
+}

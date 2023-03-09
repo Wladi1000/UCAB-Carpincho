@@ -178,10 +178,6 @@ const generarCriterio = (text) => {
 }
 
 const generarCelda = (text, width, after, before) => {
-    console.log(text);
-    console.log(width);
-    console.log(after);
-    console.log(before);
     return (new TableCell({
         children: [
             new Paragraph({
@@ -1172,6 +1168,7 @@ export const generarPE_revisor_teg = (PE_REVISOR_TEG) => {
     */
     const nombre_archivo = "Planilla revisor TEG"
     Packer.toBlob(doc).then(blob => {
+        console.log(blob)
         saveAs(blob, nombre_archivo + ".docx");
         //console.log("Documento creado de forma exitosa en el navegador");
     });

@@ -16,6 +16,10 @@ export const PE_REVISOR_PTIG = sequelize.define("pe_revisor_ptig", {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: new Date()
+    },
+    documento: {
+        type: DataTypes.BLOB,
+        defaultValue: null
     }
 },
 {

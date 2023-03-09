@@ -59,3 +59,15 @@ export const buscarPE_REVISOR_PTEG = async (req, res) => {
         return res.status(404).json("PE_REVISOR_PTEG no encontrado");
     }
 }
+
+export const cargarPlanillaEvaluacion = async (req, res) => {
+    const id = req.params.id;
+    const { doc } = req.body
+    try {
+        const buscar = await PE_REVISOR_PTEG.findByPk(id);
+        buscar.doc = doc;
+        return res.json({mensaje: "Planilla anclada a documento"});
+    } catch (error) {
+        return res.status(500).json({mensaje: "Error en planilla Anclada a documento"});
+    }
+}
