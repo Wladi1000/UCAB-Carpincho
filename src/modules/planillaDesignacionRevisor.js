@@ -13,7 +13,7 @@ export class PlanillaDesignacionRevisor {
     this.propuesta = {
       titulo: titulo,
       alumno: [],
-      tutor: tutor
+      tutor_academico: tutor
     };
     this.fecha_designacion = fecha_designacion;
     this.administrador = administrador.nombre;
@@ -28,10 +28,6 @@ export class PlanillaDesignacionRevisor {
     alert('No se pueden añadir mas de 2 alumnos por Trabajo de Grado');
   }
   imprimir() {
-    /*
-    generarCartaDesignacionRevisor( this )
-    alert('Generado con exito! UwU');
-    */
    generarPE_revisor_teg(this);
   };
 }

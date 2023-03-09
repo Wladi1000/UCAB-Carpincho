@@ -17,7 +17,8 @@ import {
     obtenerPTGPE,
     asignarRevisor,
     aprobarRevisorPTG,
-    rechazarRevisorPTG
+    rechazarRevisorPTG,
+    obtenerPTGPRRevisor
 } from '../controllers/PTG.controller.js';
 
 const router = Router();
@@ -40,9 +41,9 @@ router.get('/aprobarCDEPTG/:id',aprobarCDEPTG);
 router.get('/PTG/estatus/PR',obtenerPTGPR);
 router.get('/PTG/estatus/PE',obtenerPTGPE);
 router.put('/asignarRevisor/:id',asignarRevisor);
-router.put('/PTG/aprobarRevisor/:id',aprobarRevisorPTG);
-router.put('/PTG/rechazarRevisor/:id',rechazarRevisorPTG);
-
+router.get('/PTG/aprobarRevisor/:id',aprobarRevisorPTG);
+router.get('/PTG/rechazarRevisor/:id',rechazarRevisorPTG);
+router.get('/PTG/estatus/PR/Asignado',obtenerPTGPRRevisor);
 
 
 export default router;
