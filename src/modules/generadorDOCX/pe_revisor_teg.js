@@ -55,6 +55,71 @@ const linea = {
         color: "ff0000",
     }
 }
+const generarDesicion = (text) => {
+
+    const fila = [
+        new TableCell({
+            borders: sin_bordes,
+            children: [
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: "Decisión Final: "
+                        })
+                    ]
+                })
+            ]
+        }),
+        new TableCell({
+            borders: sin_bordes,
+            children: [
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: text
+                        })
+                    ]
+                })
+            ],
+            width: {
+                size: 1500,
+                type: WidthType.DXA
+            },
+        }),
+        new TableCell({
+            borders: sin_bordes,
+            children: [
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: "Fecha: "
+                        })
+                    ],
+                    alignment: AlignmentType.RIGHT
+                })
+            ],
+            width: {
+                size: 2000,
+                type: WidthType.DXA
+            },
+        }),
+        new TableCell({
+            borders: sin_bordes,
+            children: [
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: "PE_REVISOR_TEG.revisor.fecha_revisado"
+                        })
+                    ]
+                })
+            ]
+        }),
+    ]
+
+    return fila
+
+}
 const generarCriterio = (text) => {
     return (new TableRow({
                     height: {
@@ -82,7 +147,7 @@ const generarCriterio = (text) => {
                                 new Paragraph({
                                     children: [
                                         new TextRun({
-                                            text: text
+                                            text: ""
                                         })
                                     ],
                                 })
@@ -97,7 +162,7 @@ const generarCriterio = (text) => {
                                 new Paragraph({
                                     children: [
                                         new TextRun({
-                                            text: text
+                                            text: ""
                                         })
                                     ],
                                 })
@@ -371,7 +436,7 @@ export const generarPE_revisor_teg = (PE_REVISOR_TEG) => {
                                     new Paragraph({
                                         children: [
                                             new TextRun({
-                                                text: "PE_REVISOR_TEG.propuesta.organizacion"
+                                                text: PE_REVISOR_TEG.propuesta.organizacion
                                             })
                                         ],
                                     })
@@ -709,7 +774,7 @@ export const generarPE_revisor_teg = (PE_REVISOR_TEG) => {
                                         style: "aside",
                                         children: [
                                             new TextRun({
-                                                text: 'PE_REVISOR_TEG.tutor_academico.apellidos + PE_REVISOR_TEG.tutor_academico.nombres',
+                                                text: PE_REVISOR_TEG.tutor_academico.apellidos + PE_REVISOR_TEG.tutor_academico.nombres,
                                             })
                                         ],
                                     })
@@ -744,7 +809,7 @@ export const generarPE_revisor_teg = (PE_REVISOR_TEG) => {
                                     new Paragraph({
                                         children: [
                                             new TextRun({
-                                                text: "PE_REVISOR_TEG.tutor_academico.cedula",
+                                                text: PE_REVISOR_TEG.tutor_academico.cedula,
                                             })
                                         ],
                                     })
@@ -779,7 +844,7 @@ export const generarPE_revisor_teg = (PE_REVISOR_TEG) => {
                                     new Paragraph({
                                         children: [
                                             new TextRun({
-                                                text: "PE_REVISOR_TEG.tutor_academico.profesion",
+                                                text: PE_REVISOR_TEG.tutor_academico.profesion,
                                             })
                                         ],
                                     })
@@ -818,7 +883,7 @@ export const generarPE_revisor_teg = (PE_REVISOR_TEG) => {
                                     new Paragraph({
                                         children: [
                                             new TextRun({
-                                                text: "PE_REVISOR_TEG.tutor_academico.experiencia",
+                                                text: PE_REVISOR_TEG.tutor_academico.experiencia,
                                             })
                                         ],
                                         
@@ -859,7 +924,7 @@ export const generarPE_revisor_teg = (PE_REVISOR_TEG) => {
                                         style: "aside",
                                         children: [
                                             new TextRun({
-                                                text: "PE_REVISOR_TEG.tutor_academico.cargo",
+                                                text: PE_REVISOR_TEG.tutor_academico.cargo,
                                             })
                                         ],
                                     })
@@ -899,7 +964,7 @@ export const generarPE_revisor_teg = (PE_REVISOR_TEG) => {
                                         style: "aside",
                                         children: [
                                             new TextRun({
-                                                text: "PE_REVISOR_TEG.tutor_academico.email",
+                                                text: PE_REVISOR_TEG.tutor_academico.email,
                                             })
                                         ],
                                     })
@@ -939,7 +1004,7 @@ export const generarPE_revisor_teg = (PE_REVISOR_TEG) => {
                                         style: "aside",
                                         children: [
                                             new TextRun({
-                                                text: "PE_REVISOR_TEG.tutor_academico.telefono",
+                                                text: PE_REVISOR_TEG.tutor_academico.telefono,
                                             })
                                         ],
                                     })
@@ -1025,81 +1090,7 @@ export const generarPE_revisor_teg = (PE_REVISOR_TEG) => {
                         ]
                     }),
                     new TableRow({
-                        children: [
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: "Decisión Final: "
-                                            })
-                                        ]
-                                    })
-                                ]
-                            }),
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: "Aprobado: "
-                                            })
-                                        ]
-                                    })
-                                ],
-                                width: {
-                                    size: 1500,
-                                    type: WidthType.DXA
-                                },
-                            }),
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: "Reprobada:"
-                                            })
-                                        ]
-                                    })
-                                ],
-                                width: {
-                                    size: 1500,
-                                    type: WidthType.DXA
-                                },
-                            }),
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: "Fecha: "
-                                            })
-                                        ],
-                                        alignment: AlignmentType.RIGHT
-                                    })
-                                ],
-                                width: {
-                                    size: 2000,
-                                    type: WidthType.DXA
-                                },
-                            }),
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: "PE_REVISOR_TEG.revisor.fecha_revisado"
-                                            })
-                                        ]
-                                    })
-                                ]
-                            }),
-                        ]
+                        children: generarDesicion("")
                     }),
                 ]
             }),
