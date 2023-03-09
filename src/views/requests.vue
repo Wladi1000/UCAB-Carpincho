@@ -72,10 +72,6 @@ onMounted(async () => {
             <img src="../assets/imgs/search-circle-outline.svg" />Buscar
             Solicitud
           </button>
-          <button>
-            <img src="../assets/imgs/cloud-upload-outline.svg" />Cargar
-            Solicitud
-          </button>
           <button @click="actionShowPlanillaCrear()">
             <img src="../assets/imgs/add-circle-outline.svg" alt="" />Crear
             Planilla

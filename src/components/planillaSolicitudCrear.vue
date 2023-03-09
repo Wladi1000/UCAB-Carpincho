@@ -206,7 +206,7 @@ onMounted(async () => {
           />
           <!-- Tutor Academico -->
           <div class="request__container__preview__form__inputs">
-            <p for="">Cédula de Tutor Académico</p>
+            <p for="">Cédula del Posible Tutor Académico</p>
             <input
               type="number"
               placeholder="98765432"
