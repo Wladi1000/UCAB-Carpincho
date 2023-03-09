@@ -7,6 +7,7 @@ import { Profesores} from '../models/Profesores.js'
 import { SPTGI } from '../models/SPTGI.js';
 import { Empresas} from '../models/Empresas.js'
 import { ProfesionalesExternos } from '../models/ProfesionalesExternos.js';
+import {Op} from 'sequelize'
 export const obtenerPTG = async (req,res) => {
     const obtener = await PTG.findAll();
     res.json(obtener);
@@ -185,27 +186,6 @@ export const rechazarComitePTG = async (req,res) => {
     }
 
 }
-
-export const rechazarCDEPTG = async (req,res) => {
-
-    const id = req.params.id;
-
-    try {
-        const buscar = await PTG.findByPk(id);
-        buscar.estatus = "R";
-        const actualizar = await buscar.save();
-
-        const sptg = await SPTG.findByPk(buscar.id_sptg)
-        sptg.estatus = "R";
-        const actualizarSPTG = await sptg.save();
-        
-        res.json( { mensaje: "PTG rechazado correctamente", usuario: buscar });
-    } catch (error) {
-        res.status(500).json({ mensaje: "Error al rechazar PTG", error: error.message});
-    }
-
-}
-
 export const aprobarComitePTG = async (req,res) => {
 
     const id = req.params.id;
@@ -225,7 +205,78 @@ export const aprobarComitePTG = async (req,res) => {
     }
 
 }
+export const obtenerPTGPR = async (req,res) => {
 
+    try {
+        const buscar = await PTG.findAll({
+            where: {
+                estatus: "PR",
+                id_profesor_revisor: {
+                    [Op.eq]: null
+                }
+            }
+        });
+        res.json( buscar );
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error en busqueda de PTG", error: error.message});
+    }
+
+}
+export const obtenerPTGPE = async (req,res) => {
+    
+    try {
+        const buscar = await PTG.findAll({
+            where: {
+                estatus: "PE"
+            }
+        });
+        res.json( buscar );
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error en busqueda de PTG", error: error.message});
+    }
+
+}
+export const aprobarRevisorPTG = async (req,res) => {
+    const id = req.params.id;
+    try {
+        const buscar = await PTG.findByPk(id);
+        buscar.estatus = "PE";
+        const actualizar = await buscar.save();
+
+        res.json( { mensaje: "PTG aprobada correctamente por revisor", usuario: buscar });
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error al aprobada PTG", error: error.message});
+    }
+}
+export const rechazarRevisorPTG = async (req,res) => {
+    const id = req.params.id;
+    try {
+        const buscar = await PTG.findByPk(id);
+        buscar.estatus = "R";
+        const actualizar = await buscar.save();
+
+        res.json( { mensaje: "PTG rechazada correctamente por revisor", usuario: buscar });
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error al aprobada PTG", error: error.message});
+    }
+}
+export const asignarRevisor = async (req,res) => {
+    const id = req.params.id;
+    const { id_profesor_revisor } = req.body
+
+    try {
+        console.log("id,id_profesor_revisor");
+        console.log(id);
+        const buscar = await PTG.findByPk(id);
+        buscar.id_profesor_revisor = id_profesor_revisor;
+        buscar.fecha_designacion_revisor = new Date();
+        const actualizar = await buscar.save();
+
+        res.json( { mensaje: "Revisor asignado correctamente", usuario: "Hola" });
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error en asignacion de revisor", error: error.message});
+    }
+}
 export const aprobarCDEPTG = async (req,res) => {
 
     const id = req.params.id;
@@ -238,6 +289,25 @@ export const aprobarCDEPTG = async (req,res) => {
         res.json( { mensaje: "PTG aprobada correctamente", usuario: buscar });
     } catch (error) {
         res.status(500).json({ mensaje: "Error al aprobada PTG", error: error.message});
+    }
+
+}
+export const rechazarCDEPTG = async (req,res) => {
+
+    const id = req.params.id;
+
+    try {
+        const buscar = await PTG.findByPk(id);
+        buscar.estatus = "R";
+        const actualizar = await buscar.save();
+
+        const sptg = await SPTG.findByPk(buscar.id_sptg)
+        sptg.estatus = "R";
+        const actualizarSPTG = await sptg.save();
+        
+        res.json( { mensaje: "PTG rechazado correctamente", usuario: buscar });
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error al rechazar PTG", error: error.message});
     }
 
 }
