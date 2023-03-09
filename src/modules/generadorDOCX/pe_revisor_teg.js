@@ -3,16 +3,16 @@ import file_saver from 'file-saver'
 const { saveAs } = file_saver
 // Load the full build.
 import lodash from 'lodash';
-const { _ } =  lodash;
-const { TableRow,BorderStyle } = docx;
-const { WidthType,Paragraph } = docx;
+const { _ } = lodash;
+const { TableRow, BorderStyle } = docx;
+const { WidthType, Paragraph } = docx;
 const { VerticalAlign, Document } = docx;
 const { TextRun, AlignmentType } = docx;
 const { SectionType, Header } = docx;
-const { HeightRule,TableCell } = docx;
+const { HeightRule, TableCell } = docx;
 const { Footer, LineRuleType } = docx;
 const { Table, PageBreak } = docx;
-const { HeadingLevel,Packer } = docx;
+const { HeadingLevel, Packer } = docx;
 //const { TableRow,BorderStyle } = docx;
 const tam_cuadro_titulo = 280;
 
@@ -122,59 +122,59 @@ const generarDesicion = (text) => {
 }
 const generarCriterio = (text) => {
     return (new TableRow({
-                    height: {
-                        value: 300,
-                        rule: HeightRule.EXACT
-                    },
-                    children: [
-                        new TableCell({
-                            children: [
-                                new Paragraph({
-                                    children: [
-                                        new TextRun({
-                                            text: text
-                                        })
-                                    ],
-                                })
-                            ],
-                            width: {
-                                size: 5000,
-                                type: WidthType.DXA
-                            }
-                        }),
-                        new TableCell({
-                            children: [
-                                new Paragraph({
-                                    children: [
-                                        new TextRun({
-                                            text: ""
-                                        })
-                                    ],
-                                })
-                            ],
-                            width: {
-                                size: 1000,
-                                type: WidthType.DXA
-                            }
-                        }),
-                        new TableCell({
-                            children: [
-                                new Paragraph({
-                                    children: [
-                                        new TextRun({
-                                            text: ""
-                                        })
-                                    ],
-                                })
-                            ],
-                            width: {
-                                size: 1000,
-                                type: WidthType.DXA
-                            }
-                        }),
+        height: {
+            value: 300,
+            rule: HeightRule.EXACT
+        },
+        children: [
+            new TableCell({
+                children: [
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: text
+                            })
+                        ],
+                    })
+                ],
+                width: {
+                    size: 5000,
+                    type: WidthType.DXA
+                }
+            }),
+            new TableCell({
+                children: [
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: ""
+                            })
+                        ],
+                    })
+                ],
+                width: {
+                    size: 1000,
+                    type: WidthType.DXA
+                }
+            }),
+            new TableCell({
+                children: [
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: ""
+                            })
+                        ],
+                    })
+                ],
+                width: {
+                    size: 1000,
+                    type: WidthType.DXA
+                }
+            }),
 
-                    ]
-                }));
+        ]
+    }));
 }
 
 const generarCelda = (text, width, after, before) => {
@@ -232,7 +232,7 @@ const PE_REVISOR_TEG = {
             nombres: '',
             cedula: '',
             telefono: '',
-            email: ''
+            correo: ''
         }
     ]
 
@@ -242,6 +242,7 @@ const PE_REVISOR_TEG = {
 */
 
 export const generarPE_revisor_teg = (PE_REVISOR_TEG) => {
+    console.log(PE_REVISOR_TEG);
     const doc = new Document({
         creator: "Luis C. Somoza",
         title: "Planilla de evaluaciòn de revisor de TEG",
@@ -359,808 +360,808 @@ export const generarPE_revisor_teg = (PE_REVISOR_TEG) => {
                 }),
             },
             children: [
-               new Paragraph({
-                style: "aside",
-                children: [
-                    new TextRun({
-                        text: "Evaluación Propuesta Trabajo Experimental de Grado (TEG)",
-                        bold: true
-                    })
-                ],
-                alignment: AlignmentType.CENTER,
-                spacing: {
-                    after: 200
-                }
-               }),
-               new Paragraph({
-                style: "aside",
-                children: [
-                    new TextRun({
-                        text: "Tema propuesto: ",
-                        bold: true
-                    })
-                ],
-                spacing: {
-                    after: 100
-                }
-               }),
-            new Table({
-                rows: [
-                    new TableRow({
-                        height: {
-                            value: 500,
-                            rule: HeightRule.EXACT
-                        },
-                        children: [
-                            new TableCell({
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: PE_REVISOR_TEG.propuesta.titulo
-                                            })
-                                        ],
-                                    })
-                                ],
-                                width: {
-                                    size: 10000,
-                                    type: WidthType.DXA
-                                }
-                            })
-                        ]
-                    }),
-                ]
-            }),
-            //FIN DE TABLA
-            new Paragraph({
-                children: [
-                    new TextRun({
-                        text: "Organización donde desarrollará el TEG: ",
-                        bold: true
-                    })
-                ],
-                spacing: {
-                    after: 200
-                }
-            }),
-            new Table({
-                rows: [
-                    new TableRow({
-                        height: {
-                            value: 500,
-                            rule: HeightRule.EXACT
-                        },
-                        children: [
-                            new TableCell({
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: PE_REVISOR_TEG.propuesta.organizacion
-                                            })
-                                        ],
-                                    })
-                                ],
-                                width: {
-                                    size: 10000,
-                                    type: WidthType.DXA
-                                }
-                            })
-                        ]
-                    })
-                ]
-            }),
-            new Paragraph({
-                children: [
-                    new TextRun({
-                        text: "Criterios de evaluación: ",
-                        bold: true
-                    })
-                ],
-                spacing: {
-                    after: 200
-                }
-            }),
-            //Tabla de criterios
-            new Table({
-                indent: {
-                    size: 500,
-                    type: WidthType.DXA
-                },
-                rows: [
-                    new TableRow({
-                        height: {
-                            value: 300,
-                            rule: HeightRule.EXACT
-                        },
-                        children: [
-                            new TableCell({
-                                verticalAlign: VerticalAlign.CENTER,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: "Criterios",
-                                                bold: true
-                                            })
-                                        ],
-                                        alignment: AlignmentType.CENTER
-                                    })
-                                ],
-                                width: {
-                                    size: 5000,
-                                    type: WidthType.DXA
-                                }
-                            }),
-                            new TableCell({
-                                verticalAlign: VerticalAlign.CENTER,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: "Aprobado",
-                                                bold: true
-                                            })
-                                        ],
-                                        alignment: AlignmentType.CENTER
-                                    })
-                                ],
-                                width: {
-                                    size: 1500,
-                                    type: WidthType.DXA
-                                }
-                            }),
-                            new TableCell({
-                                verticalAlign: VerticalAlign.CENTER,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: "Reprobado",
-                                                bold: true
-                                            })
-                                        ],
-                                        alignment: AlignmentType.CENTER
-                                    })
-                                ],
-                                width: {
-                                    size: 1500,
-                                    type: WidthType.DXA
-                                }
-                            }),
-                        ]
-                    }),
-                    generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
-                    generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
-                    generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
-                    generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
-                    generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
-                    generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
-                ]
-            }),
-            new Paragraph({
-                children: [
-                    new TextRun({
-                        text: "Observación:",
-                        bold: true
-                    }),
-                    new TextRun({
-                        text: "En caso de reprobar algún criterio, la propuesta estaría rechazada. Indicar al final la razón de rechazo."
-                    }),
-                ],
-                spacing: {
-                    after: 100
-                }
-            }),
-            new Paragraph({
-                children: [
-                    new TextRun({
-                        text: "Datos del Estudiante:",
-                        bold: true
-                    }),
-                ],
-                spacing: {
-                    after: 100,
-                    before: 100
-                }
-            }),
-            new Table({
-                columnWidths: [3000, 4500],
-                rows: [
-                    new TableRow({
-                        height: {
-                            value: 300, 
-                            rule: HeightRule.EXACT
-                        },
-                        children: [
-                            new TableCell({
-                                width: {
-                                    size: 2700,
-                                    type: WidthType.DXA
-                                },
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "Nombre",
-                                                bold: true
-                                            }),
-                                        ],
-                                        alignment: AlignmentType.CENTER,
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            }),
-                            new TableCell({
-                                width: {
-                                    size: 2000,
-                                    type: WidthType.DXA
-                                },
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "C.I.N",
-                                                bold: true
-                                            }),
-                                        ],
-                                        alignment: AlignmentType.CENTER,
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            }),
-                            new TableCell({
-                                width: {
-                                    size: 2400,
-                                    type: WidthType.DXA
-                                },
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "Telefono",
-                                                bold: true
-                                            }),
-                                        ],
-                                        alignment: AlignmentType.CENTER,
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            }),
-                            new TableCell({
-                                width: {
-                                    size: 2700,
-                                    type: WidthType.DXA
-                                },
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "Email",
-                                                bold: true
-                                            }),
-                                        ],
-                                        alignment: AlignmentType.CENTER,
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            }),
-                        ]
-                    }),
-                    new TableRow({
-                        height: {
-                            value: 300, 
-                            rule: HeightRule.EXACT
-                        },
-                        children: [
-                            new TableCell({
-                                width: {
-                                    size: 500,
-                                    type: WidthType.DXA
-                                },
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "Luis Carlos Somoza"
-                                            }),
-                                        ]
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            }),
-                            new TableCell({
-                                width: {
-                                    size: 500,
-                                    type: WidthType.DXA
-                                },
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "27656348"
-                                            }),
-                                        ]
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            }),
-                            new TableCell({
-                                width: {
-                                    size: 500,
-                                    type: WidthType.DXA
-                                },
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "04122155879"
-                                            }),
-                                        ]
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            }),
-                            new TableCell({
-                                width: {
-                                    size: 500,
-                                    type: WidthType.DXA
-                                },
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "luiscarlossomoza@gmail.com"
-                                            }),
-                                        ]
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            })
-                        ]
-                    }),
-                
-                ],
-            }),
-            new Paragraph({
-                children: [
-                    new TextRun({
-                        text: "Datos del Tutor Académico:",
-                        bold: true
-                    })
-                ],
-                spacing: {
-                    after: 100,
-                    before:100
-                }
-            }),
-            //Datos del tutor academico
-            new Table({
-                columnWidths: [3000, 4500],
-                rows: [
-                    new TableRow({
-                        height: {
-                            value: 400, 
-                            rule: HeightRule.EXACT
-                        },
-                        children : [
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "Nombre",
-                                            })
-                                        ],
-                                        alignment: AlignmentType.CENTER
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            }),
-                            new TableCell({
-                                borders: linea,
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: PE_REVISOR_TEG.tutor_academico.apellidos + PE_REVISOR_TEG.tutor_academico.nombres,
-                                            })
-                                        ],
-                                    })
-                                ],
-                            })
-                        ]
-                    }),
-                    new TableRow({
-                        height: {
-                            value: 400, 
-                            rule: HeightRule.EXACT
-                        },
-                        children : [
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "C.I.N",
-                                            })
-                                        ],
-                                        alignment: AlignmentType.CENTER
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            }),
-                            new TableCell({
-                                borders: linea,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: PE_REVISOR_TEG.tutor_academico.cedula,
-                                            })
-                                        ],
-                                    })
-                                ],
-                            })
-                        ]
-                    }),
-                    new TableRow({
-                        height: {
-                            value: 400, 
-                            rule: HeightRule.EXACT
-                        },
-                        children : [
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "Profesion",
-                                            })
-                                        ],
-                                        alignment: AlignmentType.CENTER
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            }),
-                            new TableCell({
-                                borders: linea,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: PE_REVISOR_TEG.tutor_academico.profesion,
-                                            })
-                                        ],
-                                    })
-                                ],
-                                width: {
-                                    size: 10000,
-                                    type: WidthType.DXA
-                                },
-                            })
-                        ]
-                    }),
-                    new TableRow({
-                        height: {
-                            value: 400, 
-                            rule: HeightRule.EXACT
-                        },
-                        children : [
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "Años de experiencia",
-                                            })
-                                        ],
-                                        alignment: AlignmentType.CENTER
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            }),
-                            new TableCell({
-                                borders: linea,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: PE_REVISOR_TEG.tutor_academico.experiencia,
-                                            })
-                                        ],
-                                        
-                                    })
-                                ],
-                                width: {
-                                    size: 10000,
-                                    type: WidthType.DXA
-                                },
-                            }),
-                        ]
-                    }),
-                    new TableRow({
-                        height: {
-                            value: 400, 
-                            rule: HeightRule.EXACT
-                        },
-                        children : [
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "Cargo Actual",
-                                            })
-                                        ],
-                                        alignment: AlignmentType.CENTER
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            }),
-                            new TableCell({
-                                borders: linea,
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: PE_REVISOR_TEG.tutor_academico.cargo,
-                                            })
-                                        ],
-                                    })
-                                ],
-                                width: {
-                                    size: 10000,
-                                    type: WidthType.DXA
-                                },
-                            })
-                        ]
-                    }),
-                    new TableRow({
-                        height: {
-                            value: 400, 
-                            rule: HeightRule.EXACT
-                        },
-                        children : [
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "Email",
-                                            })
-                                        ],
-                                        alignment: AlignmentType.CENTER
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            }),
-                            new TableCell({
-                                borders: linea,
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: PE_REVISOR_TEG.tutor_academico.email,
-                                            })
-                                        ],
-                                    })
-                                ],
-                                width: {
-                                    size: 10000,
-                                    type: WidthType.DXA
-                                },
-                            })
-                        ]
-                    }),
-                    new TableRow({
-                        height: {
-                            value: 400, 
-                            rule: HeightRule.EXACT
-                        },
-                        children : [
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: "Telefono",
-                                            })
-                                        ],
-                                        alignment: AlignmentType.CENTER
-                                    })
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                            }),
-                            new TableCell({
-                                borders: linea,
-                                children: [
-                                    new Paragraph({
-                                        style: "aside",
-                                        children: [
-                                            new TextRun({
-                                                text: PE_REVISOR_TEG.tutor_academico.telefono,
-                                            })
-                                        ],
-                                    })
-                                ],
-                                width: {
-                                    size: 10000,
-                                    type: WidthType.DXA
-                                },
-                            })
-                        ]
-                    }),
-                ]
-            }),
-            new Paragraph({
-                children: [
-                    new TextRun({
-                        text: "Para ser llenado por el revisor:",
-                        bold: true
-                    })
-                ],
-                spacing: {
-                    before: 100,
-                    after: 100
-                }
-            }),
-            new Table({
-                width: {
-                    size: 9000,
-                    type: WidthType.DXA
-                },
-                rows: [
-                    new TableRow({
-                        children: [
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: "Apellidos, Nombres: "
-                                            })
-                                        ],
-                                        alignment: AlignmentType.LEFT
-                                    })
-                                ],
-                                width: {
-                                    size: 2000,
-                                    type: WidthType.DXA
-                                },
-                            }),
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: "Lárez Mata, Jesús José"
-                                            })
-                                        ],
-                                        alignment: AlignmentType.LEFT
-                                    })
-                                ],
-                                width: {
-                                    size: 2000,
-                                    type: WidthType.DXA
-                                },
-                            }),
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun({
-                                                text: ""
-                                            })
-                                        ],
-                                        alignment: AlignmentType.LEFT
-                                    })
-                                ],
-                                
-                            }),
-                            
-                        ]
-                    }),
-                    new TableRow({
-                        children: generarDesicion("")
-                    }),
-                ]
-            }),
-            new Paragraph({
-                children: [
-                    new TextRun({
-                        text: "Observaciones (solo en caso de ser rechazado el documento):"
-                    })
-                ],
-                spacing: {
-                    before: 10,
-                    after: 10
-                }
-            }),
-            new Table({
-                indent: {
-                    size: 3000,
-                    type: WidthType.DXA
-                },
-                rows: [
-                    new TableRow({
-                        height: {
-                            value: 700,
-                            rule: HeightRule.EXACT
-                        },
-                        children: [
-                            new TableCell({
-                                borders: linea,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun("")
-                                        ]
-                                    })
-                                ],
-                                width: {
-                                    size: 3000,
-                                    type: WidthType.DXA
-                                }
-                            }),
-                        ],
-                    }),
-                    new TableRow({
-                        height: {
-                            value: 700,
-                            rule: HeightRule.EXACT
-                        },
-                        children: [
-                            new TableCell({
-                                borders: sin_bordes,
-                                children: [
-                                    new Paragraph({
-                                        children: [
-                                            new TextRun("Firma Revisor")
-                                        ],
-                                        alignment: AlignmentType.CENTER
-                                    }),
-                                ],
-                                verticalAlign: VerticalAlign.CENTER,
-                                width: {
-                                    size: 3000,
-                                    type: WidthType.DXA
-                                }
-                            }),
-                        ],
-                    }),
-                ]
-            }),
-    
-    
+                new Paragraph({
+                    style: "aside",
+                    children: [
+                        new TextRun({
+                            text: "Evaluación Propuesta Trabajo Experimental de Grado (TEG)",
+                            bold: true
+                        })
+                    ],
+                    alignment: AlignmentType.CENTER,
+                    spacing: {
+                        after: 200
+                    }
+                }),
+                new Paragraph({
+                    style: "aside",
+                    children: [
+                        new TextRun({
+                            text: "Tema propuesto: ",
+                            bold: true
+                        })
+                    ],
+                    spacing: {
+                        after: 100
+                    }
+                }),
+                new Table({
+                    rows: [
+                        new TableRow({
+                            height: {
+                                value: 500,
+                                rule: HeightRule.EXACT
+                            },
+                            children: [
+                                new TableCell({
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun({
+                                                    text: PE_REVISOR_TEG.propuesta.titulo
+                                                })
+                                            ],
+                                        })
+                                    ],
+                                    width: {
+                                        size: 10000,
+                                        type: WidthType.DXA
+                                    }
+                                })
+                            ]
+                        }),
+                    ]
+                }),
+                //FIN DE TABLA
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: "Organización donde desarrollará el TEG: ",
+                            bold: true
+                        })
+                    ],
+                    spacing: {
+                        after: 200
+                    }
+                }),
+                new Table({
+                    rows: [
+                        new TableRow({
+                            height: {
+                                value: 500,
+                                rule: HeightRule.EXACT
+                            },
+                            children: [
+                                new TableCell({
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun({
+                                                    text: PE_REVISOR_TEG.propuesta.organizacion
+                                                })
+                                            ],
+                                        })
+                                    ],
+                                    width: {
+                                        size: 10000,
+                                        type: WidthType.DXA
+                                    }
+                                })
+                            ]
+                        })
+                    ]
+                }),
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: "Criterios de evaluación: ",
+                            bold: true
+                        })
+                    ],
+                    spacing: {
+                        after: 200
+                    }
+                }),
+                //Tabla de criterios
+                new Table({
+                    indent: {
+                        size: 500,
+                        type: WidthType.DXA
+                    },
+                    rows: [
+                        new TableRow({
+                            height: {
+                                value: 300,
+                                rule: HeightRule.EXACT
+                            },
+                            children: [
+                                new TableCell({
+                                    verticalAlign: VerticalAlign.CENTER,
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun({
+                                                    text: "Criterios",
+                                                    bold: true
+                                                })
+                                            ],
+                                            alignment: AlignmentType.CENTER
+                                        })
+                                    ],
+                                    width: {
+                                        size: 5000,
+                                        type: WidthType.DXA
+                                    }
+                                }),
+                                new TableCell({
+                                    verticalAlign: VerticalAlign.CENTER,
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun({
+                                                    text: "Aprobado",
+                                                    bold: true
+                                                })
+                                            ],
+                                            alignment: AlignmentType.CENTER
+                                        })
+                                    ],
+                                    width: {
+                                        size: 1500,
+                                        type: WidthType.DXA
+                                    }
+                                }),
+                                new TableCell({
+                                    verticalAlign: VerticalAlign.CENTER,
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun({
+                                                    text: "Reprobado",
+                                                    bold: true
+                                                })
+                                            ],
+                                            alignment: AlignmentType.CENTER
+                                        })
+                                    ],
+                                    width: {
+                                        size: 1500,
+                                        type: WidthType.DXA
+                                    }
+                                }),
+                            ]
+                        }),
+                        generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
+                        generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
+                        generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
+                        generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
+                        generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
+                        generarCriterio("Criterio de revisor para evaluar PTG Experimental"),
+                    ]
+                }),
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: "Observación:",
+                            bold: true
+                        }),
+                        new TextRun({
+                            text: "En caso de reprobar algún criterio, la propuesta estaría rechazada. Indicar al final la razón de rechazo."
+                        }),
+                    ],
+                    spacing: {
+                        after: 100
+                    }
+                }),
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: "Datos del Estudiante:",
+                            bold: true
+                        }),
+                    ],
+                    spacing: {
+                        after: 100,
+                        before: 100
+                    }
+                }),
+                new Table({
+                    columnWidths: [3000, 4500],
+                    rows: [
+                        new TableRow({
+                            height: {
+                                value: 300,
+                                rule: HeightRule.EXACT
+                            },
+                            children: [
+                                new TableCell({
+                                    width: {
+                                        size: 2700,
+                                        type: WidthType.DXA
+                                    },
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "Nombre",
+                                                    bold: true
+                                                }),
+                                            ],
+                                            alignment: AlignmentType.CENTER,
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    width: {
+                                        size: 2000,
+                                        type: WidthType.DXA
+                                    },
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "C.I.N",
+                                                    bold: true
+                                                }),
+                                            ],
+                                            alignment: AlignmentType.CENTER,
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    width: {
+                                        size: 2400,
+                                        type: WidthType.DXA
+                                    },
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "Telefono",
+                                                    bold: true
+                                                }),
+                                            ],
+                                            alignment: AlignmentType.CENTER,
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    width: {
+                                        size: 2700,
+                                        type: WidthType.DXA
+                                    },
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "Email",
+                                                    bold: true
+                                                }),
+                                            ],
+                                            alignment: AlignmentType.CENTER,
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                            ]
+                        }),
+                        new TableRow({
+                            height: {
+                                value: 300,
+                                rule: HeightRule.EXACT
+                            },
+                            children: [
+                                new TableCell({
+                                    width: {
+                                        size: 500,
+                                        type: WidthType.DXA
+                                    },
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "Luis Carlos Somoza"
+                                                }),
+                                            ]
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    width: {
+                                        size: 500,
+                                        type: WidthType.DXA
+                                    },
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "27656348"
+                                                }),
+                                            ]
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    width: {
+                                        size: 500,
+                                        type: WidthType.DXA
+                                    },
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "04122155879"
+                                                }),
+                                            ]
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    width: {
+                                        size: 500,
+                                        type: WidthType.DXA
+                                    },
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "luiscarlossomoza@gmail.com"
+                                                }),
+                                            ]
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                })
+                            ]
+                        }),
+
+                    ],
+                }),
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: "Datos del Tutor Académico:",
+                            bold: true
+                        })
+                    ],
+                    spacing: {
+                        after: 100,
+                        before: 100
+                    }
+                }),
+                //Datos del tutor academico
+                new Table({
+                    columnWidths: [3000, 4500],
+                    rows: [
+                        new TableRow({
+                            height: {
+                                value: 400,
+                                rule: HeightRule.EXACT
+                            },
+                            children: [
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "Nombre",
+                                                })
+                                            ],
+                                            alignment: AlignmentType.CENTER
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    borders: linea,
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: PE_REVISOR_TEG.propuesta.tutor_academico.apellidos + PE_REVISOR_TEG.propuesta.tutor_academico.nombres,
+                                                })
+                                            ],
+                                        })
+                                    ],
+                                })
+                            ]
+                        }),
+                        new TableRow({
+                            height: {
+                                value: 400,
+                                rule: HeightRule.EXACT
+                            },
+                            children: [
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "C.I.N",
+                                                })
+                                            ],
+                                            alignment: AlignmentType.CENTER
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    borders: linea,
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun({
+                                                    text: PE_REVISOR_TEG.propuesta.tutor_academico.cedula,
+                                                })
+                                            ],
+                                        })
+                                    ],
+                                })
+                            ]
+                        }),
+                        new TableRow({
+                            height: {
+                                value: 400,
+                                rule: HeightRule.EXACT
+                            },
+                            children: [
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "Profesion",
+                                                })
+                                            ],
+                                            alignment: AlignmentType.CENTER
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    borders: linea,
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun({
+                                                    text: PE_REVISOR_TEG.propuesta.tutor_academico.profesion,
+                                                })
+                                            ],
+                                        })
+                                    ],
+                                    width: {
+                                        size: 10000,
+                                        type: WidthType.DXA
+                                    },
+                                })
+                            ]
+                        }),
+                        new TableRow({
+                            height: {
+                                value: 400,
+                                rule: HeightRule.EXACT
+                            },
+                            children: [
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "Años de experiencia",
+                                                })
+                                            ],
+                                            alignment: AlignmentType.CENTER
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    borders: linea,
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun({
+                                                    text: PE_REVISOR_TEG.propuesta.tutor_academico.experiencia,
+                                                })
+                                            ],
+
+                                        })
+                                    ],
+                                    width: {
+                                        size: 10000,
+                                        type: WidthType.DXA
+                                    },
+                                }),
+                            ]
+                        }),
+                        new TableRow({
+                            height: {
+                                value: 400,
+                                rule: HeightRule.EXACT
+                            },
+                            children: [
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "Cargo Actual",
+                                                })
+                                            ],
+                                            alignment: AlignmentType.CENTER
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    borders: linea,
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: PE_REVISOR_TEG.propuesta.tutor_academico.cargo,
+                                                })
+                                            ],
+                                        })
+                                    ],
+                                    width: {
+                                        size: 10000,
+                                        type: WidthType.DXA
+                                    },
+                                })
+                            ]
+                        }),
+                        new TableRow({
+                            height: {
+                                value: 400,
+                                rule: HeightRule.EXACT
+                            },
+                            children: [
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "Email",
+                                                })
+                                            ],
+                                            alignment: AlignmentType.CENTER
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    borders: linea,
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: PE_REVISOR_TEG.propuesta.tutor_academico.correo,
+                                                })
+                                            ],
+                                        })
+                                    ],
+                                    width: {
+                                        size: 10000,
+                                        type: WidthType.DXA
+                                    },
+                                })
+                            ]
+                        }),
+                        new TableRow({
+                            height: {
+                                value: 400,
+                                rule: HeightRule.EXACT
+                            },
+                            children: [
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: "Telefono",
+                                                })
+                                            ],
+                                            alignment: AlignmentType.CENTER
+                                        })
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                }),
+                                new TableCell({
+                                    borders: linea,
+                                    children: [
+                                        new Paragraph({
+                                            style: "aside",
+                                            children: [
+                                                new TextRun({
+                                                    text: PE_REVISOR_TEG.propuesta.tutor_academico.telefono,
+                                                })
+                                            ],
+                                        })
+                                    ],
+                                    width: {
+                                        size: 10000,
+                                        type: WidthType.DXA
+                                    },
+                                })
+                            ]
+                        }),
+                    ]
+                }),
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: "Para ser llenado por el revisor:",
+                            bold: true
+                        })
+                    ],
+                    spacing: {
+                        before: 100,
+                        after: 100
+                    }
+                }),
+                new Table({
+                    width: {
+                        size: 9000,
+                        type: WidthType.DXA
+                    },
+                    rows: [
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun({
+                                                    text: "Apellidos, Nombres: "
+                                                })
+                                            ],
+                                            alignment: AlignmentType.LEFT
+                                        })
+                                    ],
+                                    width: {
+                                        size: 2000,
+                                        type: WidthType.DXA
+                                    },
+                                }),
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun({
+                                                    text: "Lárez Mata, Jesús José"
+                                                })
+                                            ],
+                                            alignment: AlignmentType.LEFT
+                                        })
+                                    ],
+                                    width: {
+                                        size: 2000,
+                                        type: WidthType.DXA
+                                    },
+                                }),
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun({
+                                                    text: ""
+                                                })
+                                            ],
+                                            alignment: AlignmentType.LEFT
+                                        })
+                                    ],
+
+                                }),
+
+                            ]
+                        }),
+                        new TableRow({
+                            children: generarDesicion("")
+                        }),
+                    ]
+                }),
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: "Observaciones (solo en caso de ser rechazado el documento):"
+                        })
+                    ],
+                    spacing: {
+                        before: 10,
+                        after: 10
+                    }
+                }),
+                new Table({
+                    indent: {
+                        size: 3000,
+                        type: WidthType.DXA
+                    },
+                    rows: [
+                        new TableRow({
+                            height: {
+                                value: 700,
+                                rule: HeightRule.EXACT
+                            },
+                            children: [
+                                new TableCell({
+                                    borders: linea,
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun("")
+                                            ]
+                                        })
+                                    ],
+                                    width: {
+                                        size: 3000,
+                                        type: WidthType.DXA
+                                    }
+                                }),
+                            ],
+                        }),
+                        new TableRow({
+                            height: {
+                                value: 700,
+                                rule: HeightRule.EXACT
+                            },
+                            children: [
+                                new TableCell({
+                                    borders: sin_bordes,
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun("Firma Revisor")
+                                            ],
+                                            alignment: AlignmentType.CENTER
+                                        }),
+                                    ],
+                                    verticalAlign: VerticalAlign.CENTER,
+                                    width: {
+                                        size: 3000,
+                                        type: WidthType.DXA
+                                    }
+                                }),
+                            ],
+                        }),
+                    ]
+                }),
+
+
             ],
         }],
     });
@@ -1171,8 +1172,8 @@ export const generarPE_revisor_teg = (PE_REVISOR_TEG) => {
     */
     const nombre_archivo = "Planilla revisor TEG"
     Packer.toBlob(doc).then(blob => {
-        saveAs(blob, nombre_archivo+".docx");
+        saveAs(blob, nombre_archivo + ".docx");
         //console.log("Documento creado de forma exitosa en el navegador");
     });
-    
+
 }

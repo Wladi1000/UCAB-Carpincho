@@ -222,6 +222,23 @@ export const obtenerPTGPR = async (req,res) => {
     }
 
 }
+export const obtenerPTGPRRevisor = async (req,res) => {
+
+    try {
+        const buscar = await PTG.findAll({
+            where: {
+                estatus: "PR",
+                id_profesor_revisor: {
+                    [Op.ne]: null
+                }
+            }
+        });
+        res.json( buscar );
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error en busqueda de PTG", error: error.message});
+    }
+
+}
 export const obtenerPTGPE = async (req,res) => {
     
     try {

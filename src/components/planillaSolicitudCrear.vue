@@ -3,7 +3,7 @@ import { ref, reactive, onMounted, computed } from "vue";
 import * as api from "../modules/apiTools.js";
 import { PlanillaCrearSolicitud } from "../modules/planillaCrearSolicitud.js";
 import { PlanillaPropuestaTEG } from "../modules/planillaPropuestaTEG.js";
-import { PlanillaPropuestaTIG } from "../modules/planillaPropuestaTIG.js"
+import { PlanillaPropuestaTIG } from "../modules/planillaPropuestaTIG.js";
 
 const props = defineProps({
   showPlanillaCreate: Boolean,
@@ -26,7 +26,9 @@ async function buscarEstudiante() {
 }
 
 async function buscarTutor() {
-  const resTutor = await api.obtenerIdTutorAcademico(crearSolicitudForm.tutor.cedula);
+  const resTutor = await api.obtenerIdTutorAcademico(
+    crearSolicitudForm.tutor.cedula
+  );
   crearSolicitudForm.tutor.apellidos = resTutor.apellidos;
   crearSolicitudForm.tutor.nombres = resTutor.nombres;
   crearSolicitudForm.tutor.cedula = resTutor.cedula;
@@ -36,9 +38,12 @@ async function buscarTutorEmpresarial() {
   const resTutorEmpresarial = await api.obtenerIdTutorEmpresarialByCedula(
     crearSolicitudForm.tutorEmpresarial.cedula
   );
-  crearSolicitudForm.tutorEmpresarial.nombres = resTutorEmpresarial.usuario.nombres;
-  crearSolicitudForm.tutorEmpresarial.apellidos = resTutorEmpresarial.usuario.apellidos;
-  crearSolicitudForm.tutorEmpresarial.cedula = resTutorEmpresarial.usuario.cedula;
+  crearSolicitudForm.tutorEmpresarial.nombres =
+    resTutorEmpresarial.usuario.nombres;
+  crearSolicitudForm.tutorEmpresarial.apellidos =
+    resTutorEmpresarial.usuario.apellidos;
+  crearSolicitudForm.tutorEmpresarial.cedula =
+    resTutorEmpresarial.usuario.cedula;
 }
 
 crearSolicitudForm.empresa.idEmpresa = computed(() => {
@@ -57,63 +62,54 @@ crearSolicitudForm.empresa.idEmpresa = computed(() => {
   return "";
 });
 
-crearSolicitudForm.progressValue = computed(() => { return crearSolicitudForm.trabajoDeGrado.modalidad == 'E'? 33.3 : 25 });
+crearSolicitudForm.progressValue = computed(() => {
+  return crearSolicitudForm.trabajoDeGrado.modalidad == "E" ? 33.3 : 25;
+});
 
 async function insertarPlanilla() {
   await api.insertarSolicitudTg(crearSolicitudForm);
-  if (crearSolicitudForm.trabajoDeGrado.modalidad == 'E'){
-    
-    let planillaGenerada = new PlanillaPropuestaTEG(
+  let planillaGenerada;
+  if (crearSolicitudForm.trabajoDeGrado.modalidad == "E") {
+    planillaGenerada = new PlanillaPropuestaTEG(
       crearSolicitudForm.trabajoDeGrado.tituloTG,
       crearSolicitudForm.empresa.nombre,
       crearSolicitudForm.empresa,
       {
-        nombre:`${crearSolicitudForm.tutor.nombres} ${crearSolicitudForm.tutor.apellidos}`,
+        nombre: `${crearSolicitudForm.tutor.nombres} ${crearSolicitudForm.tutor.apellidos}`,
         cedula: crearSolicitudForm.tutor.cedula,
-        email: 'franklinBelloBellisimo@ucab.edu.ve',
-        telefono: '04121598764',
-        profesion: 'Ingeniero Informatico',
-        fecha_entrega: new Date()
+        email: "franklinBelloBellisimo@ucab.edu.ve",
+        telefono: "04121598764",
+        profesion: "Ingeniero Informatico",
+        fecha_entrega: new Date(),
       }
     );
-    planillaGenerada.añadirAlumno({
-      nombre: `${crearSolicitudForm.alumnos[0].nombres} ${crearSolicitudForm.alumnos[0].apellidos}`,
-      cedula: crearSolicitudForm.alumnos[0].cedula,
-      telefono: "04147723811",
-      email: "wladimirSanvicente@wlachoCorp C.A",
-      oficina: "#33",
-      habitacion: "Marte, calle 4, al lado del detective marciano",
-      fecha_inicio: "02/14/2053",
-      horario_propuesto: "2 min al dia",
-    });
-    planillaGenerada.imprimir();
-  }else{ 
-    alert('Tu si eres pajuo, hermano');
-    let planillaGenerada = new PlanillaPropuestaTIG(
+  } else {
+    planillaGenerada = new PlanillaPropuestaTIG(
       crearSolicitudForm.trabajoDeGrado.tituloTG,
       crearSolicitudForm.empresa.nombre,
       crearSolicitudForm.empresa,
       {
-        nombre:`${crearSolicitudForm.tutor.nombres} ${crearSolicitudForm.tutor.apellidos}`,
+        nombre: `${crearSolicitudForm.tutor.nombres} ${crearSolicitudForm.tutor.apellidos}`,
         cedula: crearSolicitudForm.tutor.cedula,
-        email: 'franklinBelloBellisimo@ucab.edu.ve',
-        telefono: '04121598764',
-        profesion: 'Ingeniero Informatico',
-        fecha_entrega: new Date()
+        email: "franklinBelloBellisimo@ucab.edu.ve",
+        telefono: "04121598764",
+        profesion: "Ingeniero Informatico",
+        fecha_entrega: new Date(),
       }
     );
-    planillaGenerada.añadirAlumno({
-      nombre: `${crearSolicitudForm.alumnos[0].nombres} ${crearSolicitudForm.alumnos[0].apellidos}`,
-      cedula: crearSolicitudForm.alumnos[0].cedula,
-      telefono: "04147723811",
-      email: "wladimirSanvicente@wlachoCorp C.A",
-      oficina: "#33",
-      habitacion: "Marte, calle 4, al lado del detective marciano",
-      fecha_inicio: "02/14/2053",
-      horario_propuesto: "2 min al dia",
-    });
-    planillaGenerada.imprimir()
   }
+  planillaGenerada.añadirAlumno({
+    nombre: `${crearSolicitudForm.alumnos[0].nombres} ${crearSolicitudForm.alumnos[0].apellidos}`,
+    cedula: crearSolicitudForm.alumnos[0].cedula,
+    telefono: "04147723811",
+    email: "wladimirSanvicente@wlachoCorp C.A",
+    oficina: "#33",
+    habitacion: "Marte, calle 4, al lado del detective marciano",
+    fecha_inicio: "02/14/2053",
+    horario_propuesto: "2 min al dia",
+  });
+
+  planillaGenerada.imprimir();
   crearSolicitudForm.progressbarState += crearSolicitudForm.progressValue;
 }
 
@@ -288,16 +284,25 @@ onMounted(async () => {
             />
           </div>
           <div class="actions">
-            <button class="succes"
-              v-if=" crearSolicitudForm.trabajoDeGrado.modalidad == 'E'? true: false"
-              :disabled="crearSolicitudForm.empresa.idEmpresa == -1 ? true : false"
+            <button
+              class="succes"
+              v-if="
+                crearSolicitudForm.trabajoDeGrado.modalidad == 'E'
+                  ? true
+                  : false
+              "
+              :disabled="
+                crearSolicitudForm.empresa.idEmpresa == -1 ? true : false
+              "
               @click="insertarPlanilla()"
             >
               Completado!
             </button>
             <button
               v-else
-              :disabled="crearSolicitudForm.empresa.idEmpresa == -1 ? true : false"
+              :disabled="
+                crearSolicitudForm.empresa.idEmpresa == -1 ? true : false
+              "
               @click="crearSolicitudForm.empresaCompletada()"
             >
               Siguiente
@@ -305,7 +310,10 @@ onMounted(async () => {
           </div>
         </form>
       </div>
-      <div class="external-profesional" v-show="crearSolicitudForm.showTutorEmpresarial">
+      <div
+        class="external-profesional"
+        v-show="crearSolicitudForm.showTutorEmpresarial"
+      >
         <form
           class="request__container__preview__form"
           @submit.prevent="submit"
@@ -345,7 +353,7 @@ onMounted(async () => {
               @click="buscarTutorEmpresarial()"
             ></button>
             <button
-            class="succes"
+              class="succes"
               :disabled="crearSolicitudForm.tutor.nombres == '' ? true : false"
               @click="insertarPlanilla()"
             >

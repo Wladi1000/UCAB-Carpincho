@@ -134,7 +134,8 @@ export const obtenerPropuestaById = async (idPropuesta) => {
     comite_evaluador:{
       id: '',
       descripcion_evaluacion: ''
-    }
+    },
+    id_profesor_revisor: ptg.id_profesor_revisor
   }
   return propuestaFormulario;
 };
@@ -177,8 +178,8 @@ export const designarRevisor = async ( idPropuesta, idRevisor ) => {
   return alert('Tutor designado desde la api');
 };
 
-export const aprobarPropuestaRevisor = async (idPropuesta ) => {
-  const resAprobarPropuesta = await fetch( "http://localhost:3000/aprobarRevisor/" + idPropuesta );
+export const aprobarPropuestaRevisor = async ( idPropuesta ) => {
+  const resAprobarPropuesta = await fetch( "http://localhost:3000/PTG/aprobarRevisor/" + idPropuesta );
   const aprobarPropuesta = await resAprobarPropuesta.json();
   
   console.log(aprobarPropuesta);
@@ -186,8 +187,8 @@ export const aprobarPropuestaRevisor = async (idPropuesta ) => {
   return alert(aprobarPropuesta);
 };
 
-export const rechazarPropuestaRevisor = async ( idComite, idPropuesta ) => {
-  const resReprobarPropuesta = await fetch( "http://localhost:3000/rechazarRevisor/" + idPropuesta );
+export const rechazarPropuestaRevisor = async ( idPropuesta ) => {
+  const resReprobarPropuesta = await fetch( "http://localhost:3000/PTG/rechazarRevisor/" + idPropuesta );
   const reprobarPropuesta = await resReprobarPropuesta.json();
 
   console.log(reprobarPropuesta);
@@ -234,6 +235,11 @@ export const obtenerPropuestaSinRevisor = async () => {
   const resPropuestasSinRevisor = await fetch( "http://localhost:3000/PTG/estatus/PR" );
   const propuestasSinRevisor = await resPropuestasSinRevisor.json();
   return propuestasSinRevisor;
+};
+export const obtenerPropuestaConRevisorAsignado = async () => {
+  const resPropuestasConRevisorAsignado = await fetch( "http://localhost:3000/PTG/estatus/PR/Asignado" );
+  const propuestasConRevisorAsignado = await resPropuestasConRevisorAsignado.json();
+  return propuestasConRevisorAsignado;
 };
 
 export const insertarSolicitudTg = async (planillaSolicitud, data) => {
