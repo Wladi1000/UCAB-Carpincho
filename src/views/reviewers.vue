@@ -21,15 +21,16 @@ const clickenComponente = async (id) => {
 
 const designarTutor = async () => {
   console.log(formularioPropuesta.value);
-  /*await api.designarRevisor( 
+  await api.designarRevisor( 
     formularioPropuesta.value.id_propuesta, 
     formularioPropuesta.value.revisor 
-  );*/
+  );
   let revisor =  await api.obtenerProfesorById(formularioPropuesta.value.revisor);
   console.log(revisor);
+  console.log(formularioPropuesta.value.tutor_academico)
   let planillaDesignacionDeTutor = new PlanillaDesignacionRevisor(
     formularioPropuesta.value.titulo,
-    `${formularioPropuesta.value.tutor_academico.nombres} ${formularioPropuesta.value.tutor_academico.apellidos}`,
+    formularioPropuesta.value.tutor_academico,
     new Date(),
     { nombre: 'Luz Medina', correo_administrador: 'lamedina@wlaluchocorp.com' },
     formularioPropuesta.value.modalidad,
@@ -52,7 +53,7 @@ const aprobarPropuesta = async () => {
 
 const hola = ()=>{ 
   console.log(formularioPropuesta.value.revisor);  
-}
+};
 
 onMounted(async () => {
   dataPropuestasPorRevisor.value = await api.obtenerPropuestaSinRevisor();
@@ -62,7 +63,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="request">
-    <h1>Revisor</h1>
+    <h1>Designacion de Revisor</h1>
     <div class="committe__container">
       <div class="committe__container__display">
         <div class="committe__container__display__controllers">

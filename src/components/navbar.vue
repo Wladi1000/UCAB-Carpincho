@@ -16,6 +16,9 @@
         <router-link to="/reviewers">Asignacion de revisor</router-link>
       </li>
       <li class="navbar__list__element">
+        <router-link to="/reviewers_evaluation">Evaluaciones de Revisor</router-link>
+      </li>
+      <li class="navbar__list__element">
         <router-link to="/council">Consejo Escuela</router-link>
       </li>
       <li class="navbar__list__element">
